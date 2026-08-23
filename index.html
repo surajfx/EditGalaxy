@@ -113,14 +113,14 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 </section>
 
 <section id="templatePage" class="content templatepage">
-  <div class="search glass"><input id="templateSearch" placeholder="Search by number, #number, title or full name…" oninput="renderTemplates()"><button class="searchbtn">Search</button></div>
+  <div class="search glass"><input id="templateSearch" placeholder="Search by number, #number, title or full name…" oninput="renderTemplates()"><button class="searchbtn" type="button" onclick="runSectionSearch('template')">Search</button></div>
   <div id="templateFilters" class="filters"></div>
   <div class="sectionhead"><h2 id="templateHeading">Premium Templates</h2><span id="templateCount"></span></div>
   <div id="templateGrid" class="grid"></div>
 </section>
 
 <section id="promptPage" class="content promptpage">
-  <div class="search glass"><input id="promptSearch" placeholder="Search prompts by number, title or text…" oninput="renderPrompts()"><button class="searchbtn">Search</button></div>
+  <div class="search glass"><input id="promptSearch" placeholder="Search prompts by number, title or text…" oninput="renderPrompts()"><button class="searchbtn" type="button" onclick="runSectionSearch('prompt')">Search</button></div>
   <div id="promptFilters" class="filters"></div>
   <div class="sectionhead"><h2>AI Image Prompts</h2><span id="promptCount"></span></div>
   <div id="promptGrid" class="grid"></div>
@@ -208,10 +208,14 @@ function listen(){
 function normalize(s){return String(s||"").toLowerCase().replace(/[#/_\-]+/g," ").replace(/\s+/g," ").trim()}
 function matches(item,q){
  if(!q)return true;
- const n=normalize(q), number=String(item.num||item.number||"");
- return normalize(item.title||item.name).includes(n)||normalize(item.category||item.cat).includes(n)||
-        normalize(item.prompt||item.girlPrompt||"").includes(n)||normalize(item.boyPrompt||"").includes(n)||
-        normalize(number).includes(n)||normalize("#"+number).includes(n);
+ const n=normalize(q), number=String(item.num||item.number||item.templateNumber||item.promptNumber||"");
+ const haystack=[
+   item.title,item.name,item.templateName,item.promptTitle,
+   item.category,item.cat, item.promptCategory,
+   item.prompt,item.girlPrompt,item.boyPrompt,item.description,
+   number,"#"+number
+ ].map(normalize).join(" ");
+ return haystack.includes(n);
 }
 function categoryMatch(item,f){return f==="all"||normalize(item.category||item.cat)===normalize(f)}
 const categoryEmoji={
@@ -290,19 +294,35 @@ function siteDetails(){ return `<div class="detailFooter"><div class="detailLink
 window.closeDetail=()=>{document.getElementById("detail").classList.remove("open");document.body.style.overflow="";if(location.hash)history.replaceState(null,"",location.pathname+location.search)};
 window.copyText=async t=>{try{await navigator.clipboard.writeText(t||"");showToast("Copied ✓")}catch{showToast("Copy failed")}}
 window.shareCurrent=async()=>{try{await navigator.share({title:window.currentShare?.title||"EditGalaxy",url:location.href})}catch{await navigator.clipboard.writeText(location.href);showToast("Link copied ✓")}}
+window.runSectionSearch=type=>{
+ const el=document.getElementById(type==="prompt"?"promptSearch":"templateSearch");
+ const q=(el?.value||"").trim();
+ if(type==="prompt") renderPrompts(); else renderTemplates();
+ showToast(q?`Searching for “${q}”`:`Showing all ${type}s`);
+};
+document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("template")}});
+document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("prompt")}});
 window.trackUse=async id=>{if(!id)return;try{await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(async m=>{const {get,set,ref}=m;const r=ref(db,"templates/"+id+"/totalUses");const s=await get(r);await set(r,(s.val()||0)+1)})}catch{}}
 window.showSection=section=>{
- const target=section==="prompts"?document.getElementById("promptPage"):document.getElementById("templatePage");
- document.getElementById("templateSwitch").classList.toggle("active",section==="templates");
- document.getElementById("promptSwitch").classList.toggle("active",section==="prompts");
- document.getElementById("navTemplates").classList.toggle("active",section==="templates");
- document.getElementById("navPrompts").classList.toggle("active",section==="prompts");
+ const isPrompt=section==="prompts";
+ const target=isPrompt?document.getElementById("promptPage"):document.getElementById("templatePage");
+ const tPage=document.getElementById("templatePage");
+ const pPage=document.getElementById("promptPage");
+ // Keep both sections in the document so the Home page can scroll between them.
+ tPage.classList.toggle("hidden",isPrompt);
+ pPage.classList.toggle("active",isPrompt);
+ document.getElementById("templateSwitch").classList.toggle("active",!isPrompt);
+ document.getElementById("promptSwitch").classList.toggle("active",isPrompt);
+ document.getElementById("navTemplates").classList.toggle("active",!isPrompt);
+ document.getElementById("navPrompts").classList.toggle("active",isPrompt);
  document.getElementById("navHome").classList.remove("active");
  closeMenu();
  if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
 }
 window.goHome=()=>{
  closeMenu();
+ document.getElementById("templatePage").classList.remove("hidden");
+ document.getElementById("promptPage").classList.remove("active");
  document.getElementById("navHome").classList.add("active");
  document.getElementById("navTemplates").classList.remove("active");
  document.getElementById("navPrompts").classList.remove("active");
