@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070811">
+<meta name="description" content="EditGalaxy — premium CapCut templates and AI image prompts for creators.">
+<title>EditGalaxy — Templates & AI Prompts</title>
+<style>
+:root{
+  --bg:#070811;--bg2:#0b0d18;--panel:rgba(255,255,255,.055);
+  --panel2:rgba(255,255,255,.075);--line:rgba(255,255,255,.10);
+  --text:#f6f7fb;--muted:#9ba1b5;--accent:#8bdcff;--accent2:#b58cff;
+  --shadow:0 22px 70px rgba(0,0,0,.35);--radius:22px;
+}
+[data-theme="light"]{
+  --bg:#f4f7fb;--bg2:#eaf0f7;--panel:rgba(255,255,255,.62);
+  --panel2:rgba(255,255,255,.82);--line:rgba(18,25,38,.10);
+  --text:#111522;--muted:#667085;--accent:#168fca;--accent2:#7553d6;
+  --shadow:0 18px 55px rgba(32,55,80,.14);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;
+background:
+radial-gradient(900px 500px at 15% -10%,rgba(93,184,255,.12),transparent 65%),
+radial-gradient(800px 500px at 90% 10%,rgba(160,105,255,.10),transparent 65%),
+linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh}
+button,input{font:inherit}button{color:inherit}.glass{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:var(--shadow)}
+.header{position:sticky;top:0;z-index:80;padding:12px 16px;background:rgba(7,8,17,.48);backdrop-filter:blur(22px);border-bottom:1px solid var(--line)}
+[data-theme="light"] .header{background:rgba(244,247,251,.58)}
+.nav{max-width:1180px;margin:auto;display:flex;align-items:center;gap:10px}
+.logo{font-weight:900;font-size:20px;letter-spacing:-.7px;text-decoration:none;color:var(--text);flex:1}
+.logo span{color:var(--accent)}
+.iconbtn,.menuitem,.switchbtn,.filter,.seg,.searchbtn,.cta,.navitem,.sharebtn{
+border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:pointer;transition:.2s}
+.iconbtn{width:42px;height:42px;display:grid;place-items:center;font-size:20px}.iconbtn:hover,.filter:hover,.seg:hover,.navitem:hover{background:var(--panel2)}
+.theme{width:42px;height:42px;display:grid;place-items:center}
+.hero{max-width:1180px;margin:auto;padding:42px 16px 22px}
+.switcher{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:700px;margin:0 auto 30px}
+.switchbtn{padding:15px 16px;font-weight:800;color:var(--muted)}
+.switchbtn.active{color:var(--text);border-color:rgba(139,220,255,.35);background:linear-gradient(180deg,rgba(139,220,255,.11),rgba(255,255,255,.04))}
+.hero h1{text-align:center;font-size:clamp(38px,7vw,74px);line-height:.98;margin:0;letter-spacing:-3px}
+.hero h1 em{font-style:normal;background:linear-gradient(100deg,var(--text),var(--accent));-webkit-background-clip:text;color:transparent}
+.hero p{max-width:650px;text-align:center;margin:18px auto 24px;color:var(--muted);line-height:1.65}
+.cta{display:flex;align-items:center;justify-content:center;gap:8px;margin:auto;padding:14px 20px;font-weight:900;text-decoration:none;color:var(--text);max-width:300px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:650px;margin:28px auto}
+.stat{padding:18px;text-align:center;border-radius:18px}.stat b{font-size:24px}.stat small{display:block;color:var(--muted);margin-top:3px}
+.content{max-width:1180px;margin:auto;padding:8px 16px 120px}
+.search{display:flex;gap:8px;padding:8px;border-radius:18px;margin:0 auto 12px;max-width:850px}
+.search input{flex:1;border:0;outline:0;background:transparent;color:var(--text);padding:12px 10px;min-width:0}
+.search input::placeholder{color:var(--muted)}.searchbtn{padding:0 17px;font-weight:800}
+.filters{display:flex;gap:7px;overflow:auto;padding:4px 2px 16px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap;padding:9px 13px;color:var(--muted);font-size:13px}
+.filter.active{color:var(--text);border-color:rgba(139,220,255,.32);background:rgba(139,220,255,.07)}
+.sectionhead{display:flex;align-items:end;justify-content:space-between;margin:20px 0 14px}.sectionhead h2{margin:0;font-size:22px}.sectionhead span{color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{overflow:hidden;border-radius:20px;cursor:pointer;background:var(--panel);border:1px solid var(--line);transition:.25s}
+.card:hover{transform:translateY(-3px);background:var(--panel2)}
+.thumb{aspect-ratio:4/5;background:#10121c;position:relative;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.badge{position:absolute;left:9px;top:9px;padding:6px 9px;border-radius:999px;background:rgba(0,0,0,.48);border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:800;backdrop-filter:blur(10px)}
+.cardbody{padding:12px}.cardtitle{font-weight:800;font-size:14px;line-height:1.35}.meta{color:var(--muted);font-size:11px;margin-top:5px}
+.empty{text-align:center;padding:55px 15px;color:var(--muted);grid-column:1/-1}
+.promptpage{display:none}.promptpage.active{display:block}.templatepage.hidden{display:none}
+.detail{position:fixed;inset:0;z-index:200;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.65);backdrop-filter:blur(10px)}
+.detail.open{display:flex}.sheet{width:min(760px,100%);max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:16px;background:var(--bg2);border:1px solid var(--line)}
+.close{float:right;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--panel);cursor:pointer}
+.detailmedia{clear:both;margin-top:8px;border-radius:20px;overflow:hidden;background:#000;aspect-ratio:16/10;display:grid;place-items:center}
+.detailmedia img{width:100%;height:100%;object-fit:cover}.play{position:absolute;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.88);color:#111;border:0;font-size:24px;cursor:pointer}
+.detail h2{margin:18px 0 6px}.detail p{color:var(--muted);line-height:1.65}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}.action{padding:13px;border-radius:14px;text-align:center;text-decoration:none;font-weight:800;border:1px solid var(--line);background:var(--panel)}
+.primary{background:rgba(139,220,255,.10);border-color:rgba(139,220,255,.30)}
+.bottom{position:fixed;z-index:90;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(620px,calc(100% - 20px));padding:7px;display:grid;grid-template-columns:1fr 1.1fr 1.3fr 1.1fr 1fr;gap:4px;border-radius:20px}
+.navitem{background:transparent;border:0;padding:9px 5px;font-size:11px;color:var(--muted);font-weight:800}.navitem.active{color:var(--text);background:rgba(255,255,255,.05)}
+.ai{width:48px;height:48px;margin:-14px auto -3px;padding:0;border-radius:50%;overflow:hidden;border:1px solid rgba(139,220,255,.35);background:#07101a;box-shadow:0 8px 28px rgba(50,190,255,.22)}
+.ai img{width:100%;height:100%;object-fit:cover}
+.menuoverlay{position:fixed;inset:0;z-index:150;display:none;background:rgba(0,0,0,.28);backdrop-filter:blur(16px)}
+.menuoverlay.open{display:block}.menu{position:absolute;right:14px;top:68px;width:min(330px,calc(100% - 28px));padding:14px;border-radius:22px}
+.menu h3{margin:5px 8px 12px}.menuitem{display:flex;align-items:center;gap:12px;width:100%;padding:13px;margin:5px 0;text-align:left;text-decoration:none}
+.menuitem span:first-child{width:25px;text-align:center}.menuitem small{color:var(--muted);margin-left:auto}
+.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(15px);z-index:500;opacity:0;pointer-events:none;padding:11px 16px;border-radius:999px;background:rgba(20,22,30,.88);border:1px solid var(--line);backdrop-filter:blur(16px);transition:.25s;font-size:13px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}.hero{padding-top:28px}.stats{gap:7px}.stat{padding:14px 7px}.stat b{font-size:20px}.bottom{border-radius:18px}.navitem{font-size:10px}}
+</style>
+</head>
+<body>
+<header class="header">
+  <nav class="nav">
+    <a class="logo" href="#" onclick="goHome();return false">Edit<span>Galaxy</span></a>
+    <button class="theme iconbtn" id="themeBtn" aria-label="Toggle theme">☾</button>
+    <button class="iconbtn" id="menuBtn" aria-label="Open menu">☰</button>
+  </nav>
+</header>
+
+<main>
+<section class="hero">
+  <div class="switcher">
+    <button id="templateSwitch" class="switchbtn active" onclick="showSection('templates')">✨ Premium Templates</button>
+    <button id="promptSwitch" class="switchbtn" onclick="showSection('prompts')">🖼️ Image Prompts</button>
+  </div>
+  <h1>Create. Edit. <em>Explore.</em></h1>
+  <p>Discover premium CapCut templates and carefully crafted AI image prompts — made for creators who want to create faster and better.</p>
+  <a class="cta" href="https://app.surajfx.in" target="_blank" rel="noopener">CapCut Pro — Download Now ↗</a>
+  <div class="stats">
+    <div class="stat glass"><b id="statTemplates">500+</b><small>Templates</small></div>
+    <div class="stat glass"><b id="statPrompts">100+</b><small>Prompts</small></div>
+    <div class="stat glass"><b id="statUses">100K+</b><small>Downloads</small></div>
+  </div>
+</section>
+
+<section id="templatePage" class="content templatepage">
+  <div class="search glass"><input id="templateSearch" placeholder="Search by number, #number, title or full name…" oninput="renderTemplates()"><button class="searchbtn">Search</button></div>
+  <div id="templateFilters" class="filters"></div>
+  <div class="sectionhead"><h2 id="templateHeading">Premium Templates</h2><span id="templateCount"></span></div>
+  <div id="templateGrid" class="grid"></div>
+</section>
+
+<section id="promptPage" class="content promptpage">
+  <div class="search glass"><input id="promptSearch" placeholder="Search prompts by number, title or text…" oninput="renderPrompts()"><button class="searchbtn">Search</button></div>
+  <div id="promptFilters" class="filters"></div>
+  <div class="sectionhead"><h2>AI Image Prompts</h2><span id="promptCount"></span></div>
+  <div id="promptGrid" class="grid"></div>
+</section>
+</main>
+
+<footer style="max-width:1180px;margin:auto;padding:10px 16px 120px;color:var(--muted);text-align:center;font-size:12px">
+  EditGalaxy · AI Prompts · CapCut Templates · Creative Resources
+</footer>
+
+<div id="menuOverlay" class="menuoverlay">
+  <div class="menu glass" onclick="event.stopPropagation()">
+    <h3>EditGalaxy</h3>
+    <button class="menuitem" onclick="goHome()"><span>⌂</span> Home</button>
+    <button class="menuitem" onclick="showSection('templates');closeMenu()"><span>🎬</span> Templates</button>
+    <button class="menuitem" onclick="showSection('prompts');closeMenu()"><span>🖼️</span> Image Prompts</button>
+    <a class="menuitem" href="https://app.surajfx.in" target="_blank" rel="noopener"><span>✦</span> CapCut <small>↗</small></a>
+    <a class="menuitem" href="https://www.instagram.com/trending_edit_day/" target="_blank" rel="noopener"><span>◎</span> Instagram <small>↗</small></a>
+    <a class="menuitem" href="https://www.tiktok.com/@trending_edit_day" target="_blank" rel="noopener"><span>♪</span> TikTok <small>↗</small></a>
+    <a class="menuitem" href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank" rel="noopener"><span>f</span> Facebook <small>↗</small></a>
+    <a class="menuitem" href="https://www.threads.com/@trending_edit_day" target="_blank" rel="noopener"><span>@</span> Threads <small>↗</small></a>
+    <a class="menuitem" href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener"><span>▶</span> YouTube <small>↗</small></a>
+  </div>
+</div>
+
+<nav class="bottom glass">
+  <button class="navitem active" id="navHome" onclick="goHome()">Home</button>
+  <button class="navitem" id="navTemplates" onclick="showSection('templates')">Templates</button>
+  <button class="navitem ai" onclick="openAISearch()" aria-label="AI Search"><img src="editgalaxy-ai-icon.png" alt="AI"></button>
+  <button class="navitem" id="navPrompts" onclick="showSection('prompts')">Prompts</button>
+  <button class="navitem" onclick="showExplore()">Explore</button>
+</nav>
+
+<div id="detail" class="detail" onclick="if(event.target===this)closeDetail()">
+  <article class="sheet">
+    <button class="close" onclick="closeDetail()">✕</button>
+    <div id="detailContent"></div>
+  </article>
+</div>
+
+<div id="aiOverlay" class="detail" onclick="if(event.target===this)closeAI()">
+ <article class="sheet">
+  <button class="close" onclick="closeAI()">✕</button>
+  <h2>AI Search</h2>
+  <p>Choose what you want to find, type a name or number, then search.</p>
+  <div class="actions">
+    <button id="aiTemplate" class="action primary" onclick="setAIType('template')">🎬 Template</button>
+    <button id="aiPrompt" class="action" onclick="setAIType('prompt')">🖼️ Prompt</button>
+  </div>
+  <div class="search glass"><input id="aiInput" placeholder="e.g. #251 or Hindi Song"><button class="searchbtn" onclick="runAISearch()">✦ Search</button></div>
+ </article>
+</div>
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {getDatabase,ref,onValue} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyBgPllgUNMUo6j_Rbd7wg0NjR6z4YFy6uU",
+ authDomain:"template-cc1cb.firebaseapp.com",
+ databaseURL:"https://template-cc1cb-default-rtdb.firebaseio.com",
+ projectId:"template-cc1cb",
+ storageBucket:"template-cc1cb.firebasestorage.app",
+ messagingSenderId:"629554966666",
+ appId:"1:629554966666:web:e99b4dda5170da00a845d3",
+ measurementId:"G-Y3WFW4TR45"
+};
+const app=initializeApp(firebaseConfig),db=getDatabase(app);
+let templates=[],prompts=[],tFilter="all",pFilter="all",aiType="template";
+
+const templateCats=["all","trending","cinematic","hindi","english","funk","ai prompt"];
+const promptCats=["all","trending","cinematic","4k","anime","portrait","fantasy","static"];
+
+function listen(){
+ onValue(ref(db,"templates"),s=>{
+   const d=s.val()||{}; templates=Object.entries(d).map(([id,x])=>({id,...x}));
+   renderTemplateFilters();renderTemplates();
+ });
+ onValue(ref(db,"prompts"),s=>{
+   const d=s.val()||{}; prompts=Object.entries(d).map(([id,x])=>({id,...x}));
+   renderPromptFilters();renderPrompts();
+ });
+}
+function normalize(s){return String(s||"").toLowerCase().replace(/[#/_\-]+/g," ").replace(/\s+/g," ").trim()}
+function matches(item,q){
+ if(!q)return true;
+ const n=normalize(q), number=String(item.num||item.number||"");
+ return normalize(item.title||item.name).includes(n)||normalize(item.category||item.cat).includes(n)||
+        normalize(item.prompt||item.girlPrompt||"").includes(n)||normalize(item.boyPrompt||"").includes(n)||
+        normalize(number).includes(n)||normalize("#"+number).includes(n);
+}
+function categoryMatch(item,f){return f==="all"||normalize(item.category||item.cat)===normalize(f)}
+function renderTemplateFilters(){
+ document.getElementById("templateFilters").innerHTML=templateCats.map(c=>`<button class="filter ${c===tFilter?"active":""}" onclick="window.setTF('${c}')">${c==="all"?"All":c[0].toUpperCase()+c.slice(1)}</button>`).join("");
+}
+function renderPromptFilters(){
+ document.getElementById("promptFilters").innerHTML=promptCats.map(c=>`<button class="filter ${c===pFilter?"active":""}" onclick="window.setPF('${c}')">${c==="all"?"All":c[0].toUpperCase()+c.slice(1)}</button>`).join("");
+}
+function imgFor(x){return x.imageUrl||x.thumb||x.thumbnail||x.image||"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="100%" height="100%" fill="#111522"/><text x="50%" y="50%" fill="#7f879d" text-anchor="middle" font-size="28">EditGalaxy</text></svg>`)}
+function card(x,type){
+ const title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
+ const cat=x.category||x.cat||"General";
+ return `<article class="card" onclick='window.openDetail(${JSON.stringify(JSON.stringify(x))},"${type}")'>
+  <div class="thumb"><img loading="lazy" src="${escapeAttr(imgFor(x))}" alt="${escapeAttr(title)}"><span class="badge">${escapeHtml(cat)}</span></div>
+  <div class="cardbody"><div class="cardtitle">${escapeHtml(title)}</div><div class="meta">#${escapeHtml(x.num||x.number||"—")}</div></div>
+ </article>`;
+}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function escapeAttr(s){return escapeHtml(s)}
+window.setTF=f=>{tFilter=f;renderTemplateFilters();renderTemplates()}
+window.setPF=f=>{pFilter=f;renderPromptFilters();renderPrompts()}
+window.renderTemplates=renderTemplates;window.renderPrompts=renderPrompts;
+function renderTemplates(){
+ const q=document.getElementById("templateSearch").value;
+ let list=templates.filter(x=>categoryMatch(x,tFilter)&&matches(x,q));
+ if(tFilter==="trending") list.sort((a,b)=>(b.last7Uses||b.weekUses||0)-(a.last7Uses||a.weekUses||0));
+ document.getElementById("templateCount").textContent=list.length+" results";
+ document.getElementById("templateGrid").innerHTML=list.length?list.map(x=>card(x,"template")).join(""):`<div class="empty">No templates found.</div>`;
+}
+function renderPrompts(){
+ const q=document.getElementById("promptSearch").value;
+ let list=prompts.filter(x=>categoryMatch(x,pFilter)&&matches(x,q));
+ document.getElementById("promptCount").textContent=list.length+" results";
+ document.getElementById("promptGrid").innerHTML=list.length?list.map(x=>card(x,"prompt")).join(""):`<div class="empty">No prompts found.</div>`;
+}
+window.openDetail=(raw,type)=>{
+ const x=JSON.parse(raw), title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
+ let html=`<div class="detailmedia"><img src="${escapeAttr(imgFor(x))}" alt=""><button class="play" onclick='window.openExternal(${JSON.stringify(x.instagramUrl||x.video||x.instagram||"")} )'>▶</button></div>
+ <h2>${escapeHtml(title)}</h2><p>${escapeHtml(x.description||x.howToUse||x.howto||"Explore this resource on EditGalaxy.")}</p>`;
+ if(type==="template"){
+  html+=`<div class="actions"><a class="action primary" href="${escapeAttr(x.capcut||x.capcutUrl||"#")}" target="_blank" rel="noopener" onclick="window.trackUse('${escapeAttr(x.id||"")}')">Use Template on CapCut</a><button class="action" onclick="showToast('How to use: Open the CapCut link, use the template and add your media.')">How to Use Template</button></div><button class="action" style="width:100%" onclick="shareCurrent()">↗ Share</button>`;
+ }else{
+  const gp=x.girlPrompt||x.prompt||"",bp=x.boyPrompt||"";
+  html+=`<div class="actions"><button class="action primary" onclick='copyText(${JSON.stringify(gp)})'>📋 Copy ${bp?"Girl":""} Prompt</button>${bp?`<button class="action" onclick='copyText(${JSON.stringify(bp)})'>📋 Copy Boy Prompt</button>`:""}</div><button class="action" style="width:100%" onclick="shareCurrent()">↗ Share</button>`;
+ }
+ document.getElementById("detailContent").innerHTML=html;document.getElementById("detail").classList.add("open");window.currentShare={title,url:location.href};
+}
+window.openExternal=u=>{if(u)window.open(u,"_blank","noopener");else showToast("Instagram video link is not added yet.")};
+window.closeDetail=()=>document.getElementById("detail").classList.remove("open");
+window.copyText=async t=>{try{await navigator.clipboard.writeText(t||"");showToast("Copied ✓")}catch{showToast("Copy failed")}}
+window.shareCurrent=async()=>{try{await navigator.share({title:window.currentShare?.title||"EditGalaxy",url:location.href})}catch{await navigator.clipboard.writeText(location.href);showToast("Link copied ✓")}}
+window.trackUse=async id=>{if(!id)return;try{await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(async m=>{const {get,set,ref}=m;const r=ref(db,"templates/"+id+"/totalUses");const s=await get(r);await set(r,(s.val()||0)+1)})}catch{}}
+window.showSection=section=>{
+ document.getElementById("templatePage").classList.toggle("hidden",section!=="templates");
+ document.getElementById("promptPage").classList.toggle("active",section==="prompts");
+ document.getElementById("templateSwitch").classList.toggle("active",section==="templates");
+ document.getElementById("promptSwitch").classList.toggle("active",section==="prompts");
+ document.getElementById("navTemplates").classList.toggle("active",section==="templates");
+ document.getElementById("navPrompts").classList.toggle("active",section==="prompts");
+ document.getElementById("navHome").classList.toggle("active",section==="templates");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+window.goHome=()=>{showSection("templates");closeMenu()}
+window.showExplore=()=>showToast("Explore is ready for your future collections.")
+function openAISearch(){document.getElementById("aiOverlay").classList.add("open")}
+window.openAISearch=openAISearch;window.closeAI=()=>document.getElementById("aiOverlay").classList.remove("open");
+window.setAIType=t=>{aiType=t;document.getElementById("aiTemplate").classList.toggle("primary",t==="template");document.getElementById("aiPrompt").classList.toggle("primary",t==="prompt")}
+window.runAISearch=()=>{const q=document.getElementById("aiInput").value;closeAI();if(aiType==="template"){showSection("templates");document.getElementById("templateSearch").value=q;renderTemplates()}else{showSection("prompts");document.getElementById("promptSearch").value=q;renderPrompts()}}
+function closeMenu(){document.getElementById("menuOverlay").classList.remove("open")}
+document.getElementById("menuBtn").onclick=()=>document.getElementById("menuOverlay").classList.add("open");
+document.getElementById("menuOverlay").onclick=e=>{if(e.target.id==="menuOverlay")closeMenu()}
+document.getElementById("themeBtn").onclick=()=>{const next=document.documentElement.dataset.theme==="light"?"dark":"light";document.documentElement.dataset.theme=next;localStorage.setItem("eg_theme",next);document.getElementById("themeBtn").textContent=next==="light"?"☀":"☾"}
+const saved=localStorage.getItem("eg_theme")||"dark";document.documentElement.dataset.theme=saved;document.getElementById("themeBtn").textContent=saved==="light"?"☀":"☾";
+function showToast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1800)}window.showToast=showToast;
+renderTemplateFilters();renderPromptFilters();listen();
+</script>
+</body>
+</html>
