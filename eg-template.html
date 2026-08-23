@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template — EditGalaxy</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06060f;--surface:rgba(255,255,255,.04);--surface-h:rgba(255,255,255,.08);
+  --border:rgba(255,255,255,.08);--purple:#a855f7;--pink:#ec4899;--orange:#f97316;
+  --text:#f8fafc;--muted:#94a3b8;
+  --grad:linear-gradient(135deg,#a855f7,#ec4899,#f97316);
+  --grad-card:linear-gradient(160deg,rgba(168,85,247,.12) 0%,rgba(236,72,153,.06) 100%);
+  --r:18px;--card-bg:rgba(255,255,255,.03);--nav-bg:rgba(8,8,16,.9);
+}
+[data-theme="light"]{
+  --bg:#F8F9FC;--surface:rgba(120,110,140,.055);--surface-h:rgba(120,110,140,.09);
+  --border:rgba(30,25,50,.08);--purple:#8b5cf6;--pink:#db2777;--orange:#ea580c;
+  --text:#1a1625;--muted:#6b6478;
+  --grad:linear-gradient(135deg,#8b5cf6,#db2777,#ea580c);
+  --grad-card:linear-gradient(160deg,rgba(139,92,246,.035) 0%,rgba(219,39,119,.02) 100%);
+  --card-bg:rgba(255,255,255,.7);--nav-bg:rgba(255,255,255,.75);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .4s ease,color .4s ease}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-logo .spark{-webkit-text-fill-color:initial}
+.back-btn{width:38px;height:38px;border-radius:100px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;color:var(--text);font-size:16px}
+.icon-btn{width:38px;height:38px;border-radius:100px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+
+.wrap{position:relative;z-index:1;max-width:600px;margin:0 auto;padding:80px 16px 60px}
+
+.maincard{background:var(--grad-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+[data-theme="light"] .maincard{background:var(--card-bg);box-shadow:0 4px 20px rgba(30,20,60,.06)}
+.badge-row{padding:12px 14px 0}
+.badge{display:inline-block;background:rgba(0,0,0,.4);color:#fdba74;font-size:11px;font-weight:700;padding:5px 12px;border-radius:100px}
+[data-theme="light"] .badge{background:rgba(234,88,12,.1);color:#c2410c}
+
+.video-box{position:relative;width:100%;aspect-ratio:9/16;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:10px}
+.video-thumb{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.play-btn{position:relative;z-index:2;width:64px;height:64px;border-radius:100px;background:rgba(168,85,247,.85);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(4px);transition:transform .2s}
+.play-btn:active{transform:scale(.92)}
+.play-btn svg{width:26px;height:26px;fill:#fff;margin-left:3px}
+.video-embed{width:100%;height:100%;border:none;display:none}
+.video-embed.active{display:block}
+.video-thumb.hide,.play-btn.hide{display:none}
+
+.title-row{padding:16px 14px 4px}
+.tpl-title{font-family:'Syne',sans-serif;font-size:19px;font-weight:700}
+
+.action-row{display:flex;flex-direction:column;gap:10px;padding:14px}
+.btn-capcut{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--grad);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;padding:16px;border-radius:100px;text-decoration:none;box-shadow:0 10px 28px rgba(168,85,247,.3);border:none;cursor:pointer}
+.btn-secondary{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;padding:14px;border-radius:100px;text-decoration:none;border:1px solid var(--border);cursor:pointer}
+.btn-secondary:hover{background:var(--surface-h)}
+.btn-row2{display:flex;gap:10px}
+.btn-row2 .btn-secondary{flex:1}
+
+.about{padding:20px 4px 0}
+.about h3{font-family:'Syne',sans-serif;font-size:15px;margin-bottom:10px}
+.about p{font-size:13px;color:var(--muted);line-height:1.7}
+
+.cat-row{display:flex;gap:8px;padding:16px 4px;flex-wrap:wrap}
+.cat-chip{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:600;padding:6px 13px;border-radius:100px}
+
+.sh{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin:28px 0 14px}
+.rel-rail{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.rel-rail::-webkit-scrollbar{display:none}
+.rel-card{flex-shrink:0;width:90px;aspect-ratio:9/13;border-radius:12px;overflow:hidden;background:var(--surface);text-decoration:none}
+.rel-card img{width:100%;height:100%;object-fit:cover}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--grad);color:#fff;padding:12px 22px;border-radius:100px;font-size:13px;font-weight:600;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 30px rgba(168,85,247,.4)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<script>
+(function(){
+  const saved = localStorage.getItem('eg_theme') || 'dark';
+  if(saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+})();
+</script>
+
+<nav>
+  <a href="index.html" class="back-btn">←</a>
+  <a href="index.html" class="nav-logo"><span class="spark">✨</span> EditGalaxy</a>
+  <button class="icon-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
+</nav>
+
+<div class="wrap" id="content">
+  <div style="text-align:center;padding:60px 20px;color:var(--muted)">Loading template...</div>
+</div>
+
+<div class="toast" id="toast">Copied!</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, set, get }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyBgPllgUNMUo6j_Rbd7wg0NjR6z4YFy6uU",
+  authDomain:"template-cc1cb.firebaseapp.com",
+  databaseURL:"https://template-cc1cb-default-rtdb.firebaseio.com",
+  projectId:"template-cc1cb",
+  storageBucket:"template-cc1cb.firebasestorage.app",
+  messagingSenderId:"629554966666",
+  appId:"1:629554966666:web:e99b4dda5170da00a845d3"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const params = new URLSearchParams(window.location.search);
+const tplId = params.get('id');
+
+const PLACEHOLDER_IMG = 'data:image/svg+xml,' + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="640" viewBox="0 0 360 640">
+  <rect width="360" height="640" fill="#151020"/>
+  <text x="50%" y="50%" text-anchor="middle" fill="#555" font-size="16" font-family="sans-serif">Preview unavailable</text>
+</svg>`);
+
+function getVideoThumb(url){
+  if(!url) return null;
+  let m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([a-zA-Z0-9_-]{6,})/);
+  if(m) return `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`;
+  return null;
+}
+
+function getThumb(t){
+  if(t.thumb) return t.thumb;
+  const v = getVideoThumb(t.video);
+  return v || PLACEHOLDER_IMG;
+}
+
+function isInstagramUrl(url){
+  return url && url.includes('instagram.com');
+}
+
+function getInstagramEmbed(url){
+  // Normalize to embed URL
+  let clean = url.split('?')[0];
+  if(!clean.endsWith('/')) clean += '/';
+  return clean + 'embed';
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+async function trackUsage(id){
+  try{
+    const usageRef = ref(db, 'templates/' + id + '/usageLog/' + Date.now());
+    await set(usageRef, Date.now());
+    const totalRef = ref(db, 'templates/' + id + '/totalUses');
+    const snap = await get(totalRef);
+    const current = snap.val() || 0;
+    await set(totalRef, current + 1);
+  }catch(e){ console.warn('Usage tracking failed', e); }
+}
+
+function renderTemplate(t, id, allTemplates){
+  const title = 'Template #' + t.num + (t.name ? ' / ' + t.name : '');
+  const thumb = getThumb(t);
+  const isInsta = isInstagramUrl(t.video);
+  const howto = t.howto || '';
+  const desc = t.description || 'This template is perfect for creating stunning edits. Just add your photos and videos, follow the on-screen guide inside CapCut, and you\\'re ready to post. Beginner friendly and works great on mobile.';
+
+  const categories = (t.cat ? [t.cat] : ['trending']);
+
+  const related = allTemplates.filter(x => x.id !== id && x.cat === t.cat).slice(0, 6);
+  const relHtml = related.map(r => {
+    const rt = getThumb(r);
+    return `<a href="template.html?id=${r.id}" class="rel-card"><img src="${rt}" loading="lazy" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'"></a>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div class="maincard">
+      <div class="badge-row"><span class="badge">🔥 ${t.cat || 'trending'}</span></div>
+      <div class="video-box" id="videoBox">
+        <img class="video-thumb" id="videoThumb" src="${thumb}" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">
+        <button class="play-btn" id="playBtn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <iframe class="video-embed" id="videoEmbed" allowfullscreen></iframe>
+      </div>
+      <div class="title-row"><div class="tpl-title">${title}</div></div>
+      <div class="action-row">
+        <button class="btn-capcut" id="useBtn">✨ Use Template on CapCut</button>
+        <div class="btn-row2">
+          <button class="btn-secondary" id="howtoBtn">📖 How to Use Template</button>
+        </div>
+        <button class="btn-secondary" id="shareBtn">🔗 Share</button>
+      </div>
+    </div>
+
+    <div class="about">
+      <h3>About This Template</h3>
+      <p>${desc}</p>
+    </div>
+
+    <div class="cat-row">
+      ${categories.map(c => `<span class="cat-chip">${c}</span>`).join('')}
+    </div>
+
+    ${related.length ? `<div class="sh">Related Templates</div><div class="rel-rail">${relHtml}</div>` : ''}
+  `;
+
+  // Play button
+  document.getElementById('playBtn').addEventListener('click', () => {
+    const box = document.getElementById('videoBox');
+    const thumbEl = document.getElementById('videoThumb');
+    const playEl = document.getElementById('playBtn');
+    const embed = document.getElementById('videoEmbed');
+
+    if(isInsta){
+      embed.src = getInstagramEmbed(t.video);
+    } else if(t.video){
+      // YouTube fallback
+      let m = t.video.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([a-zA-Z0-9_-]{6,})/);
+      if(m) embed.src = `https://www.youtube.com/embed/${m[1]}?autoplay=1`;
+      else { showToast('Video unavailable'); return; }
+    } else {
+      showToast('Video unavailable');
+      return;
+    }
+    thumbEl.classList.add('hide');
+    playEl.classList.add('hide');
+    embed.classList.add('active');
+  });
+
+  // Use template button
+  document.getElementById('useBtn').addEventListener('click', () => {
+    if(t.capcut){
+      trackUsage(id);
+      window.open(t.capcut, '_blank');
+    } else {
+      showToast('CapCut link not available');
+    }
+  });
+
+  // How to use
+  document.getElementById('howtoBtn').addEventListener('click', () => {
+    if(howto) window.open(howto, '_blank');
+    else showToast('No how-to guide available');
+  });
+
+  // Share
+  document.getElementById('shareBtn').addEventListener('click', async () => {
+    const shareUrl = window.location.href;
+    if(navigator.share){
+      try{ await navigator.share({title, url: shareUrl}); }catch(e){}
+    } else {
+      try{
+        await navigator.clipboard.writeText(shareUrl);
+        showToast('Link copied! 🔗');
+      }catch(e){ showToast('Could not copy link'); }
+    }
+  });
+}
+
+function loadTemplate(){
+  if(!tplId){
+    document.getElementById('content').innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted)">Template not found</div>';
+    return;
+  }
+  onValue(ref(db, 'templates'), snap => {
+    const data = snap.val() || {};
+    const allTemplates = Object.entries(data).map(([id,t])=>({id,...t}));
+    const t = data[tplId];
+    if(!t){
+      document.getElementById('content').innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted)">Template not found</div>';
+      return;
+    }
+    renderTemplate(t, tplId, allTemplates);
+    document.title = 'Template #' + t.num + ' — EditGalaxy';
+  }, { onlyOnce: true });
+}
+loadTemplate();
+
+window.toggleTheme = function(){
+  const html = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const isLight = html.getAttribute('data-theme') === 'light';
+  if(isLight){
+    html.removeAttribute('data-theme');
+    localStorage.setItem('eg_theme', 'dark');
+    if(btn) btn.textContent = '🌙';
+  } else {
+    html.setAttribute('data-theme', 'light');
+    localStorage.setItem('eg_theme', 'light');
+    if(btn) btn.textContent = '☀️';
+  }
+};
+(function(){
+  const btn = document.getElementById('themeToggle');
+  if(btn && document.documentElement.getAttribute('data-theme') === 'light') btn.textContent = '☀️';
+})();
+</script>
+</body>
+</html>
