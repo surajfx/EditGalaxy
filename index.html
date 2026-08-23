@@ -56,6 +56,8 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 .filters{display:flex;gap:7px;overflow:auto;padding:4px 2px 16px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap;padding:9px 13px;color:var(--text);font-size:13px;font-weight:700}
 [data-theme="light"] .filter{color:#000}
+[data-theme="light"] .meta,[data-theme="light"] .videoHint{color:#000}
+[data-theme="light"] .detail p,[data-theme="light"] .sectionhead span{color:#000}
 .filter.active{color:var(--text);border-color:rgba(139,220,255,.45);background:rgba(139,220,255,.10)}
 [data-theme="light"] .filter.active{color:#000;background:rgba(22,143,202,.08);border-color:rgba(22,143,202,.28)}
 .sectionhead{display:flex;align-items:end;justify-content:space-between;margin:20px 0 14px}.sectionhead h2{margin:0;font-size:22px}.sectionhead span{color:var(--muted);font-size:12px}
@@ -68,7 +70,7 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 .cardbody{padding:12px}.cardtitle{font-weight:800;font-size:14px;line-height:1.35}.meta{color:var(--muted);font-size:11px;margin-top:5px}.number{margin-top:7px;font-size:12px;font-weight:900;color:var(--text)}
 .empty{text-align:center;padding:55px 15px;color:var(--muted);grid-column:1/-1}
 .promptpage{display:none}.promptpage.active{display:block}.templatepage.hidden{display:none}
-.detail{position:fixed;inset:0;z-index:200;display:none;overflow:auto;background:var(--bg);padding:86px 16px 110px}.detail.open{display:block}.sheet{width:min(820px,100%);margin:auto;padding:8px 0 30px;background:transparent}.close{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);cursor:pointer;display:block;margin:0 0 14px auto}.detailmedia{position:relative;margin-top:8px;border-radius:24px;overflow:hidden;background:#090b12;aspect-ratio:16/9;display:grid;place-items:center;border:1px solid var(--line)}.detailmedia img{width:100%;height:100%;object-fit:cover}.play{position:absolute;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);color:#000;border:0;font-size:24px;cursor:pointer}.detail h2{margin:18px 0 8px;font-size:32px;letter-spacing:-1px}.detail p{color:var(--text);line-height:1.75}.actions{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}.action{display:flex;align-items:center;justify-content:center;min-height:54px;padding:11px 15px;border-radius:15px;text-align:center;text-decoration:none;font-weight:800;border:1px solid var(--line);background:var(--panel);color:var(--text)}.action.primary{background:rgba(139,220,255,.10);border-color:rgba(139,220,255,.30)}.wideAction{width:100%}.howvideo{margin-top:14px}.howvideo iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:20px}.detailInfo{margin-top:20px;padding:18px;border-radius:20px}.detailLinks{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}.detailLinks a{padding:12px;border-radius:14px;text-decoration:none;border:1px solid var(--line);color:var(--text);background:var(--panel);text-align:center;font-weight:700}.videoModal{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px)}.videoModal.open{display:flex}.videoSheet{width:min(900px,100%);background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:12px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.45)}.videoClose{position:absolute;right:10px;top:10px;z-index:3;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:22px;cursor:pointer}.videoFrame{width:100%;aspect-ratio:16/9;border:0;border-radius:18px;background:#000;display:block}.videoHint{margin:10px 4px 2px;color:var(--muted);font-size:13px;text-align:center}.detailFooter{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.detail{position:fixed;inset:0;z-index:200;display:none;overflow:auto;background:var(--bg);padding:86px 16px 110px}.detail.open{display:block}.sheet{width:min(820px,100%);margin:auto;padding:8px 0 30px;background:transparent}.close{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);cursor:pointer;display:block;margin:0 0 14px auto}.detailmedia{position:relative;margin-top:8px;border-radius:24px;overflow:hidden;background:#090b12;aspect-ratio:16/9;display:grid;place-items:center;border:1px solid var(--line)}.detailmedia img{width:100%;height:100%;object-fit:cover}.play{position:absolute;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);color:#000;border:0;font-size:24px;cursor:pointer}.detail h2{margin:18px 0 8px;font-size:32px;letter-spacing:-1px}.detail p{color:var(--text);line-height:1.75}.actions{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}.action{display:flex;align-items:center;justify-content:center;min-height:54px;padding:11px 15px;border-radius:15px;text-align:center;text-decoration:none;font-weight:800;border:1px solid var(--line);background:var(--panel);color:var(--text)}.action.primary{background:rgba(139,220,255,.10);border-color:rgba(139,220,255,.30)}.wideAction{width:100%}.howvideo{margin-top:14px}.howvideo iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:20px}.detailInfo{margin-top:20px;padding:18px;border-radius:20px}.detailLinks{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}.detailLinks a{padding:12px;border-radius:14px;text-decoration:none;border:1px solid var(--line);color:var(--text);background:var(--panel);text-align:center;font-weight:700}.videoModal{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px)}.videoModal.open{display:flex}.videoSheet{width:min(900px,100%);background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:12px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.45)}.videoClose{position:absolute;right:10px;top:10px;z-index:3;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:22px;cursor:pointer}.videoFrame{width:100%;aspect-ratio:16/9;border:0;border-radius:18px;background:#000;display:block}.videoHint{margin:10px 4px 2px;color:var(--muted);font-size:13px;text-align:center}.videoExternal{display:block;margin:10px auto 2px;width:max-content;max-width:100%;padding:10px 16px;border:1px solid var(--line);border-radius:12px;color:var(--text);text-decoration:none;font-weight:800;background:var(--panel2)}.detailFooter{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
 .bottom{position:fixed;z-index:90;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(620px,calc(100% - 20px));padding:6px;display:grid;grid-template-columns:1fr 1.1fr 1.3fr 1.1fr 1fr;gap:4px;border-radius:20px;background:rgba(255,255,255,.055);border:1px solid var(--line);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
 .navitem{background:transparent;border:0;padding:8px 5px;font-size:11px;color:var(--text);font-weight:800;display:flex;align-items:center;justify-content:center;gap:4px}.navitem .navicon{font-size:14px}.navitem.active{color:var(--text);background:rgba(255,255,255,.05)}
 .ai{width:48px;height:48px;margin:-14px auto -3px;padding:0;border-radius:50%;overflow:hidden;border:1px solid rgba(139,220,255,.35);background:#07101a;box-shadow:0 8px 28px rgba(50,190,255,.22)}
@@ -117,14 +119,14 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 </section>
 
 <section id="templatePage" class="content templatepage">
-  <div class="search glass"><input id="templateSearch" placeholder="Search by number, #number, title or full name…" oninput="renderTemplates()"><button class="searchbtn" type="button" onclick="runSectionSearch('template')">Search</button></div>
+  <div class="search glass"><input id="templateSearch" placeholder="Search by number, #number, title or full name…" ><button class="searchbtn" type="button" onclick="runSectionSearch('template')">Search</button></div>
   <div id="templateFilters" class="filters"></div>
   <div class="sectionhead"><h2 id="templateHeading">Premium Templates</h2><span id="templateCount"></span></div>
   <div id="templateGrid" class="grid"></div>
 </section>
 
 <section id="promptPage" class="content promptpage">
-  <div class="search glass"><input id="promptSearch" placeholder="Search prompts by number, title or text…" oninput="renderPrompts()"><button class="searchbtn" type="button" onclick="runSectionSearch('prompt')">Search</button></div>
+  <div class="search glass"><input id="promptSearch" placeholder="Search prompts by number, title or text…" ><button class="searchbtn" type="button" onclick="runSectionSearch('prompt')">Search</button></div>
   <div id="promptFilters" class="filters"></div>
   <div class="sectionhead"><h2>AI Image Prompts</h2><span id="promptCount"></span></div>
   <div id="promptGrid" class="grid"></div>
@@ -249,8 +251,9 @@ function imgFor(x){
 function card(x,type){
  const title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
  const cat=x.category||x.cat||"General";
+ const catText=catLabel(normalize(cat));
  return `<article class="card" onclick='window.openDetail(${JSON.stringify(JSON.stringify(x))},"${type}")'>
-  <div class="thumb"><img loading="lazy" src="${escapeAttr(imgFor(x))}" alt="${escapeAttr(title)}"><span class="badge">${escapeHtml(cat)}</span></div>
+  <div class="thumb"><img loading="lazy" src="${escapeAttr(imgFor(x))}" alt="${escapeAttr(title)}"><span class="badge">${escapeHtml(catText)}</span></div>
   <div class="cardbody"><div class="cardtitle">${escapeHtml(title)}</div><div class="number">#${escapeHtml(x.num||x.number||"—")}</div></div>
  </article>`;
 }
@@ -262,7 +265,7 @@ window.renderTemplates=renderTemplates;window.renderPrompts=renderPrompts;
 function createdValue(x){ return Number(x.createdAt||x.timestamp||x.addedAt||x.created||0) || 0; }
 function newestFirst(a,b){ const av=createdValue(a),bv=createdValue(b); if(av||bv) return bv-av; return String(b.id||"").localeCompare(String(a.id||"")); }
 function renderTemplates(){
- const q=document.getElementById("templateSearch").value;
+ const q=document.getElementById("templateSearch").value.trim();
  let list=templates.filter(x=>categoryMatch(x,tFilter)&&matches(x,q));
  if(tFilter==="trending") list.sort((a,b)=>(b.last7Uses||b.weekUses||0)-(a.last7Uses||a.weekUses||0)); else list.sort(newestFirst);
  document.getElementById("templateCount").textContent=list.length+" results";
@@ -275,7 +278,7 @@ const demoPrompts=[
  {id:"demo4",num:4,title:"Anime Night Portrait",category:"anime",imageUrl:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80",girlPrompt:"Stylized anime-inspired night portrait, expressive eyes, neon rim light, detailed background, polished illustration.",boyPrompt:"Stylized anime-inspired night portrait, expressive eyes, neon rim light, detailed background, polished illustration."}
 ];
 function renderPrompts(){
- const q=document.getElementById("promptSearch").value;
+ const q=document.getElementById("promptSearch").value.trim();
  let source=prompts.length?prompts:demoPrompts;
  let list=source.filter(x=>categoryMatch(x,pFilter)&&matches(x,q));
  document.getElementById("promptCount").textContent=list.length+" results";
@@ -286,14 +289,14 @@ window.openDetail=(raw,type)=>{
  const img=imgFor(x);
  let html=`<div class="detailmedia"><img src="${escapeAttr(img)}" alt="${escapeAttr(title)}">${type==="template"?`<button class="play" aria-label="Play template video" onclick='openVideoModal(${JSON.stringify(x.instagramUrl||x.video||x.instagram||"")},"instagram")'>▶</button>`:""}</div><h2>${escapeHtml(title)}</h2>`;
  if(type==="template") {
-   const cap=x.capcut||x.capcutUrl||"#", how=x.howToUseVideo||x.howToUseVideoUrl||x.howVideo||x.howToUseLink||"";
+   const cap=x.capcut||x.capcutUrl||x.capcutLink||"#", how=x.howToUseVideo||x.howToUseVideoUrl||x.howVideo||x.howToUseLink||x.howto||"";
    html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="window.trackUse('${escapeAttr(x.id||"")}')">✨ Use Template on CapCut</a>${how?`<button class="action wideAction" onclick='openVideoModal(${JSON.stringify(how)},"auto")'>▶ How to Use Video</button>`:`<button class="action wideAction" onclick="showToast('How-to-use video link is not added yet.')">▶ How to Use Video</button>`}</div>`;
-   const desc=x.description||x.howToUse||"Open the CapCut template button above. When CapCut opens, choose the template and add your own photos or video clips. Follow the How to Use Video for a quick step-by-step guide.";
-   const insta=x.instagramUrl||x.video||x.instagram||"#";
+   const desc=x.description||x.howToUse||"Open the CapCut template button above. In CapCut, choose the template, tap Use Template, select your photos or video clips, adjust the clips if needed, then preview and export your finished edit. Use the How to Use Video for a visual step-by-step guide.";
+   const insta=x.instagramUrl||x.instagramVideo||x.video||x.instagram||"#";
    html+=`<div class="detailInfo glass"><p>${escapeHtml(desc)}</p><div class="detailLinks"><a href="${escapeAttr(cap)}" target="_blank" rel="noopener">✨ CapCut Template</a><a href="${escapeAttr(insta)}" target="_blank" rel="noopener">📷 Instagram Video</a></div></div>`;
  } else {
    const gp=x.girlPrompt||x.prompt||"", bp=x.boyPrompt||"";
-   html+=`<div class="actions"><button class="action primary wideAction" onclick='copyText(${JSON.stringify(gp)})'>📋 Copy ${bp?"Girl":"Prompt"}</button>${bp?`<button class="action wideAction" onclick='copyText(${JSON.stringify(bp)})'>📋 Copy Boy Prompt</button>`:""}</div><div class="detailInfo glass"><p>${escapeHtml(x.description||"Copy the prompt and use it with your preferred image generator.")}</p></div>`;
+   html+=`<div class="actions"><button class="action primary wideAction" onclick='copyText(${JSON.stringify(gp)},${JSON.stringify(x.id||"")})'>📋 Copy ${bp?"Girl":"Prompt"}</button>${bp?`<button class="action wideAction" onclick='copyText(${JSON.stringify(bp)},${JSON.stringify(x.id||"")})'>📋 Copy Boy Prompt</button>`:""}</div><div class="detailInfo glass"><p>${escapeHtml(x.description||x.tips||"Copy the prompt and use it with your preferred image generator.")}</p></div>`;
  }
  html+=siteDetails();
  document.getElementById("detailContent").innerHTML=html;
@@ -308,48 +311,74 @@ function normalizeVideoUrl(url){
  try{
    const u=new URL(raw);
    const host=u.hostname.replace(/^www\./,"").toLowerCase();
-   if(host.includes("instagram.com")){
-     const path=u.pathname.replace(/\/+/g,"/").replace(/\/$/,"");
-     if(/\/(reel|p|tv)\//i.test(path)) return {kind:"iframe",src:raw.replace(/\/?$/,"/")+"embed"};
-     return {kind:"iframe",src:raw};
+   if(host.endsWith("instagram.com")){
+     const parts=u.pathname.split("/").filter(Boolean);
+     const kind=parts[0]?.toLowerCase();
+     const id=parts[1];
+     if((kind==="reel"||kind==="p"||kind==="tv")&&id){
+       return {kind:"iframe",src:`https://www.instagram.com/${kind}/${encodeURIComponent(id)}/embed/`,external:raw};
+     }
+     return {kind:"iframe",src:raw,external:raw};
    }
    if(host.includes("youtube.com")){
      let id=u.searchParams.get("v");
      if(!id && u.pathname.includes("/shorts/")) id=u.pathname.split("/shorts/")[1].split("/")[0];
      if(!id && u.pathname.includes("/embed/")) id=u.pathname.split("/embed/")[1].split("/")[0];
-     if(id) return {kind:"iframe",src:`https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`};
+     if(id) return {kind:"iframe",src:`https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`,external:raw};
    }
    if(host==="youtu.be"){
      const id=u.pathname.slice(1).split("/")[0];
-     if(id) return {kind:"iframe",src:`https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`};
+     if(id) return {kind:"iframe",src:`https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`,external:raw};
    }
-   if(/\.(mp4|webm|ogg)(?:$|\?)/i.test(u.pathname)) return {kind:"video",src:raw};
-   return {kind:"iframe",src:raw};
- }catch{return {kind:"iframe",src:raw};}
+   if(/\.(mp4|webm|ogg)(?:$|\?)/i.test(u.pathname)) return {kind:"video",src:raw,external:raw};
+   return {kind:"iframe",src:raw,external:raw};
+ }catch{return {kind:"iframe",src:raw,external:raw};}
 }
 window.openVideoModal=(url,type="auto")=>{
  const v=normalizeVideoUrl(url);
  if(!v){showToast("Video link is not added yet.");return;}
  const body=document.getElementById("videoBody");
- if(v.kind==="video") body.innerHTML=`<video class="videoFrame" controls autoplay playsinline src="${escapeAttr(v.src)}"></video><div class="videoHint">Video is playing on EditGalaxy.</div>`;
- else body.innerHTML=`<iframe class="videoFrame" src="${escapeAttr(v.src)}" title="EditGalaxy video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe><div class="videoHint">If Instagram blocks embedded playback, use the Instagram Video button below.</div>`;
+ const fallback=v.external?`<a class="videoExternal" href="${escapeAttr(v.external)}" target="_blank" rel="noopener">Open original video ↗</a>`:"";
+ if(v.kind==="video") body.innerHTML=`<video class="videoFrame" controls autoplay playsinline src="${escapeAttr(v.src)}"></video>${fallback}`;
+ else body.innerHTML=`<iframe class="videoFrame" src="${escapeAttr(v.src)}" title="EditGalaxy video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe><div class="videoHint">If the platform blocks embedded playback, use the button below.</div>${fallback}`;
  document.getElementById("videoModal").classList.add("open");
-}
+};
 window.closeVideoModal=()=>{const m=document.getElementById("videoModal");m.classList.remove("open");document.getElementById("videoBody").innerHTML=""};
 
 function siteDetails(){ return `<div class="detailFooter"><div class="detailLinks"><a href="#" onclick="goHome();return false">About</a><a href="#" onclick="showToast('Contact page coming soon.');return false">Contact</a><a href="#" onclick="showToast('Team page coming soon.');return false">Team</a><a href="#" onclick="showToast('Privacy Policy page coming soon.');return false">Privacy Policy</a><a href="#" onclick="showToast('Trust & Safety page coming soon.');return false">Trust</a><a href="https://www.instagram.com/trending_edit_day/" target="_blank">Instagram</a><a href="https://t.me/trending_edit_day" target="_blank">Telegram</a><a href="https://youtube.com/@surajfx2.0" target="_blank">YouTube</a><a href="https://www.tiktok.com/@trending_edit_day" target="_blank">TikTok</a><a href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank">Facebook</a><a href="https://www.threads.com/@trending_edit_day" target="_blank">Threads</a></div></div>` }
 window.closeDetail=()=>{document.getElementById("detail").classList.remove("open");document.body.style.overflow="";if(location.hash)history.replaceState(null,"",location.pathname+location.search)};
-window.copyText=async t=>{try{await navigator.clipboard.writeText(t||"");showToast("Copied ✓")}catch{showToast("Copy failed")}}
+window.copyText=async (t,id)=>{try{await navigator.clipboard.writeText(t||"");if(id){try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,ref,update}=m;const r=ref(db,"prompts/"+id);const s=await get(ref(db,"prompts/"+id+"/totalCopies"));const next=(s.val()||0)+1;await update(r,{totalCopies:next,["copyHistory/"+Date.now()]:true});}catch{}}showToast("Copied ✓")}catch{showToast("Copy failed")}}
 window.shareCurrent=async()=>{try{await navigator.share({title:window.currentShare?.title||"EditGalaxy",url:location.href})}catch{await navigator.clipboard.writeText(location.href);showToast("Link copied ✓")}}
 window.runSectionSearch=type=>{
  const el=document.getElementById(type==="prompt"?"promptSearch":"templateSearch");
  const q=(el?.value||"").trim();
- if(type==="prompt") renderPrompts(); else renderTemplates();
- showToast(q?`Searching for “${q}”`:`Showing all ${type}s`);
+ const box=el?.closest(".search"), btn=box?.querySelector(".searchbtn");
+ if(!q){ if(type==="prompt") renderPrompts(); else renderTemplates(); showToast(`Showing all ${type}s`); return; }
+ box?.classList.add("searching"); if(btn) btn.textContent="Searching…";
+ setTimeout(()=>{
+   const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
+   const item=source.filter(x=>type==="template"?categoryMatch(x,tFilter):categoryMatch(x,pFilter)).map(x=>({x,score:scoreItem(x,q)})).filter(v=>v.score>0).sort((a,b)=>b.score-a.score)[0]?.x;
+   box?.classList.remove("searching"); if(btn) btn.textContent="Search";
+   if(item){ openDetail(JSON.stringify(item),type); } else { if(type==="prompt") renderPrompts(); else renderTemplates(); showToast(`No ${type} found for “${q}”`); }
+ },420);
 };
+function scoreItem(x,q){
+ const n=normalize(q), number=String(x.num||x.number||x.templateNumber||x.promptNumber||"");
+ const title=normalize(x.title||x.name||x.templateName||x.promptTitle||"");
+ const hay=[title,normalize(number),normalize("#"+number),normalize(x.category||x.cat||""),normalize(x.prompt||x.girlPrompt||x.boyPrompt||""),normalize(x.description||x.tips||"")];
+ let score=0;
+ if(n===normalize(number)||n===normalize("#"+number)) score+=1000;
+ if(n===title) score+=900;
+ if(title.includes(n)) score+=600;
+ if(hay.some(v=>v.includes(n))) score+=300;
+ return score;
+}
+let searchTimers={};
+document.getElementById("templateSearch").addEventListener("input",()=>{clearTimeout(searchTimers.t);searchTimers.t=setTimeout(renderTemplates,180)});
 document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("template")}});
+document.getElementById("promptSearch").addEventListener("input",()=>{clearTimeout(searchTimers.p);searchTimers.p=setTimeout(renderPrompts,180)});
 document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("prompt")}});
-window.trackUse=async id=>{if(!id)return;try{await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(async m=>{const {get,set,ref}=m;const r=ref(db,"templates/"+id+"/totalUses");const s=await get(r);await set(r,(s.val()||0)+1)})}catch{}}
+window.trackUse=async id=>{if(!id)return;try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,update,ref}=m;const r=ref(db,"templates/"+id);const s=await get(ref(db,"templates/"+id+"/totalUses"));const next=(s.val()||0)+1;const now=Date.now();const day=new Date(now).toISOString().slice(0,10);await update(r,{totalUses:next,["useHistory/"+now]:true,["usesByDay/"+day]:((await get(ref(db,"templates/"+id+"/usesByDay/"+day))).val()||0)+1});}catch{}}
 window.showSection=section=>{
  const isPrompt=section==="prompts";
  const target=isPrompt?document.getElementById("promptPage"):document.getElementById("templatePage");
@@ -364,7 +393,7 @@ window.showSection=section=>{
  document.getElementById("navPrompts").classList.toggle("active",isPrompt);
  document.getElementById("navHome").classList.remove("active");
  closeMenu();
- if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
+ if(target){ requestAnimationFrame(()=>target.scrollIntoView({behavior:"smooth",block:"start"})); }
 }
 window.goHome=()=>{
  closeMenu();
@@ -383,20 +412,7 @@ window.openAISearch=openAISearch;window.closeAI=()=>document.getElementById("aiO
 window.setAIType=t=>{aiType=t;document.getElementById("aiTemplate").classList.toggle("primary",t==="template");document.getElementById("aiPrompt").classList.toggle("primary",t==="prompt")}
 function aiFindItem(q,type){
  const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
- const n=normalize(q);
- if(!n) return null;
- const scored=source.map(x=>{
-   const number=String(x.num||x.number||x.templateNumber||x.promptNumber||"");
-   const title=normalize(x.title||x.name||x.templateName||x.promptTitle||"");
-   const hay=[title,normalize(number),normalize("#"+number),normalize(x.category||x.cat||""),normalize(x.prompt||x.girlPrompt||x.boyPrompt||"")];
-   let score=0;
-   if(n===normalize(number)||n===normalize("#"+number)) score+=1000;
-   if(n===title) score+=900;
-   if(title.includes(n)) score+=600;
-   if(hay.some(v=>v.includes(n))) score+=300;
-   return {x,score};
- }).filter(v=>v.score>0).sort((a,b)=>b.score-a.score);
- return scored[0]?.x||null;
+ return source.map(x=>({x,score:scoreItem(x,q)})).filter(v=>v.score>0).sort((a,b)=>b.score-a.score)[0]?.x||null;
 }
 window.runAISearch=()=>{
  const input=document.getElementById("aiInput"), box=input.closest(".search"), btn=box.querySelector(".searchbtn");
@@ -410,7 +426,7 @@ window.runAISearch=()=>{
    if(item){
      closeAI();
      if(type==="template"){showSection("templates")}else{showSection("prompts")}
-     setTimeout(()=>window.openDetail(JSON.stringify(JSON.stringify(item)),type),350);
+     setTimeout(()=>window.openDetail(JSON.stringify(item),type),350);
    }else{showToast(`No ${type} found for “${q}”`);}
  },700);
 }
