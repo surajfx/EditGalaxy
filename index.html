@@ -49,6 +49,10 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 .search{display:flex;gap:8px;padding:8px;border-radius:18px;margin:0 auto 12px;max-width:850px}
 .search input{flex:1;border:0;outline:0;background:transparent;color:var(--text);padding:12px 10px;min-width:0}
 .search input::placeholder{color:var(--muted)}.searchbtn{padding:0 17px;font-weight:800}
+.aiSearchBox.searching{animation:aiPulse .65s ease-in-out 2;border-color:rgba(139,220,255,.65)}
+.aiSearchBox.searching .searchbtn{animation:aiSpin .8s linear infinite}
+@keyframes aiPulse{0%,100%{transform:scale(1);box-shadow:var(--shadow)}50%{transform:scale(1.015);box-shadow:0 0 0 8px rgba(139,220,255,.08),0 20px 70px rgba(0,0,0,.35)}}
+@keyframes aiSpin{to{transform:rotate(360deg)}}
 .filters{display:flex;gap:7px;overflow:auto;padding:4px 2px 16px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap;padding:9px 13px;color:var(--text);font-size:13px;font-weight:700}
 [data-theme="light"] .filter{color:#000}
@@ -170,7 +174,7 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
     <button id="aiTemplate" class="action primary" onclick="setAIType('template')">🎬 Template</button>
     <button id="aiPrompt" class="action" onclick="setAIType('prompt')">🖼️ Prompt</button>
   </div>
-  <div class="search glass"><input id="aiInput" placeholder="e.g. #251 or Hindi Song"><button class="searchbtn" onclick="runAISearch()">✦ Search</button></div>
+  <div class="search glass aiSearchBox"><input id="aiInput" placeholder="e.g. #251 or Hindi Song"><button class="searchbtn" onclick="runAISearch()">✦ Search</button></div>
  </article>
 </div>
 <div id="toast" class="toast"></div>
@@ -186,7 +190,7 @@ const firebaseConfig={
  projectId:"template-cc1cb",
  storageBucket:"template-cc1cb.firebasestorage.app",
  messagingSenderId:"62955466666",
- appId:"1:629554966666:web:e99b4dda5170da00a845d3",
+ appId:"1:62955466666:web:e99b4dda5170da00a845d3",
  measurementId:"G-Y3WFW4TR45"
 };
 const app=initializeApp(firebaseConfig),db=getDatabase(app);
@@ -274,7 +278,7 @@ function renderPrompts(){
 window.openDetail=(raw,type)=>{
  const x=JSON.parse(raw), title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
  const img=imgFor(x);
- let html=`<button class="close" onclick="closeDetail()">✕</button><div class="detailmedia"><img src="${escapeAttr(img)}" alt="${escapeAttr(title)}"><button class="play" onclick='window.openExternal(${JSON.stringify(x.instagramUrl||x.video||x.instagram||"")})'>▶</button></div><h2>${escapeHtml(title)}</h2>`;
+ let html=`<button class="close" onclick="closeDetail()">✕</button><div class="detailmedia"><img src="${escapeAttr(img)}" alt="${escapeAttr(title)}">${type==="template"?`<button class="play" onclick='window.openExternal(${JSON.stringify(x.instagramUrl||x.video||x.instagram||"")})'>▶</button>`:""}</div><h2>${escapeHtml(title)}</h2>`;
  if(type==="template") {
    const cap=x.capcut||x.capcutUrl||"#", how=x.howToUseVideo||x.howToUseVideoUrl||x.howVideo||x.howToUseLink||"";
    html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="window.trackUse('${escapeAttr(x.id||"")}')">✨ Use Template on CapCut</a>${how?`<a class="action wideAction" href="${escapeAttr(how)}" target="_blank" rel="noopener">▶ How to Use Video</a>`:`<button class="action wideAction" onclick="showToast('How-to-use video link is not added yet.')">▶ How to Use Video</button>`}</div>`;
@@ -334,7 +338,40 @@ window.showExplore=()=>showToast("Explore is ready for your future collections."
 function openAISearch(){document.getElementById("aiOverlay").classList.add("open")}
 window.openAISearch=openAISearch;window.closeAI=()=>document.getElementById("aiOverlay").classList.remove("open");
 window.setAIType=t=>{aiType=t;document.getElementById("aiTemplate").classList.toggle("primary",t==="template");document.getElementById("aiPrompt").classList.toggle("primary",t==="prompt")}
-window.runAISearch=()=>{const q=document.getElementById("aiInput").value;closeAI();if(aiType==="template"){showSection("templates");document.getElementById("templateSearch").value=q;renderTemplates()}else{showSection("prompts");document.getElementById("promptSearch").value=q;renderPrompts()}}
+function aiFindItem(q,type){
+ const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
+ const n=normalize(q);
+ if(!n) return null;
+ const scored=source.map(x=>{
+   const number=String(x.num||x.number||x.templateNumber||x.promptNumber||"");
+   const title=normalize(x.title||x.name||x.templateName||x.promptTitle||"");
+   const hay=[title,normalize(number),normalize("#"+number),normalize(x.category||x.cat||""),normalize(x.prompt||x.girlPrompt||x.boyPrompt||"")];
+   let score=0;
+   if(n===normalize(number)||n===normalize("#"+number)) score+=1000;
+   if(n===title) score+=900;
+   if(title.includes(n)) score+=600;
+   if(hay.some(v=>v.includes(n))) score+=300;
+   return {x,score};
+ }).filter(v=>v.score>0).sort((a,b)=>b.score-a.score);
+ return scored[0]?.x||null;
+}
+window.runAISearch=()=>{
+ const input=document.getElementById("aiInput"), box=input.closest(".search"), btn=box.querySelector(".searchbtn");
+ const q=input.value.trim();
+ if(!q){showToast("Type a name or number first");input.focus();return;}
+ box.classList.add("searching"); btn.textContent="✦";
+ const type=aiType;
+ setTimeout(()=>{
+   const item=aiFindItem(q,type);
+   box.classList.remove("searching"); btn.textContent="✦ Search";
+   if(item){
+     closeAI();
+     if(type==="template"){showSection("templates")}else{showSection("prompts")}
+     setTimeout(()=>window.openDetail(JSON.stringify(JSON.stringify(item)),type),350);
+   }else{showToast(`No ${type} found for “${q}”`);}
+ },700);
+}
+document.getElementById("aiInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();window.runAISearch()}});
 function closeMenu(){document.getElementById("menuOverlay").classList.remove("open")}
 document.getElementById("menuBtn").onclick=()=>document.getElementById("menuOverlay").classList.add("open");
 document.getElementById("menuOverlay").onclick=e=>{if(e.target.id==="menuOverlay")closeMenu()}
