@@ -19,9 +19,9 @@
   --text:#000000;--muted:#000000;--accent:#168fca;--accent2:#7553d6;
   --shadow:0 18px 55px rgba(32,55,80,.14);
 }
-*{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;color:var(--text);font-family:Arial,Helvetica,sans-serif;
-background:
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg);overscroll-behavior-y:none}body{overscroll-behavior-y:none}
+body.menu-open{overflow:hidden}body{margin:0;color:var(--text);font-family:Arial,Helvetica,sans-serif;
+background-color:var(--bg);background:
 radial-gradient(900px 520px at 12% -8%,rgba(80,150,190,.11),transparent 68%),
 radial-gradient(760px 520px at 90% 18%,rgba(100,80,170,.08),transparent 68%),
 linear-gradient(145deg,var(--bg),var(--bg2));min-height:100vh}
@@ -75,9 +75,9 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 .navitem{background:transparent;border:0;padding:8px 5px;font-size:11px;color:var(--text);font-weight:800;display:flex;align-items:center;justify-content:center;gap:4px}.navitem .navicon{font-size:14px}.navitem.active{color:var(--text);background:rgba(255,255,255,.05)}
 .ai{width:48px;height:48px;margin:-14px auto -3px;padding:0;border-radius:50%;overflow:hidden;border:1px solid rgba(139,220,255,.35);background:#07101a;box-shadow:0 8px 28px rgba(50,190,255,.22)}
 .ai img{width:100%;height:100%;object-fit:cover}
-.menuoverlay{position:fixed;inset:0;z-index:150;display:none;background:rgba(0,0,0,.28);backdrop-filter:blur(16px)}
-.menuoverlay.open{display:block}.menu{position:absolute;right:14px;top:68px;width:min(330px,calc(100% - 28px));padding:14px;border-radius:22px}
-.menu h3{margin:5px 8px 12px}.menuitem{display:flex;align-items:center;gap:12px;width:100%;padding:13px;margin:5px 0;text-align:left;text-decoration:none}
+.menuoverlay{position:fixed;inset:0;z-index:150;display:none;overflow:auto;padding:76px 14px 24px;background:rgba(0,0,0,.28);backdrop-filter:blur(16px);overscroll-behavior:contain}
+.menuoverlay.open{display:block}.menu{position:relative;margin-left:auto;right:auto;top:auto;width:min(330px,100%);max-height:calc(100dvh - 100px);overflow-y:auto;overscroll-behavior:contain;padding:14px;border-radius:22px;scrollbar-width:none}.menu::-webkit-scrollbar{display:none}
+.menu h3{margin:5px 8px 12px}.menuitem{display:flex;align-items:center;gap:12px;width:100%;padding:13px;margin:5px 0;text-align:left;text-decoration:none;color:var(--text)}.menuitem:visited{color:var(--text)}.menuitem .socialGlyph{width:24px;height:24px;display:grid;place-items:center;flex:0 0 24px}.menuitem .socialGlyph svg{width:22px;height:22px;fill:currentColor}.menuitem small{color:var(--muted)}
 .menuitem span:first-child{width:25px;text-align:center}.menuitem small{color:var(--muted);margin-left:auto}
 .toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(15px);z-index:500;opacity:0;pointer-events:none;padding:11px 16px;border-radius:999px;background:rgba(20,22,30,.88);border:1px solid var(--line);backdrop-filter:blur(16px);transition:.25s;font-size:13px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
@@ -143,12 +143,12 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
     <button class="menuitem" onclick="goHome()"><span>⌂</span> Home</button>
     <button class="menuitem" onclick="showSection('templates');closeMenu()"><span>🎬</span> Templates</button>
     <button class="menuitem" onclick="showSection('prompts');closeMenu()"><span>🖼️</span> Image Prompts</button>
-    <a class="menuitem" href="https://app.surajfx.in" target="_blank" rel="noopener"><span>✦</span> CapCut <small>↗</small></a>
-    <a class="menuitem" href="https://www.instagram.com/trending_edit_day/" target="_blank" rel="noopener"><span>◎</span> Instagram <small>↗</small></a>
-    <a class="menuitem" href="https://www.tiktok.com/@trending_edit_day" target="_blank" rel="noopener"><span>♪</span> TikTok <small>↗</small></a>
-    <a class="menuitem" href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank" rel="noopener"><span>f</span> Facebook <small>↗</small></a>
-    <a class="menuitem" href="https://www.threads.com/@trending_edit_day" target="_blank" rel="noopener"><span>@</span> Threads <small>↗</small></a>
-    <a class="menuitem" href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener"><span>▶</span> YouTube <small>↗</small></a>
+    <a class="menuitem" href="https://app.surajfx.in" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true">✦</span> CapCut <small>↗</small></a>
+    <a class="menuitem" href="https://www.instagram.com/trending_edit_day/" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.7" r="1.2"/></svg></span> Instagram <small>↗</small></a>
+    <a class="menuitem" href="https://www.tiktok.com/@trending_edit_day" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.2 3v10.1a4.2 4.2 0 1 1-3.3-4.1v3.2a1.3 1.3 0 1 0 1.1 1.3V3h2.2c.3 1.8 1.3 3 3 3.5v2.3c-1.2-.1-2.2-.5-3-1.1V3z"/></svg></span> TikTok <small>↗</small></a>
+    <a class="menuitem" href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.6 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V3.9c-.3 0-1.4-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3V10H7.4v3h2.8v8h3.4z"/></svg></span> Facebook <small>↗</small></a>
+    <a class="menuitem" href="https://www.threads.com/@trending_edit_day" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.4 21c-4.6 0-7.4-2.9-7.4-7.7 0-5.1 2.8-8.3 7.5-8.3 4.2 0 6.8 2.2 7.1 5.9h-2.3c-.3-2.3-1.9-3.7-4.8-3.7-3.3 0-5.1 2.1-5.1 6.1 0 3.7 1.7 5.4 4.9 5.4 2.4 0 4.2-1.1 4.8-3.2-.9-.5-2-.8-3.3-.8-1.8 0-2.8.7-2.8 1.8 0 .8.6 1.3 1.7 1.3 1.5 0 2.5-.9 2.9-2.5-2.8-1-6.8-.2-6.8 2.8 0 1.9 1.7 2.9 3.6 2.9 2.4 0 4.1-1 4.8-2.9l2 .9c-1.1 2.8-3.4 4.7-6.8 4.7z"/></svg></span> Threads <small>↗</small></a>
+    <a class="menuitem" href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21.6 7.2a2.9 2.9 0 0 0-2-2C17.9 4.7 12 4.7 12 4.7s-5.9 0-7.6.5a2.9 2.9 0 0 0-2 2C1.9 8.9 1.9 12 1.9 12s0 3.1.5 4.8a2.9 2.9 0 0 0 2 2c1.7.5 7.6.5 7.6.5s5.9 0 7.6-.5a2.9 2.9 0 0 0 2-2c.5-1.7.5-4.8.5-4.8s0-3.1-.5-4.8zM10 15.3V8.7l5.7 3.3-5.7 3.3z"/></svg></span> YouTube <small>↗</small></a>
     <a class="menuitem" href="about.html"><span>ⓘ</span> About <small>↗</small></a>
     <a class="menuitem" href="contact.html"><span>✉</span> Contact <small>↗</small></a>
     <a class="menuitem" href="team.html"><span>👥</span> Team <small>↗</small></a>
@@ -466,8 +466,8 @@ window.runAISearch=()=>{
  },700);
 }
 document.getElementById("aiInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();window.runAISearch()}});
-function closeMenu(){document.getElementById("menuOverlay").classList.remove("open");if(location.hash==="#menu")history.replaceState(null,"",location.pathname+location.search)}
-document.getElementById("menuBtn").onclick=()=>{document.getElementById("menuOverlay").classList.add("open");history.pushState({overlay:"menu"},"",location.href.split("#")[0]+"#menu")};
+function closeMenu(){document.getElementById("menuOverlay").classList.remove("open");document.body.classList.remove("menu-open");if(location.hash==="#menu")history.replaceState(null,"",location.pathname+location.search)}
+document.getElementById("menuBtn").onclick=()=>{document.getElementById("menuOverlay").classList.add("open");document.body.classList.add("menu-open");history.pushState({overlay:"menu"},"",location.href.split("#")[0]+"#menu")};
 document.getElementById("menuOverlay").onclick=e=>{if(e.target.id==="menuOverlay")closeMenu()}
 document.getElementById("themeBtn").onclick=()=>{const next=document.documentElement.dataset.theme==="light"?"dark":"light";document.documentElement.dataset.theme=next;localStorage.setItem("eg_theme",next);document.getElementById("themeBtn").textContent=next==="light"?"☀":"☾"}
 const saved=localStorage.getItem("eg_theme")||"dark";document.documentElement.dataset.theme=saved;document.getElementById("themeBtn").textContent=saved==="light"?"☀":"☾";
@@ -523,7 +523,7 @@ window.addEventListener("popstate",()=>{
   const d=document.getElementById("detail"), ai=document.getElementById("aiOverlay"), menu=document.getElementById("menuOverlay");
   if(d.classList.contains("open")){ closeDetail(); return; }
   if(ai.classList.contains("open")){ ai.classList.remove("open"); return; }
-  if(menu.classList.contains("open")){ menu.classList.remove("open"); return; }
+  if(menu.classList.contains("open")){ menu.classList.remove("open"); document.body.classList.remove("menu-open"); return; }
 });
 </script>
 </body>
