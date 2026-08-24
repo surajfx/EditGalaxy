@@ -81,6 +81,8 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 .detail{position:fixed;inset:0;z-index:200;display:none;overflow:auto;background:var(--bg);padding:86px 16px 110px}.detail.open{display:block}.sheet{width:min(820px,100%);margin:auto;padding:8px 0 30px;background:transparent}.close{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);cursor:pointer;display:block;margin:0 0 14px auto}.detailmedia{position:relative;margin:8px auto 0;width:min(100%,420px);border-radius:24px;overflow:hidden;background:#090b12;aspect-ratio:4/5;display:grid;place-items:center;border:1px solid var(--line)}.detailmedia img{width:100%;height:100%;object-fit:cover;display:block}.play{position:absolute;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);color:#000;border:0;font-size:24px;cursor:pointer}.detail h2{margin:18px 0 8px;font-size:32px;letter-spacing:-1px}.detail p{color:var(--text);line-height:1.75}.actions{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}.action{display:flex;align-items:center;justify-content:center;min-height:54px;padding:11px 15px;border-radius:15px;text-align:center;text-decoration:none;font-weight:800;border:1px solid var(--line);background:var(--panel);color:var(--text)}.action.primary{background:rgba(139,220,255,.10);border-color:rgba(139,220,255,.30)}.wideAction{width:100%}.howvideo{margin-top:14px}.howvideo iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:20px}.detailInfo{margin-top:20px;padding:18px;border-radius:20px}.detailLinks{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}.detailLinks a{padding:8px 4px;border-radius:8px;text-decoration:none;border:0;color:var(--text);background:transparent;text-align:center;font-weight:800}.detailLinks a:hover{text-decoration:underline;text-underline-offset:4px}.videoModal{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px)}.videoModal.open{display:flex}.videoSheet{width:min(900px,100%);background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:12px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.45)}.videoClose{position:absolute;right:10px;top:10px;z-index:3;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:22px;cursor:pointer}.videoFrame{width:100%;aspect-ratio:16/9;border:0;border-radius:18px;background:#000;display:block}.videoFrame.vertical{aspect-ratio:9/16;max-height:78vh;max-width:min(100%,430px);margin:auto;object-fit:contain}.videoHint{margin:10px 4px 2px;color:var(--muted);font-size:13px;text-align:center}.videoExternal{display:block;margin:10px auto 2px;width:max-content;max-width:100%;padding:10px 16px;border:1px solid var(--line);border-radius:12px;color:var(--text);text-decoration:none;font-weight:800;background:var(--panel2)}.detailFooter{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
 .promptTrending{margin-top:28px}.promptTrending h3{margin:0 0 14px;font-size:18px}.promptTrending .grid{grid-template-columns:repeat(3,1fr)}
 .promptModal{position:fixed;inset:0;z-index:520;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.promptModal.open{display:flex}.promptSheet{width:min(760px,100%);max-height:90dvh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 30px 90px rgba(0,0,0,.5)}.promptSheet h3{margin:0 0 16px;font-size:24px}.promptBox{padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--panel2);margin:12px 0}.promptBox h4{margin:0 0 10px;font-size:15px}.promptText{white-space:pre-wrap;line-height:1.65;color:var(--text);max-height:230px;overflow:auto;font-size:13px}.copyPrompt{margin-top:12px}.promptLoading{display:grid;place-items:center;gap:14px;padding:54px 10px;text-align:center}.promptSpinner{width:42px;height:42px;border-radius:50%;border:3px solid var(--line);border-top-color:#8bdcff;animation:promptSpin .8s linear infinite}@keyframes promptSpin{to{transform:rotate(360deg)}}.promptTool{margin-top:12px}.aiChooserText{color:var(--muted);margin:0 0 16px}.aiChoiceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.aiChoice{min-height:62px;font-size:16px}.aiBack{margin-top:10px}.promptModalClose{float:right;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--text);cursor:pointer;font-size:20px}
+.exploreGrid{margin-top:16px}.exploreEmpty{padding:28px;text-align:center;color:var(--muted);border-radius:20px}.exploreTitle{display:flex;align-items:end;justify-content:space-between;gap:12px}.exploreTitle h2{margin:0}.exploreTitle span{color:var(--muted);font-size:13px}.exploreClear{margin-top:12px;width:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.searching,.normalSearchResult{transition:none!important;animation:none!important}}
 @media(max-width:650px){.promptTrending .grid{grid-template-columns:repeat(2,1fr)}.promptSheet{padding:16px;border-radius:22px}.promptText{max-height:210px}.aiChoiceGrid{grid-template-columns:1fr}}
 .bottom{position:fixed;z-index:90;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(620px,calc(100% - 20px));padding:6px;display:grid;grid-template-columns:1fr 1.1fr 1.3fr 1.1fr 1fr;gap:4px;border-radius:20px;background:rgba(255,255,255,.055);border:1px solid var(--line);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
 .navitem{background:transparent;border:0;padding:8px 5px;font-size:11px;color:var(--text);font-weight:800;display:flex;align-items:center;justify-content:center;gap:4px}.navitem .navicon{font-size:14px}.navitem.active{color:var(--text);background:rgba(255,255,255,.05)}
@@ -208,6 +210,15 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
   <div class="search glass aiSearchBox"><input id="aiInput" placeholder="e.g. #251 or Hindi Song"><button class="searchbtn" onclick="runAISearch()">✦ Search</button></div>
  </article>
 </div>
+<div id="exploreOverlay" class="detail" onclick="if(event.target===this)closeExplore()">
+ <article class="sheet">
+  <button class="close" onclick="closeExplore()">✕</button>
+  <div class="exploreTitle"><h2>Explore</h2><span id="exploreCount"></span></div>
+  <p class="aiChooserText">Recently viewed templates and prompts appear here.</p>
+  <div id="exploreGrid" class="exploreGrid"></div>
+  <button class="action exploreClear" onclick="clearRecentViews()">Clear Recently Viewed</button>
+ </article>
+</div>
 <div id="videoModal" class="videoModal" onclick="if(event.target===this)closeVideoModal()">
  <div class="videoSheet">
   <button class="videoClose" onclick="closeVideoModal()">✕</button>
@@ -321,7 +332,7 @@ function renderPrompts(){
  document.getElementById("promptCount").textContent=list.length+" results";
  document.getElementById("promptGrid").innerHTML=list.length?list.map(x=>card(x,"prompt")).join(""):`<div class="empty">No prompts found.</div>`;
 }
-window.openDetail=(raw,type)=>{
+window.openDetail=(raw,type,opts={})=>{
  const x=JSON.parse(raw), title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
  const img=imgFor(x);
  let html=`<div class="detailmedia"><img src="${escapeAttr(img)}" alt="${escapeAttr(title)}">${type==="template"?`<button class="play" aria-label="Play template video" onclick='openVideoModal(${JSON.stringify(x.instagramUrl||x.video||x.instagram||"")},"instagram")'>▶</button>`:""}</div><h2>${escapeHtml(title)}</h2>`;
@@ -346,8 +357,11 @@ window.openDetail=(raw,type)=>{
  document.getElementById("detail").classList.add("open");
  document.body.style.overflow="hidden";
  const key=encodeURIComponent(x.id||x.num||x.number||"");
- history.pushState({detail:true},"",`#${type}/${key}`);
+ const targetHash=`#${type}/${key}`;
+ if(!opts.fromHash && location.hash!==targetHash) history.pushState({detail:true,type,key},"",targetHash);
+ else history.replaceState({detail:true,type,key},"",targetHash);
  window.currentShare={title,url:location.href};
+ rememberRecent(type,x);
 }
 function renderPromptTrending(current){
  const source=(prompts.length?prompts:demoPrompts).filter(x=>String(x.id||"")!==String(current.id||"") && (normalize(x.category||x.cat)==="trending" || (x.trending===true)));
@@ -448,7 +462,12 @@ window.openVideoModal=(url,type="auto")=>{
 window.closeVideoModal=()=>{const m=document.getElementById("videoModal");m.classList.remove("open");document.getElementById("videoBody").innerHTML=""};
 
 function siteDetails(){ return `<div class="detailFooter"><div class="detailLinks"><a href="about.html">About</a><a href="contact.html">Contact</a><a href="team.html">Team</a><a href="privacy.html">Privacy Policy</a><a href="trust.html">Trust & Safety</a><a href="terms.html">Terms</a><a href="copyright.html">Copyright</a><a href="https://www.instagram.com/trending_edit_day/" target="_blank" rel="noopener">Instagram</a><a href="https://t.me/trending_edit_day" target="_blank" rel="noopener">Telegram</a><a href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener">YouTube</a><a href="https://www.tiktok.com/@trending_edit_day" target="_blank" rel="noopener">TikTok</a><a href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank" rel="noopener">Facebook</a><a href="https://www.threads.com/@trending_edit_day" target="_blank" rel="noopener">Threads</a></div></div>` }
-window.closeDetail=()=>{document.getElementById("detail").classList.remove("open");document.body.style.overflow="";if(location.hash.startsWith("#template/")||location.hash.startsWith("#prompt/"))history.replaceState(null,"",location.pathname+location.search)};
+function recentKey(type,x){return `${type}:${x.id||x.num||x.number||x.title||x.name||""}`;}
+function getRecentViews(){try{return JSON.parse(localStorage.getItem("eg_recent_views")||"[]")}catch{return []}}
+function rememberRecent(type,x){const item={type,id:x.id||"",num:x.num||x.number||"",title:x.title||x.name||"",category:x.category||x.cat||"",imageUrl:imgFor(x),girlPrompt:x.girlPrompt||x.prompt||"",boyPrompt:x.boyPrompt||"",description:x.description||x.tips||"",capcut:x.capcut||x.capcutUrl||x.capcutLink||"",instagramUrl:x.instagramUrl||x.instagramVideo||x.video||x.instagram||"",howToUseVideo:x.howToUseVideo||x.howToUseVideoUrl||x.howVideo||x.howToUseLink||""};const key=recentKey(type,item);const list=getRecentViews().filter(v=>recentKey(v.type,v)!==key);list.unshift(item);try{localStorage.setItem("eg_recent_views",JSON.stringify(list.slice(0,12)))}catch{};renderExplore();}
+function renderExplore(){const grid=document.getElementById("exploreGrid"),count=document.getElementById("exploreCount");if(!grid)return;const list=getRecentViews();if(count)count.textContent=`${list.length} viewed`;grid.innerHTML=list.length?`<div class="grid">${list.map(x=>card(x,x.type)).join("")}</div>`:`<div class="exploreEmpty glass">Nothing viewed yet. Open a template or prompt and it will appear here.</div>`;}
+window.clearRecentViews=()=>{try{localStorage.removeItem("eg_recent_views")}catch{}renderExplore();showToast("Recently viewed cleared ✓")};
+window.closeDetail=()=>{const d=document.getElementById("detail");if(!d.classList.contains("open"))return;if(location.hash.startsWith("#template/")||location.hash.startsWith("#prompt/")){history.back();return;}d.classList.remove("open");document.body.style.overflow=""};
 window.copyText=async (t,id)=>{try{await navigator.clipboard.writeText(t||"");if(id){try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,ref,update}=m;const r=ref(db,"prompts/"+id);const s=await get(ref(db,"prompts/"+id+"/totalCopies"));const next=(s.val()||0)+1;await update(r,{totalCopies:next,["copyHistory/"+Date.now()]:true});}catch{}}showToast("Copied ✓")}catch{showToast("Copy failed")}}
 window.shareCurrent=async()=>{
  const url=window.currentShare?.url||location.href;
@@ -528,9 +547,12 @@ window.goHome=()=>{
  document.getElementById("promptSwitch").classList.remove("active");
  window.scrollTo({top:0,behavior:"smooth"});
 }
-window.showExplore=()=>openAISearch()
-function openAISearch(){const o=document.getElementById("aiOverlay");if(o.classList.contains("open"))return;o.classList.add("open");history.pushState({overlay:"ai"},"",location.href.split("#")[0]+"#ai-search")}
-window.openAISearch=openAISearch;window.closeAI=()=>{const o=document.getElementById("aiOverlay");o.classList.remove("open");if(location.hash==="#ai-search")history.replaceState(null,"",location.pathname+location.search)};
+window.showExplore=()=>openExplore();
+function openExplore(){const o=document.getElementById("exploreOverlay");if(o.classList.contains("open"))return;renderExplore();o.classList.add("open");document.body.style.overflow="hidden";history.pushState({overlay:"explore"},"",location.href.split("#")[0]+"#explore")}
+window.openExplore=openExplore;
+window.closeExplore=()=>{const o=document.getElementById("exploreOverlay");if(!o.classList.contains("open"))return;if(location.hash==="#explore"){history.back();return;}o.classList.remove("open");document.body.style.overflow=""};
+function openAISearch(){const o=document.getElementById("aiOverlay");if(o.classList.contains("open"))return;o.classList.add("open");document.body.style.overflow="hidden";history.pushState({overlay:"ai"},"",location.href.split("#")[0]+"#ai-search")}
+window.openAISearch=openAISearch;window.closeAI=()=>{const o=document.getElementById("aiOverlay");if(!o.classList.contains("open"))return;if(location.hash==="#ai-search"){history.back();return;}o.classList.remove("open");document.body.style.overflow=""};
 window.setAIType=t=>{aiType=t;document.getElementById("aiTemplate").classList.toggle("primary",t==="template");document.getElementById("aiPrompt").classList.toggle("primary",t==="prompt")}
 function aiFindItem(q,type){
  const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
@@ -553,7 +575,7 @@ window.runAISearch=()=>{
  },700);
 }
 document.getElementById("aiInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();window.runAISearch()}});
-function closeMenu(){document.getElementById("menuOverlay").classList.remove("open");document.body.classList.remove("menu-open");if(location.hash==="#menu")history.replaceState(null,"",location.pathname+location.search)}
+function closeMenu(){const m=document.getElementById("menuOverlay");if(!m.classList.contains("open"))return;if(location.hash==="#menu"){history.back();return;}m.classList.remove("open");document.body.classList.remove("menu-open")}
 document.getElementById("menuBtn").onclick=()=>{document.getElementById("menuOverlay").classList.add("open");document.body.classList.add("menu-open");history.pushState({overlay:"menu"},"",location.href.split("#")[0]+"#menu")};
 document.getElementById("menuOverlay").onclick=e=>{if(e.target.id==="menuOverlay")closeMenu()}
 document.getElementById("themeBtn").onclick=()=>{const next=document.documentElement.dataset.theme==="light"?"dark":"light";document.documentElement.dataset.theme=next;localStorage.setItem("eg_theme",next);document.getElementById("themeBtn").textContent=next==="light"?"☀":"☾"}
@@ -598,20 +620,23 @@ function findByKey(type,key){
 function handleHash(){
  const h=location.hash||"";
  const m=h.match(/^#(template|prompt)\/(.+)$/);
- if(m){
-   const item=findByKey(m[1],m[2]);
-   if(item){openDetail(JSON.stringify(item),m[1]);return true;}
- }
+ if(m){const item=findByKey(m[1],m[2]);if(item){openDetail(JSON.stringify(item),m[1],{fromHash:true});return true;}}
+ if(h==="#explore"){document.getElementById("exploreOverlay").classList.add("open");document.body.style.overflow="hidden";renderExplore();return true;}
+ if(h==="#ai-search"){document.getElementById("aiOverlay").classList.add("open");document.body.style.overflow="hidden";return true;}
+ if(h==="#menu"){document.getElementById("menuOverlay").classList.add("open");document.body.classList.add("menu-open");return true;}
  return false;
 }
-renderTemplateFilters();renderPromptFilters();listen();
-window.addEventListener("hashchange",()=>{ if(!handleHash() && location.hash!=="#ai-search" && location.hash!=="#menu"){ closeDetail(); closeAI(); closeMenu(); }});
-window.addEventListener("popstate",()=>{
-  const d=document.getElementById("detail"), ai=document.getElementById("aiOverlay"), menu=document.getElementById("menuOverlay");
-  if(d.classList.contains("open")){ closeDetail(); return; }
-  if(ai.classList.contains("open")){ ai.classList.remove("open"); return; }
-  if(menu.classList.contains("open")){ menu.classList.remove("open"); document.body.classList.remove("menu-open"); return; }
-});
+renderTemplateFilters();renderPromptFilters();renderExplore();listen();
+function syncOverlaysToHash(){
+ const h=location.hash||"";
+ const d=document.getElementById("detail"),ai=document.getElementById("aiOverlay"),menu=document.getElementById("menuOverlay"),explore=document.getElementById("exploreOverlay");
+ if(h.startsWith("#template/")||h.startsWith("#prompt/")){ai.classList.remove("open");menu.classList.remove("open");explore.classList.remove("open");document.body.classList.remove("menu-open");return;}
+ d.classList.remove("open");ai.classList.toggle("open",h==="#ai-search");explore.classList.toggle("open",h==="#explore");menu.classList.toggle("open",h==="#menu");document.body.classList.toggle("menu-open",h==="#menu");
+ if(h==="#explore")renderExplore();
+ document.body.style.overflow=(h==="#ai-search"||h==="#explore")?"hidden":"";
+}
+window.addEventListener("hashchange",()=>{if(!handleHash())syncOverlaysToHash()});
+window.addEventListener("popstate",()=>{if(handleHash())return;syncOverlaysToHash()});
 </script>
 </body>
 </html>
