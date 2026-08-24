@@ -80,8 +80,8 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 .promptpage{display:none}.promptpage.active{display:block}.templatepage.hidden{display:none}
 .detail{position:fixed;inset:0;z-index:200;display:none;overflow:auto;background:var(--bg);padding:86px 16px 110px}.detail.open{display:block}.sheet{width:min(820px,100%);margin:auto;padding:8px 0 30px;background:transparent}.close{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);cursor:pointer;display:block;margin:0 0 14px auto}.detailmedia{position:relative;margin:8px auto 0;width:min(100%,420px);border-radius:24px;overflow:hidden;background:#090b12;aspect-ratio:4/5;display:grid;place-items:center;border:1px solid var(--line)}.detailmedia img{width:100%;height:100%;object-fit:cover;display:block}.play{position:absolute;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);color:#000;border:0;font-size:24px;cursor:pointer}.detail h2{margin:18px 0 8px;font-size:32px;letter-spacing:-1px}.detail p{color:var(--text);line-height:1.75}.actions{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}.action{display:flex;align-items:center;justify-content:center;min-height:54px;padding:11px 15px;border-radius:15px;text-align:center;text-decoration:none;font-weight:800;border:1px solid var(--line);background:var(--panel);color:var(--text)}.action.primary{background:rgba(139,220,255,.10);border-color:rgba(139,220,255,.30)}.wideAction{width:100%}.howvideo{margin-top:14px}.howvideo iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:20px}.detailInfo{margin-top:20px;padding:18px;border-radius:20px}.detailLinks{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}.detailLinks a{padding:8px 4px;border-radius:8px;text-decoration:none;border:0;color:var(--text);background:transparent;text-align:center;font-weight:800}.detailLinks a:hover{text-decoration:underline;text-underline-offset:4px}.videoModal{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px)}.videoModal.open{display:flex}.videoSheet{width:min(900px,100%);background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:12px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.45)}.videoClose{position:absolute;right:10px;top:10px;z-index:3;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:22px;cursor:pointer}.videoFrame{width:100%;aspect-ratio:16/9;border:0;border-radius:18px;background:#000;display:block}.videoFrame.vertical{aspect-ratio:9/16;max-height:78vh;max-width:min(100%,430px);margin:auto;object-fit:contain}.videoHint{margin:10px 4px 2px;color:var(--muted);font-size:13px;text-align:center}.videoExternal{display:block;margin:10px auto 2px;width:max-content;max-width:100%;padding:10px 16px;border:1px solid var(--line);border-radius:12px;color:var(--text);text-decoration:none;font-weight:800;background:var(--panel2)}.detailFooter{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
 .promptTrending{margin-top:28px}.promptTrending h3{margin:0 0 14px;font-size:18px}.promptTrending .grid{grid-template-columns:repeat(3,1fr)}
-.promptModal{position:fixed;inset:0;z-index:520;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.promptModal.open{display:flex}.promptSheet{width:min(760px,100%);max-height:90dvh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 30px 90px rgba(0,0,0,.5)}.promptSheet h3{margin:0 0 16px;font-size:24px}.promptBox{padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--panel2);margin:12px 0}.promptBox h4{margin:0 0 10px;font-size:15px}.promptText{white-space:pre-wrap;line-height:1.65;color:var(--text);max-height:230px;overflow:auto;font-size:13px}.copyPrompt{margin-top:12px}.promptLoading{display:grid;place-items:center;gap:14px;padding:54px 10px;text-align:center}.promptSpinner{width:42px;height:42px;border-radius:50%;border:3px solid var(--line);border-top-color:#8bdcff;animation:promptSpin .8s linear infinite}@keyframes promptSpin{to{transform:rotate(360deg)}}.promptTool{margin-top:12px}.promptModalClose{float:right;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--text);cursor:pointer;font-size:20px}
-@media(max-width:650px){.promptTrending .grid{grid-template-columns:repeat(2,1fr)}.promptSheet{padding:16px;border-radius:22px}.promptText{max-height:210px}}
+.promptModal{position:fixed;inset:0;z-index:520;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.promptModal.open{display:flex}.promptSheet{width:min(760px,100%);max-height:90dvh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 30px 90px rgba(0,0,0,.5)}.promptSheet h3{margin:0 0 16px;font-size:24px}.promptBox{padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--panel2);margin:12px 0}.promptBox h4{margin:0 0 10px;font-size:15px}.promptText{white-space:pre-wrap;line-height:1.65;color:var(--text);max-height:230px;overflow:auto;font-size:13px}.copyPrompt{margin-top:12px}.promptLoading{display:grid;place-items:center;gap:14px;padding:54px 10px;text-align:center}.promptSpinner{width:42px;height:42px;border-radius:50%;border:3px solid var(--line);border-top-color:#8bdcff;animation:promptSpin .8s linear infinite}@keyframes promptSpin{to{transform:rotate(360deg)}}.promptTool{margin-top:12px}.aiChooserText{color:var(--muted);margin:0 0 16px}.aiChoiceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.aiChoice{min-height:62px;font-size:16px}.aiBack{margin-top:10px}.promptModalClose{float:right;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--text);cursor:pointer;font-size:20px}
+@media(max-width:650px){.promptTrending .grid{grid-template-columns:repeat(2,1fr)}.promptSheet{padding:16px;border-radius:22px}.promptText{max-height:210px}.aiChoiceGrid{grid-template-columns:1fr}}
 .bottom{position:fixed;z-index:90;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(620px,calc(100% - 20px));padding:6px;display:grid;grid-template-columns:1fr 1.1fr 1.3fr 1.1fr 1fr;gap:4px;border-radius:20px;background:rgba(255,255,255,.055);border:1px solid var(--line);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
 .navitem{background:transparent;border:0;padding:8px 5px;font-size:11px;color:var(--text);font-weight:800;display:flex;align-items:center;justify-content:center;gap:4px}.navitem .navicon{font-size:14px}.navitem.active{color:var(--text);background:rgba(255,255,255,.05)}
 .ai{width:48px;height:48px;margin:-14px auto -3px;padding:0;border-radius:50%;overflow:hidden;border:1px solid rgba(139,220,255,.35);background:#07101a;box-shadow:0 8px 28px rgba(50,190,255,.22)}
@@ -365,10 +365,47 @@ window.openPromptLoader=(raw)=>{
    body.innerHTML=`<h3>Get Prompt</h3>
    <div class="promptBox"><h4>👩 Girl Version</h4><div class="promptText">${escapeHtml(gp)}</div><button class="action primary wideAction copyPrompt" onclick='copyText(${JSON.stringify(gp)},${JSON.stringify(x.id||"")})'>📋 Copy Girl Prompt</button></div>
    ${bp?`<div class="promptBox"><h4>👨 Boy Version</h4><div class="promptText">${escapeHtml(bp)}</div><button class="action primary wideAction copyPrompt" onclick='copyText(${JSON.stringify(bp)},${JSON.stringify(x.id||"")})'>📋 Copy Boy Prompt</button></div>`:""}
-   <a class="action wideAction promptTool" href="https://chatgpt.com/" target="_blank" rel="noopener">🤖 Open AI Tool</a>`;
+   <button class="action wideAction promptTool" onclick='openAITool(${JSON.stringify(JSON.stringify(x))})'>🤖 Open AI Tool</button>`;
  },520);
 };
-window.closePromptModal=()=>{const m=document.getElementById("promptModal");m.classList.remove("open");document.getElementById("promptModalBody").innerHTML=""};
+window.closePromptModal=()=>{const m=document.getElementById("promptModal");m.classList.remove("open");document.getElementById("promptModalBody").innerHTML="";window.aiToolItem=null};
+
+window.openAITool=(raw)=>{
+ const x=JSON.parse(raw);
+ window.aiToolItem=x;
+ const body=document.getElementById("promptModalBody");
+ body.innerHTML=`<h3>🤖 Choose AI Tool</h3>
+   <p class="aiChooserText">Choose where you want to use this prompt.</p>
+   <div class="aiChoiceGrid">
+     <button class="action primary aiChoice" onclick="chooseAITool('gpt')">🤖 GPT</button>
+     <button class="action aiChoice" onclick="chooseAITool('gemini')">✨ Gemini</button>
+   </div>`;
+ document.getElementById("promptModal").classList.add("open");
+};
+window.chooseAITool=(tool)=>{
+ const body=document.getElementById("promptModalBody");
+ window.aiToolChoice=tool;
+ const name=tool==='gpt'?'GPT':'Gemini';
+ body.innerHTML=`<h3>👤 Who are you creating this for?</h3>
+   <p class="aiChooserText">Choose the version you want to send to ${name}.</p>
+   <div class="aiChoiceGrid">
+     <button class="action primary aiChoice" onclick="sendPromptToAI('girl')">👩 Girl</button>
+     <button class="action aiChoice" onclick="sendPromptToAI('boy')">👨 Boy</button>
+   </div>
+   <button class="action wideAction aiBack" onclick="openAITool(${JSON.stringify(JSON.stringify(window.aiToolItem||{}))})">← Back</button>`;
+};
+window.sendPromptToAI=(gender)=>{
+ const x=window.aiToolItem||{};
+ const prompt=gender==='girl'?(x.girlPrompt||x.prompt||''):(x.boyPrompt||'');
+ const tool=window.aiToolChoice||'gpt';
+ if(!prompt){showToast(`No ${gender} prompt is available.`);return;}
+ const encoded=encodeURIComponent(prompt);
+ const url=tool==='gemini'
+   ? `https://gemini.google.com/app?prompt=${encoded}`
+   : `https://chatgpt.com/?q=${encoded}`;
+ try{window.open(url,'_blank','noopener');}catch{location.href=url;}
+ showToast(`${gender==='girl'?'Girl':'Boy'} prompt prepared for ${tool==='gemini'?'Gemini':'GPT'} ✓`);
+};
 
 function normalizeVideoUrl(url){
  const raw=String(url||"").trim();
