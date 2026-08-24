@@ -311,7 +311,14 @@ window.setTF=f=>{tFilter=f;renderTemplateFilters();renderTemplates()}
 window.setPF=f=>{pFilter=f;renderPromptFilters();renderPrompts()}
 window.renderTemplates=renderTemplates;window.renderPrompts=renderPrompts;
 function createdValue(x){ return Number(x.createdAt||x.timestamp||x.addedAt||x.created||0) || 0; }
-function newestFirst(a,b){ const av=createdValue(a),bv=createdValue(b); if(av||bv) return bv-av; return String(b.id||"").localeCompare(String(a.id||"")); }
+function newestFirst(a,b){
+ const av=Number(a.num??a.number??a.templateNumber??-Infinity);
+ const bv=Number(b.num??b.number??b.templateNumber??-Infinity);
+ if(Number.isFinite(av)&&Number.isFinite(bv)&&av!==bv) return bv-av;
+ const ac=createdValue(a),bc=createdValue(b);
+ if(ac||bc) return bc-ac;
+ return String(b.id||"").localeCompare(String(a.id||""));
+}
 function renderTemplates(){
  const q=document.getElementById("templateSearch").value.trim();
  let list=templates.filter(x=>categoryMatch(x,tFilter)&&matches(x,q));
