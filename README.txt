@@ -18,3 +18,6 @@ Template media:
 - How-to-use video: supported video/embed URL
 
 The template description is generated automatically on the public site and is not requested in the admin form.
+
+
+BULK IMPORT: Open bulk_upload.html, enter the Admin password, paste Template and Instagram lists, Match & Preview, then Confirm & Add to Firebase. Only numbers with both links are added; existing numbers are skipped.
