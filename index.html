@@ -50,7 +50,7 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 .search input{flex:1;border:0;outline:0;background:transparent;color:var(--text);padding:12px 10px;min-width:0}
 .search input::placeholder{color:var(--muted)}.searchbtn{padding:0 17px;font-weight:800}
 .aiSearchBox.searching{animation:aiPulse .65s ease-in-out 2;border-color:rgba(139,220,255,.65)}
-.aiSearchBox.searching .searchbtn{animation:aiSpin .8s linear infinite}
+.aiSearchBox.searching .searchbtn{animation:aiSpin .8s linear infinite}.normalSearchResult{animation:normalSearchIn .28s ease}@keyframes normalSearchIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes aiPulse{0%,100%{transform:scale(1);box-shadow:var(--shadow)}50%{transform:scale(1.015);box-shadow:0 0 0 8px rgba(139,220,255,.08),0 20px 70px rgba(0,0,0,.35)}}
 @keyframes aiSpin{to{transform:rotate(360deg)}}
 .filters{display:flex;gap:7px;overflow:auto;padding:4px 2px 16px;scrollbar-width:none}
@@ -149,6 +149,13 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
     <a class="menuitem" href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank" rel="noopener"><span>f</span> Facebook <small>↗</small></a>
     <a class="menuitem" href="https://www.threads.com/@trending_edit_day" target="_blank" rel="noopener"><span>@</span> Threads <small>↗</small></a>
     <a class="menuitem" href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener"><span>▶</span> YouTube <small>↗</small></a>
+    <a class="menuitem" href="about.html"><span>ⓘ</span> About <small>↗</small></a>
+    <a class="menuitem" href="contact.html"><span>✉</span> Contact <small>↗</small></a>
+    <a class="menuitem" href="team.html"><span>👥</span> Team <small>↗</small></a>
+    <a class="menuitem" href="privacy.html"><span>🔒</span> Privacy Policy <small>↗</small></a>
+    <a class="menuitem" href="trust.html"><span>🛡️</span> Trust & Safety <small>↗</small></a>
+    <a class="menuitem" href="terms.html"><span>📄</span> Terms <small>↗</small></a>
+    <a class="menuitem" href="copyright.html"><span>©</span> Copyright <small>↗</small></a>
   </div>
 </div>
 
@@ -211,10 +218,12 @@ function listen(){
  onValue(ref(db,"templates"),s=>{
    const d=s.val()||{}; templates=Object.entries(d).map(([id,x])=>({id,...x}));
    renderTemplateFilters();renderTemplates();
+   if(location.hash.startsWith("#template/")) setTimeout(handleHash,0);
  });
  onValue(ref(db,"prompts"),s=>{
    const d=s.val()||{}; prompts=Object.entries(d).map(([id,x])=>({id,...x}));
    renderPromptFilters();renderPrompts();
+   if(location.hash.startsWith("#prompt/")) setTimeout(handleHash,0);
  });
 }
 function normalize(s){return String(s||"").toLowerCase().replace(/[#/_\-]+/g," ").replace(/\s+/g," ").trim()}
@@ -290,7 +299,11 @@ window.openDetail=(raw,type)=>{
  let html=`<div class="detailmedia"><img src="${escapeAttr(img)}" alt="${escapeAttr(title)}">${type==="template"?`<button class="play" aria-label="Play template video" onclick='openVideoModal(${JSON.stringify(x.instagramUrl||x.video||x.instagram||"")},"instagram")'>▶</button>`:""}</div><h2>${escapeHtml(title)}</h2>`;
  if(type==="template") {
    const cap=x.capcut||x.capcutUrl||x.capcutLink||"#", how=x.howToUseVideo||x.howToUseVideoUrl||x.howVideo||x.howToUseLink||x.howto||"";
-   html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="window.trackUse('${escapeAttr(x.id||"")}')">✨ Use Template on CapCut</a>${how?`<button class="action wideAction" onclick='openVideoModal(${JSON.stringify(how)},"auto")'>▶ How to Use Video</button>`:`<button class="action wideAction" onclick="showToast('How-to-use video link is not added yet.')">▶ How to Use Video</button>`}</div>`;
+   const extraEnabled=x.extraButtonEnabled!==false && !!(x.extraButtonLink||x.extraLink);
+   const extraName=x.extraButtonName||x.extraName||"More Details";
+   const extraLink=x.extraButtonLink||x.extraLink||"#";
+   const extraHtml=extraEnabled?`<a class="action wideAction extraAction" href="${escapeAttr(extraLink)}" target="_blank" rel="noopener">${escapeHtml(extraName)} ↗</a>`:"";
+   html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="window.trackUse('${escapeAttr(x.id||"")}')">✨ Use Template on CapCut</a>${extraHtml}${how?`<button class="action wideAction" onclick='openVideoModal(${JSON.stringify(how)},"auto")'>▶ How to Use Video</button>`:`<button class="action wideAction" onclick="showToast('How-to-use video link is not added yet.')">▶ How to Use Video</button>`}<button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share Template</button></div>`;
    const desc="First, download CapCut Pro and open this template. If CapCut works without VPN on your phone, you do not need a VPN. If CapCut is not available without VPN, connect a VPN first. Then tap “Use Template on CapCut” above. In CapCut, open the template, add your own photos or videos, adjust the clips if needed, preview your edit, and export your finished video. For an easy visual guide, tap “How to Use Video”.";
    const insta=x.instagramUrl||x.instagramVideo||x.video||x.instagram||"#";
    html+=`<div class="detailInfo glass"><p>${escapeHtml(desc)}</p><div class="detailLinks"><a href="${escapeAttr(cap)}" target="_blank" rel="noopener">✨ CapCut Template</a><a href="${escapeAttr(insta)}" target="_blank" rel="noopener">📷 Instagram Video</a></div></div>`;
@@ -303,7 +316,9 @@ window.openDetail=(raw,type)=>{
  document.getElementById("detail").classList.add("open");
  document.body.style.overflow="hidden";
  window.currentShare={title,url:location.href};
- history.pushState({detail:true},"",`#${type}/${encodeURIComponent(x.id||x.num||x.number||"")}`);
+ const key=encodeURIComponent(x.id||x.num||x.number||"");
+ history.pushState({detail:true},"",`#${type}/${key}`);
+ window.currentShare={title,url:location.href};
 }
 function normalizeVideoUrl(url){
  const raw=String(url||"").trim();
@@ -348,19 +363,39 @@ window.closeVideoModal=()=>{const m=document.getElementById("videoModal");m.clas
 function siteDetails(){ return `<div class="detailFooter"><div class="detailLinks"><a href="about.html">About</a><a href="contact.html">Contact</a><a href="team.html">Team</a><a href="privacy.html">Privacy Policy</a><a href="trust.html">Trust & Safety</a><a href="terms.html">Terms</a><a href="copyright.html">Copyright</a><a href="https://www.instagram.com/trending_edit_day/" target="_blank" rel="noopener">Instagram</a><a href="https://t.me/trending_edit_day" target="_blank" rel="noopener">Telegram</a><a href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener">YouTube</a><a href="https://www.tiktok.com/@trending_edit_day" target="_blank" rel="noopener">TikTok</a><a href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank" rel="noopener">Facebook</a><a href="https://www.threads.com/@trending_edit_day" target="_blank" rel="noopener">Threads</a></div></div>` }
 window.closeDetail=()=>{document.getElementById("detail").classList.remove("open");document.body.style.overflow="";if(location.hash.startsWith("#template/")||location.hash.startsWith("#prompt/"))history.replaceState(null,"",location.pathname+location.search)};
 window.copyText=async (t,id)=>{try{await navigator.clipboard.writeText(t||"");if(id){try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,ref,update}=m;const r=ref(db,"prompts/"+id);const s=await get(ref(db,"prompts/"+id+"/totalCopies"));const next=(s.val()||0)+1;await update(r,{totalCopies:next,["copyHistory/"+Date.now()]:true});}catch{}}showToast("Copied ✓")}catch{showToast("Copy failed")}}
-window.shareCurrent=async()=>{try{await navigator.share({title:window.currentShare?.title||"EditGalaxy",url:location.href})}catch{await navigator.clipboard.writeText(location.href);showToast("Link copied ✓")}}
+window.shareCurrent=async()=>{
+ const url=window.currentShare?.url||location.href;
+ const title=window.currentShare?.title||"EditGalaxy";
+ try{
+   if(navigator.share){await navigator.share({title,url});showToast("Share sheet opened ✓");}
+   else{await navigator.clipboard.writeText(url);showToast("Link copied ✓");}
+ }catch(err){
+   if(err?.name==="AbortError") return;
+   try{await navigator.clipboard.writeText(url);showToast("Link copied ✓")}catch{showToast("Could not share link")}
+ }
+}
 window.runSectionSearch=type=>{
  const el=document.getElementById(type==="prompt"?"promptSearch":"templateSearch");
  const q=(el?.value||"").trim();
  const box=el?.closest(".search"), btn=box?.querySelector(".searchbtn");
- if(!q){ if(type==="prompt") renderPrompts(); else renderTemplates(); showToast(`Showing all ${type}s`); return; }
- box?.classList.add("searching"); if(btn) btn.textContent="Searching…";
+ el?.blur();
+ const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
+ if(!q){
+   if(type==="prompt") renderPrompts(); else renderTemplates();
+   showToast(`Showing all ${type}s`);
+   return;
+ }
+ if(btn) btn.textContent="Search";
+ box?.classList.add("normalSearchResult");
  setTimeout(()=>{
-   const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
-   const item=source.filter(x=>type==="template"?categoryMatch(x,tFilter):categoryMatch(x,pFilter)).map(x=>({x,score:scoreItem(x,q)})).filter(v=>v.score>0).sort((a,b)=>b.score-a.score)[0]?.x;
-   box?.classList.remove("searching"); if(btn) btn.textContent="Search";
-   if(item){ openDetail(JSON.stringify(item),type); } else { if(type==="prompt") renderPrompts(); else renderTemplates(); showToast(`No ${type} found for “${q}”`); }
- },420);
+   const list=source.filter(x=>(type==="template"?categoryMatch(x,tFilter):categoryMatch(x,pFilter)) && scoreItem(x,q)>0);
+   const grid=document.getElementById(type==="template"?"templateGrid":"promptGrid");
+   const count=document.getElementById(type==="template"?"templateCount":"promptCount");
+   count.textContent=list.length+" results";
+   grid.innerHTML=list.length?list.map(x=>card(x,type)).join(""):`<div class="empty">No ${type}s found for “${escapeHtml(q)}”.</div>`;
+   grid.classList.remove("normalSearchResult"); void grid.offsetWidth; grid.classList.add("normalSearchResult");
+   setTimeout(()=>box?.classList.remove("normalSearchResult"),320);
+ },180);
 };
 function scoreItem(x,q){
  const n=normalize(q), number=String(x.num||x.number||x.templateNumber||x.promptNumber||"");
@@ -374,9 +409,9 @@ function scoreItem(x,q){
  return score;
 }
 let searchTimers={};
-document.getElementById("templateSearch").addEventListener("input",()=>{clearTimeout(searchTimers.t);searchTimers.t=setTimeout(renderTemplates,180)});
+document.getElementById("templateSearch").addEventListener("input",()=>{});
 document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("template")}});
-document.getElementById("promptSearch").addEventListener("input",()=>{clearTimeout(searchTimers.p);searchTimers.p=setTimeout(renderPrompts,180)});
+document.getElementById("promptSearch").addEventListener("input",()=>{});
 document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("prompt")}});
 window.trackUse=async id=>{if(!id)return;try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,update,ref}=m;const r=ref(db,"templates/"+id);const s=await get(ref(db,"templates/"+id+"/totalUses"));const next=(s.val()||0)+1;const now=Date.now();const day=new Date(now).toISOString().slice(0,10);await update(r,{totalUses:next,["useHistory/"+now]:true,["usesByDay/"+day]:((await get(ref(db,"templates/"+id+"/usesByDay/"+day))).val()||0)+1});}catch{}}
 window.showSection=section=>{
@@ -468,7 +503,22 @@ window.addEventListener("scroll",()=>{
  }
 },{passive:true});
 
+function findByKey(type,key){
+ const source=type==="template"?templates:prompts;
+ const decoded=decodeURIComponent(key||"");
+ return source.find(x=>String(x.id||"")===decoded || String(x.num||x.number||"")===decoded) || null;
+}
+function handleHash(){
+ const h=location.hash||"";
+ const m=h.match(/^#(template|prompt)\/(.+)$/);
+ if(m){
+   const item=findByKey(m[1],m[2]);
+   if(item){openDetail(JSON.stringify(item),m[1]);return true;}
+ }
+ return false;
+}
 renderTemplateFilters();renderPromptFilters();listen();
+window.addEventListener("hashchange",()=>{ if(!handleHash() && location.hash!=="#ai-search" && location.hash!=="#menu"){ closeDetail(); closeAI(); closeMenu(); }});
 window.addEventListener("popstate",()=>{
   const d=document.getElementById("detail"), ai=document.getElementById("aiOverlay"), menu=document.getElementById("menuOverlay");
   if(d.classList.contains("open")){ closeDetail(); return; }
