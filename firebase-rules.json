@@ -1,0 +1,30 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "templates": {
+      ".read": true,
+      "$id": {
+        ".write": "auth != null",
+        "totalUses": {
+          ".write": true,
+          ".validate": "newData.isNumber() && (!data.exists() || newData.val() == data.val() + 1)"
+        },
+        "useHistory": { ".write": true },
+        "usesByDay": { ".write": true }
+      }
+    },
+    "prompts": {
+      ".read": true,
+      "$id": {
+        ".write": "auth != null",
+        "totalCopies": {
+          ".write": true,
+          ".validate": "newData.isNumber() && (!data.exists() || newData.val() == data.val() + 1)"
+        },
+        "copyHistory": { ".write": true }
+      }
+    }
+  }
+}
+
