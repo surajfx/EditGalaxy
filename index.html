@@ -7,643 +7,75 @@
 <meta name="description" content="EditGalaxy — premium CapCut templates and AI image prompts for creators.">
 <title>EditGalaxy — Templates & AI Prompts</title>
 <style>
-:root{
-  --bg:#070811;--bg2:#0b0d18;--panel:rgba(255,255,255,.055);
-  --panel2:rgba(255,255,255,.075);--line:rgba(255,255,255,.10);
-  --text:#ffffff;--muted:#ffffff;--accent:#8bdcff;--accent2:#b58cff;
-  --shadow:0 22px 70px rgba(0,0,0,.35);--radius:22px;
-}
-[data-theme="light"]{
-  --bg:#f7f8fb;--bg2:#eef1f5;--panel:rgba(255,255,255,.62);
-  --panel2:rgba(255,255,255,.82);--line:rgba(18,25,38,.10);
-  --text:#000000;--muted:#000000;--accent:#168fca;--accent2:#7553d6;
-  --shadow:0 18px 55px rgba(32,55,80,.14);
-}
-*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg);overscroll-behavior-y:none}body{overscroll-behavior-y:none}
-body.menu-open{overflow:hidden}body{margin:0;color:var(--text);font-family:Arial,Helvetica,sans-serif;
-background-color:var(--bg);background:
-radial-gradient(760px 520px at 50% -8%,rgba(74,205,255,.16),transparent 64%),
-radial-gradient(680px 520px at -8% 52%,rgba(92,83,255,.12),transparent 66%),
-radial-gradient(720px 560px at 108% 78%,rgba(0,220,190,.09),transparent 66%),
-linear-gradient(135deg,#05060d 0%,#080b16 46%,#050711 100%);min-height:100vh;position:relative;isolation:isolate}
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.16;background-image:linear-gradient(rgba(139,220,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(139,220,255,.035) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,black,transparent 78%);-webkit-mask-image:linear-gradient(to bottom,black,transparent 78%)}
-button,input{font:inherit}button{color:inherit}.glass{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:var(--shadow)}
-.header{position:sticky;top:0;z-index:80;padding:12px 16px;background:rgba(7,8,17,.48);backdrop-filter:blur(22px);border-bottom:1px solid var(--line)}
-[data-theme="light"] body{background:
-radial-gradient(760px 520px at 50% -10%,rgba(55,190,245,.16),transparent 64%),
-radial-gradient(680px 520px at -8% 52%,rgba(118,94,235,.09),transparent 66%),
-radial-gradient(720px 560px at 108% 78%,rgba(0,190,170,.07),transparent 66%),
-linear-gradient(135deg,#f8fbff 0%,#eef5fb 48%,#f7f9fc 100%)}
-[data-theme="light"] body::before{opacity:.22;background-image:linear-gradient(rgba(22,143,202,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(22,143,202,.035) 1px,transparent 1px)}
-[data-theme="light"] .header{background:rgba(244,247,251,.58)}
-.nav{max-width:1180px;margin:auto;display:flex;align-items:center;gap:10px}
-.logo{font-weight:900;font-size:20px;letter-spacing:-.7px;text-decoration:none;color:var(--text);flex:1}
-.logo span{color:var(--accent)}
-.iconbtn,.menuitem,.switchbtn,.filter,.seg,.searchbtn,.cta,.navitem,.sharebtn{
-border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:pointer;transition:.2s}
-.iconbtn{width:42px;height:42px;display:grid;place-items:center;font-size:20px}.iconbtn:hover,.filter:hover,.seg:hover,.navitem:hover{background:var(--panel2)}
-.theme{width:42px;height:42px;display:grid;place-items:center}
-.hero{max-width:1180px;margin:auto;padding:42px 16px 22px}
-.switcher{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:570px;margin:0 auto 28px}
-.switchbtn{padding:11px 13px;font-weight:800;color:var(--muted)}
-.switchbtn.active{color:var(--text);border-color:rgba(139,220,255,.35);background:linear-gradient(180deg,rgba(139,220,255,.11),rgba(255,255,255,.04))}
-.hero h1{text-align:center;font-size:clamp(34px,6.5vw,68px);line-height:.98;margin:0;letter-spacing:-3px}
-.hero h1 em{font-style:normal;background:linear-gradient(100deg,var(--text),var(--accent));-webkit-background-clip:text;color:transparent}
-.hero p{max-width:650px;text-align:center;margin:18px auto 24px;color:var(--muted);line-height:1.65}
-.cta{display:flex;align-items:center;justify-content:center;gap:8px;margin:auto;padding:14px 20px;font-weight:900;text-decoration:none;color:var(--text);max-width:300px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:650px;margin:28px auto}
-.stat{padding:18px;text-align:center;border-radius:18px}.stat b{font-size:24px}.stat small{display:block;color:var(--muted);margin-top:3px}
-.content{max-width:1180px;margin:auto;padding:8px 16px 120px;scroll-margin-top:82px}
-.search{display:flex;gap:8px;padding:8px;border-radius:18px;margin:0 auto 12px;max-width:850px}
-.search input{flex:1;border:0;outline:0;background:transparent;color:var(--text);padding:12px 10px;min-width:0}
-.search input::placeholder{color:var(--muted)}.searchbtn{padding:0 17px;font-weight:800}
-.aiSearchBox.searching{animation:aiPulse .65s ease-in-out 2;border-color:rgba(139,220,255,.65)}
-.aiSearchBox.searching .searchbtn{animation:aiSpin .8s linear infinite}.normalSearchResult{animation:normalSearchIn .28s ease}@keyframes normalSearchIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
-@keyframes aiPulse{0%,100%{transform:scale(1);box-shadow:var(--shadow)}50%{transform:scale(1.015);box-shadow:0 0 0 8px rgba(139,220,255,.08),0 20px 70px rgba(0,0,0,.35)}}
-@keyframes aiSpin{to{transform:rotate(360deg)}}
-.filters{display:flex;gap:7px;overflow:auto;padding:4px 2px 16px;scrollbar-width:none}
-.filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap;padding:9px 13px;color:var(--text);font-size:13px;font-weight:700}
-[data-theme="light"] .filter{color:#000}
-[data-theme="light"] .meta,[data-theme="light"] .videoHint{color:#000}
-[data-theme="light"] .detail p,[data-theme="light"] .sectionhead span{color:#000}
-.filter.active{color:var(--text);border-color:rgba(139,220,255,.45);background:rgba(139,220,255,.10)}
-[data-theme="light"] .filter.active{color:#000;background:rgba(22,143,202,.08);border-color:rgba(22,143,202,.28)}
-.sectionhead{display:flex;align-items:end;justify-content:space-between;margin:20px 0 14px}.sectionhead h2{margin:0;font-size:22px}.sectionhead span{color:var(--muted);font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.card{overflow:hidden;border-radius:20px;cursor:pointer;background:var(--panel);border:1px solid var(--line);transition:.25s}
-.card:hover{transform:translateY(-3px);background:var(--panel2)}
-.thumb{aspect-ratio:4/5;background:#10121c;position:relative;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.badge{position:absolute;left:9px;top:9px;padding:6px 9px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.16);font-size:10px;font-weight:800;backdrop-filter:blur(10px)}
-[data-theme="light"] .badge{background:rgba(255,255,255,.88);color:#000;border-color:rgba(0,0,0,.14)}
-.cardbody{padding:12px}.cardtitle{font-weight:800;font-size:14px;line-height:1.35}.meta{color:var(--muted);font-size:11px;margin-top:5px}.number{margin-top:7px;font-size:12px;font-weight:900;color:var(--text)}
-.empty{text-align:center;padding:55px 15px;color:var(--muted);grid-column:1/-1}
-.promptpage{display:none}.promptpage.active{display:block}.templatepage.hidden{display:none}
-.detail{position:fixed;inset:0;z-index:200;display:none;overflow:auto;background:var(--bg);padding:86px 16px 110px}.detail.open{display:block}.sheet{width:min(820px,100%);margin:auto;padding:8px 0 30px;background:transparent}.close{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);cursor:pointer;display:block;margin:0 0 14px auto}.detailmedia{position:relative;margin:8px auto 0;width:min(100%,420px);border-radius:24px;overflow:hidden;background:#090b12;aspect-ratio:4/5;display:grid;place-items:center;border:1px solid var(--line)}.detailmedia img{width:100%;height:100%;object-fit:cover;display:block}.play{position:absolute;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);color:#000;border:0;font-size:24px;cursor:pointer}.detail h2{margin:18px 0 8px;font-size:32px;letter-spacing:-1px}.detail p{color:var(--text);line-height:1.75}.actions{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}.action{display:flex;align-items:center;justify-content:center;min-height:54px;padding:11px 15px;border-radius:15px;text-align:center;text-decoration:none;font-weight:800;border:1px solid var(--line);background:var(--panel);color:var(--text)}.action.primary{background:rgba(139,220,255,.10);border-color:rgba(139,220,255,.30)}.wideAction{width:100%}.howvideo{margin-top:14px}.howvideo iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:20px}.detailInfo{margin-top:20px;padding:18px;border-radius:20px}.detailLinks{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}.detailLinks a{padding:8px 4px;border-radius:8px;text-decoration:none;border:0;color:var(--text);background:transparent;text-align:center;font-weight:800}.detailLinks a:hover{text-decoration:underline;text-underline-offset:4px}.videoModal{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px)}.videoModal.open{display:flex}.videoSheet{width:min(900px,100%);background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:12px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.45)}.videoClose{position:absolute;right:10px;top:10px;z-index:3;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:22px;cursor:pointer}.videoFrame{width:100%;aspect-ratio:16/9;border:0;border-radius:18px;background:#000;display:block}.videoFrame.vertical{aspect-ratio:9/16;max-height:78vh;max-width:min(100%,430px);margin:auto;object-fit:contain}.videoHint{margin:10px 4px 2px;color:var(--muted);font-size:13px;text-align:center}.videoExternal{display:block;margin:10px auto 2px;width:max-content;max-width:100%;padding:10px 16px;border:1px solid var(--line);border-radius:12px;color:var(--text);text-decoration:none;font-weight:800;background:var(--panel2)}.detailFooter{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
-.promptTrending{margin-top:28px}.promptTrending h3{margin:0 0 14px;font-size:18px}.promptTrending .grid{grid-template-columns:repeat(3,1fr)}
-.promptModal{position:fixed;inset:0;z-index:520;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.promptModal.open{display:flex}.promptSheet{width:min(760px,100%);max-height:90dvh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 30px 90px rgba(0,0,0,.5)}.promptSheet h3{margin:0 0 16px;font-size:24px}.promptBox{padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--panel2);margin:12px 0}.promptBox h4{margin:0 0 10px;font-size:15px}.promptText{white-space:pre-wrap;line-height:1.65;color:var(--text);max-height:230px;overflow:auto;font-size:13px}.copyPrompt{margin-top:12px}.promptLoading{display:grid;place-items:center;gap:14px;padding:54px 10px;text-align:center}.promptSpinner{width:42px;height:42px;border-radius:50%;border:3px solid var(--line);border-top-color:#8bdcff;animation:promptSpin .8s linear infinite}@keyframes promptSpin{to{transform:rotate(360deg)}}.promptTool{margin-top:12px}.aiChooserText{color:var(--muted);margin:0 0 16px}.aiChoiceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.aiChoice{min-height:62px;font-size:16px}.aiBack{margin-top:10px}.promptModalClose{float:right;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--text);cursor:pointer;font-size:20px}
-.exploreGrid{margin-top:16px}.exploreEmpty{padding:28px;text-align:center;color:var(--muted);border-radius:20px}.exploreTitle{display:flex;align-items:end;justify-content:space-between;gap:12px}.exploreTitle h2{margin:0}.exploreTitle span{color:var(--muted);font-size:13px}.exploreClear{margin-top:12px;width:100%}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.searching,.normalSearchResult{transition:none!important;animation:none!important}}
-@media(max-width:650px){.promptTrending .grid{grid-template-columns:repeat(2,1fr)}.promptSheet{padding:16px;border-radius:22px}.promptText{max-height:210px}.aiChoiceGrid{grid-template-columns:1fr}}
-.bottom{position:fixed;z-index:90;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(620px,calc(100% - 20px));padding:6px;display:grid;grid-template-columns:1fr 1.1fr 1.3fr 1.1fr 1fr;gap:4px;border-radius:20px;background:rgba(255,255,255,.055);border:1px solid var(--line);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
-.navitem{background:transparent;border:0;padding:8px 5px;font-size:11px;color:var(--text);font-weight:800;display:flex;align-items:center;justify-content:center;gap:4px}.navitem .navicon{font-size:14px}.navitem.active{color:var(--text);background:rgba(255,255,255,.05)}
-.ai{width:48px;height:48px;margin:-14px auto -3px;padding:0;border-radius:50%;overflow:hidden;border:1px solid rgba(139,220,255,.35);background:#07101a;box-shadow:0 8px 28px rgba(50,190,255,.22)}
-.ai img{width:100%;height:100%;object-fit:cover}
-.menuoverlay{position:fixed;inset:0;z-index:150;display:none;overflow:auto;padding:76px 14px 24px;background:rgba(0,0,0,.28);backdrop-filter:blur(16px);overscroll-behavior:contain}
-.menuoverlay.open{display:block}.menu{position:relative;margin-left:auto;right:auto;top:auto;width:min(330px,100%);max-height:calc(100dvh - 100px);overflow-y:auto;overscroll-behavior:contain;padding:14px;border-radius:22px;scrollbar-width:none}.menu::-webkit-scrollbar{display:none}
-.menu h3{margin:5px 8px 12px}.menuitem{display:flex;align-items:center;gap:12px;width:100%;padding:13px;margin:5px 0;text-align:left;text-decoration:none;color:var(--text)}.menuitem:visited{color:var(--text)}.menuitem .socialGlyph{width:24px;height:24px;display:grid;place-items:center;flex:0 0 24px}.menuitem .socialGlyph svg{width:22px;height:22px;fill:currentColor}.menuitem small{color:var(--muted)}
-.menuitem span:first-child{width:25px;text-align:center}.menuitem small{color:var(--muted);margin-left:auto}
-.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(15px);z-index:500;opacity:0;pointer-events:none;padding:11px 16px;border-radius:999px;background:rgba(20,22,30,.88);border:1px solid var(--line);backdrop-filter:blur(16px);transition:.25s;font-size:13px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+:root{--bg:#05060b;--bg2:#0b1020;--panel:rgba(255,255,255,.055);--panel2:rgba(255,255,255,.09);--line:rgba(255,255,255,.11);--text:#fff;--muted:#b9c1d4;--accent:#7ddcff;--accent2:#b78cff;--shadow:0 18px 55px rgba(0,0,0,.28)}
+[data-theme=light]{--bg:#f7f9fc;--bg2:#edf2f7;--panel:rgba(255,255,255,.78);--panel2:rgba(255,255,255,.96);--line:rgba(10,20,35,.12);--text:#111827;--muted:#4b5563;--accent:#168fca;--accent2:#7553d6;--shadow:0 15px 40px rgba(32,55,80,.12)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Arial,Helvetica,sans-serif;background:radial-gradient(850px 430px at 8% -5%,rgba(60,180,255,.12),transparent 68%),radial-gradient(760px 430px at 94% 14%,rgba(145,85,255,.11),transparent 70%),linear-gradient(145deg,var(--bg),var(--bg2));min-height:100vh}button,input{font:inherit;color:inherit}button{cursor:pointer}.glass{background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.header{position:sticky;top:0;z-index:80;padding:11px 16px;background:rgba(5,6,11,.9);border-bottom:1px solid var(--line)}[data-theme=light] .header{background:rgba(247,249,252,.92)}.nav{max-width:1180px;margin:auto;display:flex;align-items:center;gap:10px}.logo{font-weight:900;font-size:20px;letter-spacing:-.7px;text-decoration:none;color:var(--text);flex:1}.logo span{color:var(--accent)}.iconbtn,.switchbtn,.filter,.searchbtn,.action,.navitem{border:1px solid var(--line);background:var(--panel);border-radius:14px;transition:.18s}.iconbtn{width:42px;height:42px;display:grid;place-items:center;font-size:20px}.iconbtn:hover,.filter:hover,.action:hover{background:var(--panel2)}
+.hero{max-width:1180px;margin:auto;padding:40px 16px 20px}.switcher{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:570px;margin:0 auto 26px}.switchbtn{padding:11px 13px;font-weight:800}.switchbtn.active{border-color:rgba(125,220,255,.4);background:rgba(125,220,255,.1)}.hero h1{text-align:center;font-size:clamp(34px,6.5vw,68px);line-height:.98;margin:0;letter-spacing:-3px}.hero h1 em{font-style:normal;background:linear-gradient(100deg,var(--text),var(--accent));-webkit-background-clip:text;color:transparent}.hero p{max-width:650px;text-align:center;margin:17px auto 23px;color:var(--muted);line-height:1.6}.cta{display:flex;align-items:center;justify-content:center;gap:8px;margin:auto;padding:14px 20px;font-weight:900;text-decoration:none;color:var(--text);max-width:300px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(183,140,255,.18),rgba(125,220,255,.12))}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:650px;margin:26px auto}.stat{padding:16px;text-align:center;border-radius:18px}.stat b{font-size:23px}.stat small{display:block;color:var(--muted);margin-top:3px}
+.content{max-width:1180px;margin:auto;padding:8px 16px 120px;scroll-margin-top:78px}.search{display:flex;gap:8px;padding:7px;border-radius:17px;margin:0 auto 12px;max-width:850px}.search input{flex:1;border:0;outline:0;background:transparent;padding:12px 10px;min-width:0}.search input::placeholder{color:var(--muted)}.searchbtn{padding:0 16px;font-weight:800}.filters{display:flex;gap:7px;overflow:auto;padding:4px 2px 15px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap;padding:9px 13px;font-size:13px;font-weight:700}.filter.active{border-color:rgba(125,220,255,.45);background:rgba(125,220,255,.1)}.sectionhead{display:flex;align-items:end;justify-content:space-between;margin:19px 0 13px}.sectionhead h2{margin:0;font-size:22px}.sectionhead span{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{overflow:hidden;border-radius:20px;cursor:pointer;background:var(--panel);border:1px solid var(--line);transition:transform .18s,background .18s}.card:hover{transform:translateY(-2px);background:var(--panel2)}.thumb{aspect-ratio:4/5;background:#10131c;position:relative;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover;display:block}.badge{position:absolute;left:9px;top:9px;padding:6px 9px;border-radius:999px;background:rgba(0,0,0,.62);color:#fff;border:1px solid rgba(255,255,255,.16);font-size:10px;font-weight:800}.cardbody{padding:12px}.cardtitle{font-weight:800;font-size:14px;line-height:1.35}.number{margin-top:5px;font-size:12px;font-weight:900;color:var(--muted)}.empty{text-align:center;padding:55px 15px;color:var(--muted);grid-column:1/-1}.promptpage{display:none}.promptpage.active{display:block}.templatepage.hidden{display:none}
+.detail{position:fixed;inset:0;z-index:200;display:none;overflow:auto;background:linear-gradient(145deg,var(--bg),var(--bg2));padding:82px 16px 105px}.detail.open{display:block}.sheet{width:min(820px,100%);margin:auto}.close{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:block;margin:0 0 12px auto}.detailmedia{position:relative;border-radius:23px;overflow:hidden;background:#090b12;aspect-ratio:4/5;max-height:70vh;display:grid;place-items:center;border:1px solid var(--line)}.detailmedia img{width:100%;height:100%;object-fit:cover}.play{position:absolute;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.94);color:#000;border:0;font-size:22px}.detail h2{margin:17px 0 9px;font-size:31px;letter-spacing:-1px}.detail p{color:var(--muted);line-height:1.7}.actions{display:grid;grid-template-columns:1fr;gap:9px;margin:14px 0}.action{display:flex;align-items:center;justify-content:center;min-height:53px;padding:11px 15px;text-align:center;text-decoration:none;font-weight:800}.action.primary{background:rgba(125,220,255,.11);border-color:rgba(125,220,255,.3)}.detailInfo{margin-top:16px;padding:17px;border-radius:20px}.detailLinks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.detailLinks a{padding:11px;border-radius:13px;text-decoration:none;border:1px solid var(--line);color:var(--text);background:var(--panel);text-align:center;font-weight:700}.detailFooter{margin-top:18px;padding-top:17px;border-top:1px solid var(--line)}.trendWrap{margin-top:25px}.trendWrap h3{font-size:17px;margin:0 0 11px}.trendGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.trendCard{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--panel);cursor:pointer}.trendCard img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}.trendCard b{display:block;padding:8px;font-size:11px}.privacyBox{margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}
+.promptModal{position:fixed;inset:0;z-index:420;display:none;background:rgba(0,0,0,.68);align-items:flex-end;justify-content:center}.promptModal.open{display:flex}.promptSheet{width:min(760px,100%);max-height:92vh;overflow:auto;background:var(--bg2);border:1px solid var(--line);border-radius:25px 25px 0 0;padding:18px 16px 30px}.drag{width:42px;height:4px;border-radius:5px;background:rgba(255,255,255,.18);margin:0 auto 18px}.promptSheet h2{margin:0 0 14px}.promptBox{padding:14px;border:1px solid var(--line);border-radius:17px;background:var(--panel);margin:10px 0}.promptBox h3{font-size:15px;margin:0 0 8px}.promptText{max-height:220px;overflow:auto;color:var(--muted);line-height:1.65;white-space:pre-wrap;font-family:monospace;font-size:12px}.loadingScreen{position:fixed;inset:0;z-index:450;display:none;place-items:center;background:rgba(5,6,11,.78)}.loadingScreen.show{display:grid}.loader{width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,.12);border-top-color:var(--accent);animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.aiChoice{display:grid;grid-template-columns:1fr 1fr;gap:9px}.genderChoice{display:grid;grid-template-columns:1fr 1fr;gap:9px}.aiModal .promptSheet{max-width:520px}.smallNote{font-size:12px;color:var(--muted);line-height:1.5}.bottom{position:fixed;z-index:90;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(620px,calc(100% - 20px));padding:6px;display:grid;grid-template-columns:1fr 1.1fr 1.3fr 1.1fr 1fr;gap:4px;border-radius:20px;background:rgba(10,12,20,.92);border:1px solid var(--line)}[data-theme=light] .bottom{background:rgba(255,255,255,.94)}.navitem{background:transparent;border:0;padding:8px 4px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:4px}.navitem.active{background:rgba(255,255,255,.07)}.ai{width:48px;height:48px;margin:-14px auto -3px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#8bdcff,#6c4cff 48%,#11162c);box-shadow:0 8px 28px rgba(70,160,255,.22);font-size:23px}
+.menuoverlay{position:fixed;inset:0;z-index:150;display:none;background:rgba(0,0,0,.35)}.menuoverlay.open{display:block}.menu{position:absolute;right:14px;top:68px;width:min(330px,calc(100% - 28px));padding:14px;border-radius:22px}.menu h3{margin:5px 8px 12px}.menuitem{display:flex;align-items:center;gap:12px;width:100%;padding:13px;margin:5px 0;text-align:left;text-decoration:none}.menuitem small{color:var(--muted);margin-left:auto}.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(15px);z-index:700;opacity:0;pointer-events:none;padding:11px 16px;border-radius:999px;background:#171b28;border:1px solid var(--line);transition:.2s;font-size:13px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}.hero{padding-top:28px}.stats{gap:7px}.stat{padding:14px 7px}.stat b{font-size:20px}.bottom{border-radius:18px}.navitem{font-size:10px}}
-
-/* Lightweight rendering for slower phones / 4G connections */
-.card{content-visibility:auto;contain-intrinsic-size:0 310px}
-@media(max-width:700px){
-  .glass,.header,.bottom,.menuoverlay,.menu,.videoModal,.toast{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-  .card:hover{transform:none}
-}
-@media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
-}
-
-/* Final mobile polish */
-@media(max-width:700px){
-  .switcher{max-width:520px;gap:8px;margin-bottom:28px}
-  .switchbtn{padding:10px 9px;font-size:14px}
-  .filter{padding:10px 14px;font-size:13px}
-  .content{scroll-margin-top:78px}
-  .sectionhead h2{font-size:22px}
-}
+@media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}.hero{padding-top:27px}.stats{gap:7px}.stat{padding:13px 7px}.stat b{font-size:20px}.bottom{border-radius:18px}.navitem{font-size:10px}.trendGrid{grid-template-columns:repeat(5,1fr);overflow:hidden}.detail h2{font-size:27px}}
+@media(max-width:600px){.glass{box-shadow:0 10px 28px rgba(0,0,0,.18)}.header{backdrop-filter:none;-webkit-backdrop-filter:none}.detailmedia{max-height:none}.detail{padding-top:75px}.promptText{max-height:190px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<header class="header">
-  <nav class="nav">
-    <a class="logo" href="#" onclick="goHome();return false">Edit<span>Galaxy</span></a>
-    <button class="theme iconbtn" id="themeBtn" aria-label="Toggle theme">☾</button>
-    <button class="iconbtn" id="menuBtn" aria-label="Open menu">☰</button>
-  </nav>
-</header>
-
-<main>
-<section class="hero">
-  <div class="switcher">
-    <button id="templateSwitch" class="switchbtn active" onclick="showSection('templates')">✨ Premium Templates</button>
-    <button id="promptSwitch" class="switchbtn" onclick="showSection('prompts')">🖼️ Image Prompts</button>
-  </div>
-  <h1>Create. Edit. <em>Explore.</em></h1>
-  <p>Discover premium CapCut templates and carefully crafted AI image prompts — made for creators who want to create faster and better.</p>
-  <a class="cta" href="https://app.surajfx.in" target="_blank" rel="noopener">👑 CapCut Pro — Download Now ↗</a>
-  <div class="stats">
-    <div class="stat glass"><b id="statTemplates">500+</b><small>Templates</small></div>
-    <div class="stat glass"><b id="statPrompts">100+</b><small>Prompts</small></div>
-    <div class="stat glass"><b id="statUses">100K+</b><small>Downloads</small></div>
-  </div>
-</section>
-
-<section id="templatePage" class="content templatepage">
-  <div class="search glass"><input id="templateSearch" placeholder="Search by number, #number, title or full name…" ><button class="searchbtn" type="button" onclick="runSectionSearch('template')">Search</button></div>
-  <div id="templateFilters" class="filters"></div>
-  <div class="sectionhead"><h2 id="templateHeading">Premium Templates</h2><span id="templateCount"></span></div>
-  <div id="templateGrid" class="grid"></div>
-</section>
-
-<section id="promptPage" class="content promptpage">
-  <div class="search glass"><input id="promptSearch" placeholder="Search prompts by number, title or text…" ><button class="searchbtn" type="button" onclick="runSectionSearch('prompt')">Search</button></div>
-  <div id="promptFilters" class="filters"></div>
-  <div class="sectionhead"><h2>AI Image Prompts</h2><span id="promptCount"></span></div>
-  <div id="promptGrid" class="grid"></div>
-</section>
-</main>
-
-<footer style="max-width:1180px;margin:auto;padding:10px 16px 120px;color:var(--text);text-align:center;font-size:12px">
-  EditGalaxy · AI Prompts · CapCut Templates · Creative Resources
-</footer>
-
-<div id="menuOverlay" class="menuoverlay">
-  <div class="menu glass" onclick="event.stopPropagation()">
-    <h3>EditGalaxy</h3>
-    <button class="menuitem" onclick="goHome()"><span>⌂</span> Home</button>
-    <button class="menuitem" onclick="showSection('templates');closeMenu()"><span>🎬</span> Templates</button>
-    <button class="menuitem" onclick="showSection('prompts');closeMenu()"><span>🖼️</span> Image Prompts</button>
-    <a class="menuitem" href="https://app.surajfx.in" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true">✦</span> CapCut <small>↗</small></a>
-    <a class="menuitem" href="https://www.instagram.com/trending_edit_day/" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.7" r="1.2"/></svg></span> Instagram <small>↗</small></a>
-    <a class="menuitem" href="https://www.tiktok.com/@trending_edit_day" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.2 3v10.1a4.2 4.2 0 1 1-3.3-4.1v3.2a1.3 1.3 0 1 0 1.1 1.3V3h2.2c.3 1.8 1.3 3 3 3.5v2.3c-1.2-.1-2.2-.5-3-1.1V3z"/></svg></span> TikTok <small>↗</small></a>
-    <a class="menuitem" href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.6 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V3.9c-.3 0-1.4-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3V10H7.4v3h2.8v8h3.4z"/></svg></span> Facebook <small>↗</small></a>
-    <a class="menuitem" href="https://www.threads.com/@trending_edit_day" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.4 21c-4.6 0-7.4-2.9-7.4-7.7 0-5.1 2.8-8.3 7.5-8.3 4.2 0 6.8 2.2 7.1 5.9h-2.3c-.3-2.3-1.9-3.7-4.8-3.7-3.3 0-5.1 2.1-5.1 6.1 0 3.7 1.7 5.4 4.9 5.4 2.4 0 4.2-1.1 4.8-3.2-.9-.5-2-.8-3.3-.8-1.8 0-2.8.7-2.8 1.8 0 .8.6 1.3 1.7 1.3 1.5 0 2.5-.9 2.9-2.5-2.8-1-6.8-.2-6.8 2.8 0 1.9 1.7 2.9 3.6 2.9 2.4 0 4.1-1 4.8-2.9l2 .9c-1.1 2.8-3.4 4.7-6.8 4.7z"/></svg></span> Threads <small>↗</small></a>
-    <a class="menuitem" href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener"><span class="socialGlyph" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21.6 7.2a2.9 2.9 0 0 0-2-2C17.9 4.7 12 4.7 12 4.7s-5.9 0-7.6.5a2.9 2.9 0 0 0-2 2C1.9 8.9 1.9 12 1.9 12s0 3.1.5 4.8a2.9 2.9 0 0 0 2 2c1.7.5 7.6.5 7.6.5s5.9 0 7.6-.5a2.9 2.9 0 0 0 2-2c.5-1.7.5-4.8.5-4.8s0-3.1-.5-4.8zM10 15.3V8.7l5.7 3.3-5.7 3.3z"/></svg></span> YouTube <small>↗</small></a>
-    <a class="menuitem" href="about.html"><span>ⓘ</span> About <small>↗</small></a>
-    <a class="menuitem" href="contact.html"><span>✉</span> Contact <small>↗</small></a>
-    <a class="menuitem" href="team.html"><span>👥</span> Team <small>↗</small></a>
-    <a class="menuitem" href="privacy.html"><span>🔒</span> Privacy Policy <small>↗</small></a>
-    <a class="menuitem" href="trust.html"><span>🛡️</span> Trust & Safety <small>↗</small></a>
-    <a class="menuitem" href="terms.html"><span>📄</span> Terms <small>↗</small></a>
-    <a class="menuitem" href="copyright.html"><span>©</span> Copyright <small>↗</small></a>
-  </div>
-</div>
-
-<nav class="bottom glass">
-  <button class="navitem active" id="navHome" onclick="goHome()"><span class="navicon">⌂</span>Home</button>
-  <button class="navitem" id="navTemplates" onclick="showSection('templates')"><span class="navicon">▣</span>Templates</button>
-  <button class="navitem ai" onclick="openAISearch()" aria-label="AI Search"><img src="editgalaxy-ai-icon.png" alt="AI"></button>
-  <button class="navitem" id="navPrompts" onclick="showSection('prompts')"><span class="navicon">▧</span>Prompts</button>
-  <button class="navitem" onclick="showExplore()"><span class="navicon">⌕</span>Explore</button>
-</nav>
-
-<div id="detail" class="detail" onclick="if(event.target===this)closeDetail()">
-  <article class="sheet">
-    <button class="close" onclick="closeDetail()">✕</button>
-    <div id="detailContent"></div>
-  </article>
-</div>
-
-<div id="aiOverlay" class="detail" onclick="if(event.target===this)closeAI()">
- <article class="sheet">
-  <button class="close" onclick="closeAI()">✕</button>
-  <h2>AI Search</h2>
-  <p>Choose what you want to find, type a name or number, then search.</p>
-  <div class="actions">
-    <button id="aiTemplate" class="action primary" onclick="setAIType('template')">🎬 Template</button>
-    <button id="aiPrompt" class="action" onclick="setAIType('prompt')">🖼️ Prompt</button>
-  </div>
-  <div class="search glass aiSearchBox"><input id="aiInput" placeholder="e.g. #251 or Hindi Song"><button class="searchbtn" onclick="runAISearch()">✦ Search</button></div>
- </article>
-</div>
-<div id="exploreOverlay" class="detail" onclick="if(event.target===this)closeExplore()">
- <article class="sheet">
-  <button class="close" onclick="closeExplore()">✕</button>
-  <div class="exploreTitle"><h2>Explore</h2><span id="exploreCount"></span></div>
-  <p class="aiChooserText">Recently viewed templates and prompts appear here.</p>
-  <div id="exploreGrid" class="exploreGrid"></div>
-  <button class="action exploreClear" onclick="clearRecentViews()">Clear Recently Viewed</button>
- </article>
-</div>
-<div id="videoModal" class="videoModal" onclick="if(event.target===this)closeVideoModal()">
- <div class="videoSheet">
-  <button class="videoClose" onclick="closeVideoModal()">✕</button>
-  <div id="videoBody"></div>
- </div>
-</div>
-<div id="promptModal" class="promptModal" onclick="if(event.target===this)closePromptModal()">
- <div class="promptSheet">
-  <button class="promptModalClose" onclick="closePromptModal()">✕</button>
-  <div id="promptModalBody"></div>
- </div>
-</div>
-<div id="toast" class="toast"></div>
-
+<header class="header"><nav class="nav"><a class="logo" href="#" onclick="goHome();return false">Edit<span>Galaxy</span></a><button class="iconbtn" id="themeBtn" aria-label="Toggle theme">☾</button><button class="iconbtn" id="menuBtn" aria-label="Open menu">☰</button></nav></header>
+<main><section class="hero"><div class="switcher"><button id="templateSwitch" class="switchbtn active" onclick="showSection('templates')">✨ Premium Templates</button><button id="promptSwitch" class="switchbtn" onclick="showSection('prompts')">🖼️ Image Prompts</button></div><h1>Create. Edit. <em>Explore.</em></h1><p>Discover premium CapCut templates and carefully crafted AI image prompts — made for creators.</p><a class="cta" href="https://app.surajfx.in" target="_blank" rel="noopener">👑 CapCut Pro — Download Now ↗</a><div class="stats"><div class="stat glass"><b id="statTemplates">0</b><small>Templates</small></div><div class="stat glass"><b id="statPrompts">0</b><small>Prompts</small></div><div class="stat glass"><b id="statUses">100K+</b><small>Downloads</small></div></div></section>
+<section id="templatePage" class="content templatepage"><div class="search glass"><input id="templateSearch" placeholder="Search by number, #number, title…" oninput="renderTemplates()"><button class="searchbtn" onclick="renderTemplates()">Search</button></div><div id="templateFilters" class="filters"></div><div class="sectionhead"><h2>Premium Templates</h2><span id="templateCount"></span></div><div id="templateGrid" class="grid"></div></section>
+<section id="promptPage" class="content promptpage"><div class="search glass"><input id="promptSearch" placeholder="Search prompts by number, title or text…" oninput="renderPrompts()"><button class="searchbtn" onclick="renderPrompts()">Search</button></div><div id="promptFilters" class="filters"></div><div class="sectionhead"><h2>AI Image Prompts</h2><span id="promptCount"></span></div><div id="promptGrid" class="grid"></div></section></main>
+<footer style="max-width:1180px;margin:auto;padding:10px 16px 120px;color:var(--muted);text-align:center;font-size:12px">EditGalaxy · AI Prompts · CapCut Templates · Creative Resources</footer>
+<div id="menuOverlay" class="menuoverlay"><div class="menu glass" onclick="event.stopPropagation()"><h3>EditGalaxy</h3><button class="menuitem" onclick="goHome()">⌂ Home</button><button class="menuitem" onclick="showSection('templates');closeMenu()">🎬 Templates</button><button class="menuitem" onclick="showSection('prompts');closeMenu()">🖼️ Image Prompts</button><a class="menuitem" href="https://app.surajfx.in" target="_blank" rel="noopener">✦ CapCut <small>↗</small></a><a class="menuitem" href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener">▶ YouTube <small>↗</small></a></div></div>
+<nav class="bottom"><button class="navitem active" id="navHome" onclick="goHome()">⌂ Home</button><button class="navitem" id="navTemplates" onclick="showSection('templates')">▣ Templates</button><button class="navitem ai" onclick="openAISearch()" aria-label="AI Search">✦</button><button class="navitem" id="navPrompts" onclick="showSection('prompts')">▧ Prompts</button><button class="navitem" onclick="showExplore()">⌕ Explore</button></nav>
+<div id="detail" class="detail" onclick="if(event.target===this)closeDetail()"><article class="sheet"><div id="detailContent"></div></article></div>
+<div id="promptModal" class="promptModal" onclick="if(event.target===this)closePromptModal()"><div class="promptSheet"><div class="drag"></div><button class="close" onclick="closePromptModal()">✕</button><h2>Get Prompt</h2><div id="promptModalContent"></div></div></div>
+<div id="aiModal" class="promptModal aiModal" onclick="if(event.target===this)closeAIModal()"><div class="promptSheet"><div class="drag"></div><button class="close" onclick="closeAIModal()">✕</button><h2 id="aiTitle">Choose AI Tool</h2><p class="smallNote" id="aiSub">Choose where you want to send the prompt.</p><div id="aiModalContent"></div></div></div>
+<div id="loadingScreen" class="loadingScreen"><div class="loader"></div></div><div id="toast" class="toast"></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {getDatabase,ref,onValue} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const firebaseConfig={
- apiKey:"AIzaSyBgPllgUNMUo6j_Rbd7wg0NjR6z4YFy6uU",
- authDomain:"template-cc1cb.firebaseapp.com",
- databaseURL:"https://template-cc1cb-default-rtdb.firebaseio.com",
- projectId:"template-cc1cb",
- storageBucket:"template-cc1cb.firebasestorage.app",
- messagingSenderId:"62955466666",
- appId:"1:62955466666:web:e99b4dda5170da00a845d3",
- measurementId:"G-Y3WFW4TR45"
-};
-const app=initializeApp(firebaseConfig),db=getDatabase(app);
-let templates=[],prompts=[],tFilter="all",pFilter="all",aiType="template";
-
-const templateCats=["all","trending","cinematic","hindi","english","funk","ai prompt"];
-const promptCats=["all","trending","cinematic","4k","anime","portrait","fantasy","static"];
-
-function listen(){
- onValue(ref(db,"templates"),s=>{
-   const d=s.val()||{}; templates=Object.entries(d).map(([id,x])=>({id,...x}));
-   renderTemplateFilters();renderTemplates();
-   if(location.hash.startsWith("#template/")) setTimeout(handleHash,0);
- });
- onValue(ref(db,"prompts"),s=>{
-   const d=s.val()||{}; prompts=Object.entries(d).map(([id,x])=>({id,...x}));
-   renderPromptFilters();renderPrompts();
-   if(location.hash.startsWith("#prompt/")) setTimeout(handleHash,0);
- });
-}
-function normalize(s){return String(s||"").toLowerCase().replace(/[#/_\-]+/g," ").replace(/\s+/g," ").trim()}
-function matches(item,q){
- if(!q)return true;
- const n=normalize(q), number=String(item.num||item.number||item.templateNumber||item.promptNumber||"");
- const haystack=[
-   item.title,item.name,item.templateName,item.promptTitle,
-   item.category,item.cat, item.promptCategory,
-   item.prompt,item.girlPrompt,item.boyPrompt,item.description,
-   number,"#"+number
- ].map(normalize).join(" ");
- return haystack.includes(n);
-}
-function categoryMatch(item,f){return f==="all"||normalize(item.category||item.cat)===normalize(f)}
-const categoryEmoji={
- all:"✨",trending:"🔥",cinematic:"🎬",hindi:"🇮🇳",english:"🇬🇧",funk:"🎵","ai prompt":"🤖",
- "4k":"🌟",anime:"🌸",portrait:"👤",fantasy:"🔮",static:"📸"
-};
-function catLabel(c){
- const name=c==="all"?"All":c.split(" ").map(w=>w[0].toUpperCase()+w.slice(1)).join(" ");
- return `${categoryEmoji[c]||"✨"} ${name}`;
-}
-function renderTemplateFilters(){
- document.getElementById("templateFilters").innerHTML=templateCats.map(c=>`<button class="filter ${c===tFilter?"active":""}" onclick="window.setTF('${c}')">${catLabel(c)}</button>`).join("");
-}
-function renderPromptFilters(){
- document.getElementById("promptFilters").innerHTML=promptCats.map(c=>`<button class="filter ${c===pFilter?"active":""}" onclick="window.setPF('${c}')">${catLabel(c)}</button>`).join("");
-}
-function imgFor(x){
- return x.imageUrl||x.imageURL||x.imageLink||x.previewImage||x.previewImageUrl||x.thumbnail||x.thumbnailUrl||x.thumbnailLink||x.thumb||x.customThumbnail||x.image||
- "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="100%" height="100%" fill="#111522"/><text x="50%" y="50%" fill="#7f879d" text-anchor="middle" font-size="28">EditGalaxy</text></svg>`)
-}
-function card(x,type){
- const title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
- const cat=x.category||x.cat||"General";
- const catText=catLabel(normalize(cat));
- return `<article class="card" onclick='window.openDetail(${JSON.stringify(JSON.stringify(x))},"${type}")'>
-  <div class="thumb"><img loading="lazy" decoding="async" src="${escapeAttr(imgFor(x))}" alt="${escapeAttr(title)}"><span class="badge">${escapeHtml(catText)}</span></div>
-  <div class="cardbody"><div class="cardtitle">${escapeHtml(title)}</div><div class="number">#${escapeHtml(x.num||x.number||"—")}</div></div>
- </article>`;
-}
-function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function escapeAttr(s){return escapeHtml(s)}
-window.setTF=f=>{tFilter=f;renderTemplateFilters();renderTemplates()}
-window.setPF=f=>{pFilter=f;renderPromptFilters();renderPrompts()}
-window.renderTemplates=renderTemplates;window.renderPrompts=renderPrompts;
-function createdValue(x){ return Number(x.createdAt||x.timestamp||x.addedAt||x.created||0) || 0; }
-function newestFirst(a,b){
- const av=Number(a.num??a.number??a.templateNumber??-Infinity);
- const bv=Number(b.num??b.number??b.templateNumber??-Infinity);
- if(Number.isFinite(av)&&Number.isFinite(bv)&&av!==bv) return bv-av;
- const ac=createdValue(a),bc=createdValue(b);
- if(ac||bc) return bc-ac;
- return String(b.id||"").localeCompare(String(a.id||""));
-}
-function renderTemplates(){
- const q=document.getElementById("templateSearch").value.trim();
- let list=templates.filter(x=>categoryMatch(x,tFilter)&&matches(x,q));
- if(tFilter==="trending") list.sort((a,b)=>(b.last7Uses||b.weekUses||0)-(a.last7Uses||a.weekUses||0)); else list.sort(newestFirst);
- document.getElementById("templateCount").textContent=list.length+" results";
- document.getElementById("templateGrid").innerHTML=list.length?list.map(x=>card(x,"template")).join(""):`<div class="empty">No templates found yet.</div>`;
-}
-const demoPrompts=[
- {id:"demo1",num:1,title:"Cinematic Portrait",category:"cinematic",imageUrl:"https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",girlPrompt:"Premium cinematic portrait, soft natural light, realistic skin, shallow depth of field, editorial photography.",boyPrompt:"Premium cinematic male portrait, soft natural light, realistic skin, shallow depth of field, editorial photography."},
- {id:"demo2",num:2,title:"4K Dreamy Birthday",category:"4k",imageUrl:"https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=900&q=80",girlPrompt:"Dreamy birthday portrait, elegant outfit, glowing bokeh, soft flowers, ultra-detailed 4K photorealism.",boyPrompt:"Dreamy birthday portrait, elegant outfit, glowing bokeh, soft flowers, ultra-detailed 4K photorealism."},
- {id:"demo3",num:3,title:"Fantasy Floating Melody",category:"fantasy",imageUrl:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=80",girlPrompt:"Surreal fantasy scene, subject floating in a magical garden, luminous particles, cinematic depth, high detail.",boyPrompt:"Surreal fantasy scene, subject floating in a magical garden, luminous particles, cinematic depth, high detail."},
- {id:"demo4",num:4,title:"Anime Night Portrait",category:"anime",imageUrl:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80",girlPrompt:"Stylized anime-inspired night portrait, expressive eyes, neon rim light, detailed background, polished illustration.",boyPrompt:"Stylized anime-inspired night portrait, expressive eyes, neon rim light, detailed background, polished illustration."}
-];
-function renderPrompts(){
- const q=document.getElementById("promptSearch").value.trim();
- let source=prompts.length?prompts:demoPrompts;
- let list=source.filter(x=>categoryMatch(x,pFilter)&&matches(x,q));
- document.getElementById("promptCount").textContent=list.length+" results";
- document.getElementById("promptGrid").innerHTML=list.length?list.map(x=>card(x,"prompt")).join(""):`<div class="empty">No prompts found.</div>`;
-}
-window.openDetail=(raw,type,opts={})=>{
- const x=JSON.parse(raw), title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
- const img=imgFor(x);
- let html=`<div class="detailmedia"><img src="${escapeAttr(img)}" alt="${escapeAttr(title)}">${type==="template"?`<button class="play" aria-label="Play template video" onclick='openVideoModal(${JSON.stringify(x.instagramUrl||x.video||x.instagram||"")},"instagram")'>▶</button>`:""}</div><h2>${escapeHtml(title)}</h2>`;
- if(type==="template") {
-   const cap=x.capcut||x.capcutUrl||x.capcutLink||"#", how=x.howToUseVideo||x.howToUseVideoUrl||x.howVideo||x.howToUseLink||x.howto||"";
-   const extraEnabled=x.extraButtonEnabled!==false && !!(x.extraButtonLink||x.extraLink);
-   const extraName=x.extraButtonName||x.extraName||"More Details";
-   const extraLink=x.extraButtonLink||x.extraLink||"#";
-   const extraHtml=extraEnabled?`<a class="action wideAction extraAction" href="${escapeAttr(extraLink)}" target="_blank" rel="noopener">${escapeHtml(extraName)} ↗</a>`:"";
-   html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="window.trackUse('${escapeAttr(x.id||"")}')">✨ Use Template on CapCut</a>${extraHtml}${how?`<button class="action wideAction" onclick='openVideoModal(${JSON.stringify(how)},"auto")'>▶ How to Use Video</button>`:`<button class="action wideAction" onclick="showToast('How-to-use video link is not added yet.')">▶ How to Use Video</button>`}<button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share Template</button></div>`;
-   const desc="First, download CapCut Pro and open this template. If CapCut works without VPN on your phone, you do not need a VPN. If CapCut is not available without VPN, connect a VPN first. Then tap “Use Template on CapCut” above. In CapCut, open the template, add your own photos or videos, adjust the clips if needed, preview your edit, and export your finished video. For an easy visual guide, tap “How to Use Video”.";
-   const insta=x.instagramUrl||x.instagramVideo||x.video||x.instagram||"#";
-   html+=`<div class="detailInfo glass"><p>${escapeHtml(desc)}</p><div class="detailLinks"><a href="${escapeAttr(cap)}" target="_blank" rel="noopener">✨ CapCut Template</a><a href="${escapeAttr(insta)}" target="_blank" rel="noopener">📷 Instagram Video</a></div></div>`;
- } else {
-   const gp=x.girlPrompt||x.prompt||"", bp=x.boyPrompt||"";
-   html+=`<div class="actions"><button class="action primary wideAction" onclick='openPromptLoader(${JSON.stringify(JSON.stringify(x))})'>✨ Get Prompt</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share</button></div>`;
-   html+=`<div class="detailInfo glass"><p>${escapeHtml(x.description||x.tips||"Copy the prompt and use it with your preferred image generator.")}</p></div>`;
-   html+=renderPromptTrending(x);
- }
- html+=siteDetails();
- document.getElementById("detailContent").innerHTML=html;
- document.getElementById("detail").classList.add("open");
- document.body.style.overflow="hidden";
- const key=encodeURIComponent(x.id||x.num||x.number||"");
- const targetHash=`#${type}/${key}`;
- if(!opts.fromHash && location.hash!==targetHash) history.pushState({detail:true,type,key},"",targetHash);
- else history.replaceState({detail:true,type,key},"",targetHash);
- window.currentShare={title,url:location.href};
- rememberRecent(type,x);
-}
-function renderPromptTrending(current){
- const source=(prompts.length?prompts:demoPrompts).filter(x=>String(x.id||"")!==String(current.id||"") && (normalize(x.category||x.cat)==="trending" || (x.trending===true)));
- const fallback=(prompts.length?prompts:demoPrompts).filter(x=>String(x.id||"")!==String(current.id||"") && !source.some(y=>String(y.id||"")===String(x.id||"")));
- const list=[...source,...fallback].slice(0,10);
- if(!list.length) return "";
- return `<section class="promptTrending"><h3>🔥 Trending Prompts</h3><div class="grid">${list.map(x=>card(x,"prompt")).join("")}</div></section>`;
-}
-window.openPromptLoader=(raw)=>{
- const x=JSON.parse(raw), modal=document.getElementById("promptModal"), body=document.getElementById("promptModalBody");
- body.innerHTML=`<div class="promptLoading"><div class="promptSpinner"></div><strong>Preparing your prompt…</strong><span class="meta">Loading the girl and boy versions</span></div>`;
- modal.classList.add("open");
- setTimeout(()=>{
-   const gp=x.girlPrompt||x.prompt||"", bp=x.boyPrompt||"";
-   body.innerHTML=`<h3>Get Prompt</h3>
-   <div class="promptBox"><h4>👩 Girl Version</h4><div class="promptText">${escapeHtml(gp)}</div><button class="action primary wideAction copyPrompt" onclick='copyText(${JSON.stringify(gp)},${JSON.stringify(x.id||"")})'>📋 Copy Girl Prompt</button></div>
-   ${bp?`<div class="promptBox"><h4>👨 Boy Version</h4><div class="promptText">${escapeHtml(bp)}</div><button class="action primary wideAction copyPrompt" onclick='copyText(${JSON.stringify(bp)},${JSON.stringify(x.id||"")})'>📋 Copy Boy Prompt</button></div>`:""}
-   <button class="action wideAction promptTool" onclick='openAITool(${JSON.stringify(JSON.stringify(x))})'>🤖 Open AI Tool</button>`;
- },520);
-};
-window.closePromptModal=()=>{const m=document.getElementById("promptModal");m.classList.remove("open");document.getElementById("promptModalBody").innerHTML="";window.aiToolItem=null};
-
-window.openAITool=(raw)=>{
- const x=JSON.parse(raw);
- window.aiToolItem=x;
- const body=document.getElementById("promptModalBody");
- body.innerHTML=`<h3>🤖 Choose AI Tool</h3>
-   <p class="aiChooserText">Choose where you want to use this prompt.</p>
-   <div class="aiChoiceGrid">
-     <button class="action primary aiChoice" onclick="chooseAITool('gpt')">🤖 GPT</button>
-     <button class="action aiChoice" onclick="chooseAITool('gemini')">✨ Gemini</button>
-   </div>`;
- document.getElementById("promptModal").classList.add("open");
-};
-window.chooseAITool=(tool)=>{
- const body=document.getElementById("promptModalBody");
- window.aiToolChoice=tool;
- const name=tool==='gpt'?'GPT':'Gemini';
- body.innerHTML=`<h3>👤 Who are you creating this for?</h3>
-   <p class="aiChooserText">Choose the version you want to send to ${name}.</p>
-   <div class="aiChoiceGrid">
-     <button class="action primary aiChoice" onclick="sendPromptToAI('girl')">👩 Girl</button>
-     <button class="action aiChoice" onclick="sendPromptToAI('boy')">👨 Boy</button>
-   </div>
-   <button class="action wideAction aiBack" onclick="openAITool(${JSON.stringify(JSON.stringify(window.aiToolItem||{}))})">← Back</button>`;
-};
-window.sendPromptToAI=(gender)=>{
- const x=window.aiToolItem||{};
- const prompt=gender==='girl'?(x.girlPrompt||x.prompt||''):(x.boyPrompt||'');
- const tool=window.aiToolChoice||'gpt';
- if(!prompt){showToast(`No ${gender} prompt is available.`);return;}
- const encoded=encodeURIComponent(prompt);
- const url=tool==='gemini'
-   ? `https://gemini.google.com/app?prompt=${encoded}`
-   : `https://chatgpt.com/?q=${encoded}`;
- try{window.open(url,'_blank','noopener');}catch{location.href=url;}
- showToast(`${gender==='girl'?'Girl':'Boy'} prompt prepared for ${tool==='gemini'?'Gemini':'GPT'} ✓`);
-};
-
-function normalizeVideoUrl(url){
- const raw=String(url||"").trim();
- if(!raw) return null;
- try{
-   const u=new URL(raw);
-   const host=u.hostname.replace(/^www\./,"").toLowerCase();
-   if(host.endsWith("instagram.com")){
-     const parts=u.pathname.split("/").filter(Boolean);
-     const kind=parts[0]?.toLowerCase();
-     const id=parts[1];
-     if((kind==="reel"||kind==="p"||kind==="tv")&&id){
-       return {kind:"iframe",src:`https://www.instagram.com/${kind}/${encodeURIComponent(id)}/embed/`,external:raw};
-     }
-     return {kind:"iframe",src:raw,external:raw};
-   }
-   if(host.includes("youtube.com")){
-     let id=u.searchParams.get("v");
-     if(!id && u.pathname.includes("/shorts/")) id=u.pathname.split("/shorts/")[1].split("/")[0];
-     if(!id && u.pathname.includes("/embed/")) id=u.pathname.split("/embed/")[1].split("/")[0];
-     if(id) return {kind:"iframe",src:`https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`,external:raw};
-   }
-   if(host==="youtu.be"){
-     const id=u.pathname.slice(1).split("/")[0];
-     if(id) return {kind:"iframe",src:`https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`,external:raw};
-   }
-   if(/\.(mp4|webm|ogg)(?:$|\?)/i.test(u.pathname)) return {kind:"video",src:raw,external:raw};
-   return {kind:"iframe",src:raw,external:raw};
- }catch{return {kind:"iframe",src:raw,external:raw};}
-}
-window.openVideoModal=(url,type="auto")=>{
- const v=normalizeVideoUrl(url);
- if(!v){showToast("Video link is not added yet.");return;}
- const body=document.getElementById("videoBody");
- const fallback=v.external?`<a class="videoExternal" href="${escapeAttr(v.external)}" target="_blank" rel="noopener">Open Original Video ↗</a>`:"";
- if(v.kind==="video") body.innerHTML=`<video class="videoFrame ${type==="instagram"?"vertical":""}" controls autoplay playsinline src="${escapeAttr(v.src)}"></video>${fallback}`;
- else body.innerHTML=`<iframe class="videoFrame ${type==="instagram"?"vertical":""}" src="${escapeAttr(v.src)}" title="EditGalaxy video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe><div class="videoHint">If the platform blocks embedded playback, use the button below.</div>${fallback}`;
- document.getElementById("videoModal").classList.add("open");
-};
-window.closeVideoModal=()=>{const m=document.getElementById("videoModal");m.classList.remove("open");document.getElementById("videoBody").innerHTML=""};
-
-function siteDetails(){ return `<div class="detailFooter"><div class="detailLinks"><a href="about.html">About</a><a href="contact.html">Contact</a><a href="team.html">Team</a><a href="privacy.html">Privacy Policy</a><a href="trust.html">Trust & Safety</a><a href="terms.html">Terms</a><a href="copyright.html">Copyright</a><a href="https://www.instagram.com/trending_edit_day/" target="_blank" rel="noopener">Instagram</a><a href="https://t.me/trending_edit_day" target="_blank" rel="noopener">Telegram</a><a href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener">YouTube</a><a href="https://www.tiktok.com/@trending_edit_day" target="_blank" rel="noopener">TikTok</a><a href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank" rel="noopener">Facebook</a><a href="https://www.threads.com/@trending_edit_day" target="_blank" rel="noopener">Threads</a></div></div>` }
-function recentKey(type,x){return `${type}:${x.id||x.num||x.number||x.title||x.name||""}`;}
-function getRecentViews(){try{return JSON.parse(localStorage.getItem("eg_recent_views")||"[]")}catch{return []}}
-function rememberRecent(type,x){const item={type,id:x.id||"",num:x.num||x.number||"",title:x.title||x.name||"",category:x.category||x.cat||"",imageUrl:imgFor(x),girlPrompt:x.girlPrompt||x.prompt||"",boyPrompt:x.boyPrompt||"",description:x.description||x.tips||"",capcut:x.capcut||x.capcutUrl||x.capcutLink||"",instagramUrl:x.instagramUrl||x.instagramVideo||x.video||x.instagram||"",howToUseVideo:x.howToUseVideo||x.howToUseVideoUrl||x.howVideo||x.howToUseLink||""};const key=recentKey(type,item);const list=getRecentViews().filter(v=>recentKey(v.type,v)!==key);list.unshift(item);try{localStorage.setItem("eg_recent_views",JSON.stringify(list.slice(0,12)))}catch{};renderExplore();}
-function renderExplore(){const grid=document.getElementById("exploreGrid"),count=document.getElementById("exploreCount");if(!grid)return;const list=getRecentViews();if(count)count.textContent=`${list.length} viewed`;grid.innerHTML=list.length?`<div class="grid">${list.map(x=>card(x,x.type)).join("")}</div>`:`<div class="exploreEmpty glass">Nothing viewed yet. Open a template or prompt and it will appear here.</div>`;}
-window.clearRecentViews=()=>{try{localStorage.removeItem("eg_recent_views")}catch{}renderExplore();showToast("Recently viewed cleared ✓")};
-window.closeDetail=()=>{const d=document.getElementById("detail");if(!d.classList.contains("open"))return;if(location.hash.startsWith("#template/")||location.hash.startsWith("#prompt/")){history.back();return;}d.classList.remove("open");document.body.style.overflow=""};
-window.copyText=async (t,id)=>{try{await navigator.clipboard.writeText(t||"");if(id){try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,ref,update}=m;const r=ref(db,"prompts/"+id);const s=await get(ref(db,"prompts/"+id+"/totalCopies"));const next=(s.val()||0)+1;await update(r,{totalCopies:next,["copyHistory/"+Date.now()]:true});}catch{}}showToast("Copied ✓")}catch{showToast("Copy failed")}}
-window.shareCurrent=async()=>{
- const url=window.currentShare?.url||location.href;
- const title=window.currentShare?.title||"EditGalaxy";
- try{
-   if(navigator.share){await navigator.share({title,url});showToast("Share sheet opened ✓");}
-   else{await navigator.clipboard.writeText(url);showToast("Link copied ✓");}
- }catch(err){
-   if(err?.name==="AbortError") return;
-   try{await navigator.clipboard.writeText(url);showToast("Link copied ✓")}catch{showToast("Could not share link")}
- }
-}
-window.runSectionSearch=type=>{
- const el=document.getElementById(type==="prompt"?"promptSearch":"templateSearch");
- const q=(el?.value||"").trim();
- const box=el?.closest(".search"), btn=box?.querySelector(".searchbtn");
- el?.blur();
- const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
- if(!q){
-   if(type==="prompt") renderPrompts(); else renderTemplates();
-   showToast(`Showing all ${type}s`);
-   return;
- }
- if(btn) btn.textContent="Search";
- box?.classList.add("normalSearchResult");
- setTimeout(()=>{
-   const list=source.filter(x=>(type==="template"?categoryMatch(x,tFilter):categoryMatch(x,pFilter)) && scoreItem(x,q)>0);
-   const grid=document.getElementById(type==="template"?"templateGrid":"promptGrid");
-   const count=document.getElementById(type==="template"?"templateCount":"promptCount");
-   count.textContent=list.length+" results";
-   grid.innerHTML=list.length?list.map(x=>card(x,type)).join(""):`<div class="empty">No ${type}s found for “${escapeHtml(q)}”.</div>`;
-   grid.classList.remove("normalSearchResult"); void grid.offsetWidth; grid.classList.add("normalSearchResult");
-   setTimeout(()=>box?.classList.remove("normalSearchResult"),320);
- },180);
-};
-function scoreItem(x,q){
- const n=normalize(q), number=String(x.num||x.number||x.templateNumber||x.promptNumber||"");
- const title=normalize(x.title||x.name||x.templateName||x.promptTitle||"");
- const hay=[title,normalize(number),normalize("#"+number),normalize(x.category||x.cat||""),normalize(x.prompt||x.girlPrompt||x.boyPrompt||""),normalize(x.description||x.tips||"")];
- let score=0;
- if(n===normalize(number)||n===normalize("#"+number)) score+=1000;
- if(n===title) score+=900;
- if(title.includes(n)) score+=600;
- if(hay.some(v=>v.includes(n))) score+=300;
- return score;
-}
-let searchTimers={};
-document.getElementById("templateSearch").addEventListener("input",()=>{});
-document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("template")}});
-document.getElementById("promptSearch").addEventListener("input",()=>{});
-document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("prompt")}});
-window.trackUse=async id=>{if(!id)return;try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,update,ref}=m;const r=ref(db,"templates/"+id);const s=await get(ref(db,"templates/"+id+"/totalUses"));const next=(s.val()||0)+1;const now=Date.now();const day=new Date(now).toISOString().slice(0,10);await update(r,{totalUses:next,["useHistory/"+now]:true,["usesByDay/"+day]:((await get(ref(db,"templates/"+id+"/usesByDay/"+day))).val()||0)+1});}catch{}}
-window.showSection=section=>{
- const isPrompt=section==="prompts";
- const target=isPrompt?document.getElementById("promptPage"):document.getElementById("templatePage");
- const tPage=document.getElementById("templatePage");
- const pPage=document.getElementById("promptPage");
- // Keep both sections in the document so the Home page can scroll between them.
- tPage.classList.toggle("hidden",isPrompt);
- pPage.classList.toggle("active",isPrompt);
- document.getElementById("templateSwitch").classList.toggle("active",!isPrompt);
- document.getElementById("promptSwitch").classList.toggle("active",isPrompt);
- document.getElementById("navTemplates").classList.toggle("active",!isPrompt);
- document.getElementById("navPrompts").classList.toggle("active",isPrompt);
- document.getElementById("navHome").classList.remove("active");
- closeMenu();
- if(target){ requestAnimationFrame(()=>target.scrollIntoView({behavior:"smooth",block:"start"})); }
-}
-window.goHome=()=>{
- closeMenu();
- document.getElementById("templatePage").classList.remove("hidden");
- document.getElementById("promptPage").classList.remove("active");
- document.getElementById("navHome").classList.add("active");
- document.getElementById("navTemplates").classList.remove("active");
- document.getElementById("navPrompts").classList.remove("active");
- document.getElementById("templateSwitch").classList.add("active");
- document.getElementById("promptSwitch").classList.remove("active");
- window.scrollTo({top:0,behavior:"smooth"});
-}
-window.showExplore=()=>openExplore();
-function openExplore(){const o=document.getElementById("exploreOverlay");if(o.classList.contains("open"))return;renderExplore();o.classList.add("open");document.body.style.overflow="hidden";history.pushState({overlay:"explore"},"",location.href.split("#")[0]+"#explore")}
-window.openExplore=openExplore;
-window.closeExplore=()=>{const o=document.getElementById("exploreOverlay");if(!o.classList.contains("open"))return;if(location.hash==="#explore"){history.back();return;}o.classList.remove("open");document.body.style.overflow=""};
-function openAISearch(){const o=document.getElementById("aiOverlay");if(o.classList.contains("open"))return;o.classList.add("open");document.body.style.overflow="hidden";history.pushState({overlay:"ai"},"",location.href.split("#")[0]+"#ai-search")}
-window.openAISearch=openAISearch;window.closeAI=()=>{const o=document.getElementById("aiOverlay");if(!o.classList.contains("open"))return;if(location.hash==="#ai-search"){history.back();return;}o.classList.remove("open");document.body.style.overflow=""};
-window.setAIType=t=>{aiType=t;document.getElementById("aiTemplate").classList.toggle("primary",t==="template");document.getElementById("aiPrompt").classList.toggle("primary",t==="prompt")}
-function aiFindItem(q,type){
- const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
- return source.map(x=>({x,score:scoreItem(x,q)})).filter(v=>v.score>0).sort((a,b)=>b.score-a.score)[0]?.x||null;
-}
-window.runAISearch=()=>{
- const input=document.getElementById("aiInput"), box=input.closest(".search"), btn=box.querySelector(".searchbtn");
- const q=input.value.trim();
- if(!q){showToast("Type a name or number first");input.focus();return;}
- box.classList.add("searching"); btn.textContent="✦";
- const type=aiType;
- setTimeout(()=>{
-   const item=aiFindItem(q,type);
-   box.classList.remove("searching"); btn.textContent="✦ Search";
-   if(item){
-     closeAI();
-     if(type==="template"){showSection("templates")}else{showSection("prompts")}
-     setTimeout(()=>window.openDetail(JSON.stringify(item),type),350);
-   }else{showToast(`No ${type} found for “${q}”`);}
- },700);
-}
-document.getElementById("aiInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();window.runAISearch()}});
-function closeMenu(){const m=document.getElementById("menuOverlay");if(!m.classList.contains("open"))return;if(location.hash==="#menu"){history.back();return;}m.classList.remove("open");document.body.classList.remove("menu-open")}
-document.getElementById("menuBtn").onclick=()=>{document.getElementById("menuOverlay").classList.add("open");document.body.classList.add("menu-open");history.pushState({overlay:"menu"},"",location.href.split("#")[0]+"#menu")};
-document.getElementById("menuOverlay").onclick=e=>{if(e.target.id==="menuOverlay")closeMenu()}
-document.getElementById("themeBtn").onclick=()=>{const next=document.documentElement.dataset.theme==="light"?"dark":"light";document.documentElement.dataset.theme=next;localStorage.setItem("eg_theme",next);document.getElementById("themeBtn").textContent=next==="light"?"☀":"☾"}
-const saved=localStorage.getItem("eg_theme")||"dark";document.documentElement.dataset.theme=saved;document.getElementById("themeBtn").textContent=saved==="light"?"☀":"☾";
-function showToast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1800)}window.showToast=showToast;
-
-const sectionObserver=new IntersectionObserver(entries=>{
- entries.forEach(entry=>{
-   if(!entry.isIntersecting)return;
-   const id=entry.target.id;
-   if(id==="templatePage"){
-     document.getElementById("navTemplates").classList.add("active");
-     document.getElementById("navPrompts").classList.remove("active");
-     document.getElementById("navHome").classList.remove("active");
-     document.getElementById("templateSwitch").classList.add("active");
-     document.getElementById("promptSwitch").classList.remove("active");
-   }else if(id==="promptPage"){
-     document.getElementById("navPrompts").classList.add("active");
-     document.getElementById("navTemplates").classList.remove("active");
-     document.getElementById("navHome").classList.remove("active");
-     document.getElementById("promptSwitch").classList.add("active");
-     document.getElementById("templateSwitch").classList.remove("active");
-   }
- });
-},{rootMargin:"-82px 0px -45% 0px",threshold:0.01});
-sectionObserver.observe(document.getElementById("templatePage"));
-sectionObserver.observe(document.getElementById("promptPage"));
-
-window.addEventListener("scroll",()=>{
- if(window.scrollY<180){
-   document.getElementById("navHome").classList.add("active");
-   document.getElementById("navTemplates").classList.remove("active");
-   document.getElementById("navPrompts").classList.remove("active");
- }
-},{passive:true});
-
-function findByKey(type,key){
- const source=type==="template"?templates:prompts;
- const decoded=decodeURIComponent(key||"");
- return source.find(x=>String(x.id||"")===decoded || String(x.num||x.number||"")===decoded) || null;
-}
-function handleHash(){
- const h=location.hash||"";
- const m=h.match(/^#(template|prompt)\/(.+)$/);
- if(m){const item=findByKey(m[1],m[2]);if(item){openDetail(JSON.stringify(item),m[1],{fromHash:true});return true;}}
- if(h==="#explore"){document.getElementById("exploreOverlay").classList.add("open");document.body.style.overflow="hidden";renderExplore();return true;}
- if(h==="#ai-search"){document.getElementById("aiOverlay").classList.add("open");document.body.style.overflow="hidden";return true;}
- if(h==="#menu"){document.getElementById("menuOverlay").classList.add("open");document.body.classList.add("menu-open");return true;}
- return false;
-}
-renderTemplateFilters();renderPromptFilters();renderExplore();listen();
-function syncOverlaysToHash(){
- const h=location.hash||"";
- const d=document.getElementById("detail"),ai=document.getElementById("aiOverlay"),menu=document.getElementById("menuOverlay"),explore=document.getElementById("exploreOverlay");
- if(h.startsWith("#template/")||h.startsWith("#prompt/")){ai.classList.remove("open");menu.classList.remove("open");explore.classList.remove("open");document.body.classList.remove("menu-open");return;}
- d.classList.remove("open");ai.classList.toggle("open",h==="#ai-search");explore.classList.toggle("open",h==="#explore");menu.classList.toggle("open",h==="#menu");document.body.classList.toggle("menu-open",h==="#menu");
- if(h==="#explore")renderExplore();
- document.body.style.overflow=(h==="#ai-search"||h==="#explore")?"hidden":"";
-}
-window.addEventListener("hashchange",()=>{if(!handleHash())syncOverlaysToHash()});
-window.addEventListener("popstate",()=>{if(handleHash())return;syncOverlaysToHash()});
-</script>
-</body>
-</html>
+const firebaseConfig={apiKey:"AIzaSyBgPllgUNMUo6j_Rbd7wg0NjR6z4YFy6uU",authDomain:"template-cc1cb.firebaseapp.com",databaseURL:"https://template-cc1cb-default-rtdb.firebaseio.com",projectId:"template-cc1cb",storageBucket:"template-cc1cb.firebasestorage.app",messagingSenderId:"629554966666",appId:"1:629554966666:web:e99b4dda5170da00a845d3",measurementId:"G-Y3WFW4TR45"};
+const app=initializeApp(firebaseConfig),db=getDatabase(app);let templates=[],prompts=[],tFilter="all",pFilter="all",aiType="template",currentPrompt=null,currentAIMode=null;
+const templateCats=["all","trending","cinematic","hindi","english","funk","ai prompt"],promptCats=["all","trending","cinematic","4k","anime","portrait","fantasy","static"];
+const categoryEmoji={all:"✨",trending:"🔥",cinematic:"🎬",hindi:"🇮🇳",english:"🇬🇧",funk:"🎵","ai prompt":"🤖","4k":"🌟",anime:"🌸",portrait:"👤",fantasy:"🔮",static:"📸"};
+const demoPrompts=[{id:"demo1",num:1,title:"Cinematic Portrait",category:"cinematic",imageUrl:"https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=700&q=70",girlPrompt:"Premium cinematic portrait, soft natural light, realistic skin, shallow depth of field, editorial photography.",boyPrompt:"Premium cinematic male portrait, soft natural light, realistic skin, shallow depth of field, editorial photography."},{id:"demo2",num:2,title:"4K Dreamy Birthday",category:"4k",imageUrl:"https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=700&q=70",girlPrompt:"Dreamy birthday portrait, elegant outfit, glowing bokeh, soft flowers, ultra-detailed 4K photorealism.",boyPrompt:"Dreamy birthday portrait, elegant outfit, glowing bokeh, soft flowers, ultra-detailed 4K photorealism."}];
+function normalize(s){return String(s||"").toLowerCase().replace(/[#/_\-]+/g," ").replace(/\s+/g," ").trim()}function matches(x,q){if(!q)return true;const n=normalize(q),num=String(x.num||x.number||"");return normalize(x.title||x.name).includes(n)||normalize(x.category||x.cat).includes(n)||normalize(x.girlPrompt||x.prompt||"").includes(n)||normalize(x.boyPrompt||"").includes(n)||normalize(num).includes(n)||normalize("#"+num).includes(n)}function categoryMatch(x,f){return f==="all"||normalize(x.category||x.cat)===normalize(f)}function catLabel(c){return `${categoryEmoji[c]||"✨"} ${c==="all"?"All":c.split(" ").map(w=>w[0].toUpperCase()+w.slice(1)).join(" ")}`}
+function renderTemplateFilters(){document.getElementById("templateFilters").innerHTML=templateCats.map(c=>`<button class="filter ${c===tFilter?"active":""}" onclick="setTF('${c}')">${catLabel(c)}</button>`).join("")}function renderPromptFilters(){document.getElementById("promptFilters").innerHTML=promptCats.map(c=>`<button class="filter ${c===pFilter?"active":""}" onclick="setPF('${c}')">${catLabel(c)}</button>`).join("")}
+function imgFor(x){return x.imageUrl||x.imageURL||x.imageLink||x.previewImage||x.previewImageUrl||x.thumbnail||x.thumbnailUrl||x.thumbnailLink||x.thumb||x.customThumbnail||x.image||"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="100%" height="100%" fill="#111522"/><text x="50%" y="50%" fill="#7f879d" text-anchor="middle" font-size="28">EditGalaxy</text></svg>`)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}function attr(s){return esc(s)}
+function created(x){return Number(x.createdAt||x.timestamp||x.addedAt||x.created||0)||0}function newest(a,b){const av=created(a),bv=created(b);if(av||bv)return bv-av;return Number(b.num||b.number||0)-Number(a.num||a.number||0)}
+function card(x,type){const title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;return `<article class="card" onclick='openDetail(${JSON.stringify(JSON.stringify(x))},"${type}")'><div class="thumb"><img loading="lazy" decoding="async" src="${attr(imgFor(x))}" alt="${attr(title)}"><span class="badge">${esc(x.category||x.cat||"General")}</span></div><div class="cardbody"><div class="cardtitle">${esc(title)}</div><div class="number">#${esc(x.num||x.number||"—")}</div></div></article>`}
+function renderTemplates(){const q=document.getElementById("templateSearch").value;let list=templates.filter(x=>categoryMatch(x,tFilter)&&matches(x,q));if(tFilter==="trending")list.sort((a,b)=>Number(b.last7Uses||b.weekUses||0)-Number(a.last7Uses||a.weekUses||0)||newest(a,b));else list.sort((a,b)=>Number(b.num||b.number||0)-Number(a.num||a.number||0));document.getElementById("templateCount").textContent=list.length+" results";document.getElementById("templateGrid").innerHTML=list.length?list.map(x=>card(x,"template")).join(""):`<div class="empty">No templates found.</div>`;document.getElementById("statTemplates").textContent=String(templates.length)}
+function renderPrompts(){const q=document.getElementById("promptSearch").value;const source=prompts.length?prompts:demoPrompts;let list=source.filter(x=>categoryMatch(x,pFilter)&&matches(x,q));if(pFilter==="trending")list.sort((a,b)=>Number(b.last7Uses||b.weekUses||0)-Number(a.last7Uses||a.weekUses||0)||newest(a,b));else list.sort((a,b)=>Number(b.num||b.number||0)-Number(a.num||a.number||0));document.getElementById("promptCount").textContent=list.length+" results";document.getElementById("promptGrid").innerHTML=list.length?list.map(x=>card(x,"prompt")).join(""):`<div class="empty">No prompts found.</div>`;document.getElementById("statPrompts").textContent=String(prompts.length)}
+function listen(){onValue(ref(db,"templates"),s=>{const d=s.val()||{};templates=Object.entries(d).map(([id,x])=>({id,...x}));renderTemplateFilters();renderTemplates();checkHash()});onValue(ref(db,"prompts"),s=>{const d=s.val()||{};prompts=Object.entries(d).map(([id,x])=>({id,...x}));renderPromptFilters();renderPrompts();checkHash()})}
+function related(x,type){const source=type==="template"?templates:prompts;return source.filter(y=>(y.id!==x.id||!x.id)&&Number(y.num||y.number)!==Number(x.num||x.number)).sort((a,b)=>Number(b.last7Uses||b.weekUses||0)-Number(a.last7Uses||a.weekUses||0)||Number(b.num||b.number||0)-Number(a.num||a.number||0)).slice(0,10)}
+function siteDetails(){return `<div class="privacyBox"><b>Privacy & Safety</b><p>We only use the information needed to provide EditGalaxy content and admin functions. Your prompts are not sold. External tools such as CapCut, ChatGPT, Gemini and Instagram follow their own policies.</p><div class="detailLinks"><a href="#" onclick="showToast('Privacy Policy');return false">Privacy Policy</a><a href="#" onclick="showToast('Trust & Safety');return false">Trust & Safety</a></div></div>`}
+function trendHtml(x,type){const items=related(x,type);if(!items.length)return "";return `<div class="trendWrap"><h3>🔥 Trending</h3><div class="trendGrid">${items.map(y=>`<div class="trendCard" onclick='openDetail(${JSON.stringify(JSON.stringify(y))},"${type}")'><img loading="lazy" decoding="async" src="${attr(imgFor(y))}" alt=""><b>#${esc(y.num||y.number||"")}</b></div>`).join("")}</div></div>`}
+function openDetail(raw,type){const x=JSON.parse(raw),title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`,img=imgFor(x);let html=`<button class="close" onclick="closeDetail()">✕</button><div class="detailmedia"><img src="${attr(img)}" alt="${attr(title)}"><button class="play" onclick='openExternal(${JSON.stringify(x.instagramUrl||x.video||x.instagram||"")})'>▶</button></div><h2>${esc(title)}</h2>`;
+if(type==="template"){const cap=x.capcut||x.capcutUrl||"#",how=x.howToUseVideo||x.howToUseVideoUrl||x.howVideo||x.howToUseLink||x.howto||"";html+=`<div class="actions"><a class="action primary" href="${attr(cap)}" target="_blank" rel="noopener">✨ Use Template on CapCut</a>${how?`<a class="action" href="${attr(how)}" target="_blank" rel="noopener">▶ How to Use Video</a>`:""}<button class="action" onclick="shareCurrent()">↗ Share</button></div><div class="detailInfo glass"><p>${esc(x.description||x.howToUse||"Open the CapCut button, choose the template and add your photos or clips.")}</p><div class="detailLinks"><a href="${attr(cap)}" target="_blank" rel="noopener">CapCut Template</a><a href="${attr(x.instagramUrl||x.video||x.instagram||"#")}" target="_blank" rel="noopener">Instagram Video</a></div></div>`;}
+else{html+=`<div class="actions"><button class="action primary" onclick="startGetPrompt(${JSON.stringify(JSON.stringify(x))})">✨ Get Prompt</button><button class="action" onclick="shareCurrent()">↗ Share</button></div><div class="detailInfo glass"><p>${esc(x.description||"Choose Get Prompt to view the Girl and Boy versions.")}</p></div>`;}
+html+=trendHtml(x,type)+siteDetails();document.getElementById("detailContent").innerHTML=html;document.getElementById("detail").classList.add("open");document.body.style.overflow="hidden";const key=x.id||x.num||x.number||"";history.pushState({detail:true},"",`#${type}/${encodeURIComponent(key)}`);window.currentShare={title,url:location.href};}
+function findByKey(type,key){const source=type==="template"?templates:(prompts.length?prompts:demoPrompts);return source.find(x=>String(x.id||x.num||x.number)===String(key)||String(x.num||x.number)===String(key))}
+function checkHash(){const m=location.hash.match(/^#(template|prompt)\/(.+)$/);if(!m)return;const x=findByKey(m[1],decodeURIComponent(m[2]));if(x&&!document.getElementById("detail").classList.contains("open"))openDetail(JSON.stringify(x),m[1]);}
+function closeDetail(){document.getElementById("detail").classList.remove("open");document.body.style.overflow="";if(location.hash)history.replaceState(null,"",location.pathname+location.search)}
+function shareCurrent(){const url=location.href;try{if(navigator.share)navigator.share({title:window.currentShare?.title||"EditGalaxy",text:"EditGalaxy",url});else throw 0}catch{navigator.clipboard?.writeText(url).then(()=>showToast("Card link copied ✓"))}}
+function openExternal(u){if(u)window.open(u,"_blank","noopener");else showToast("Instagram video link is not added yet.")}
+async function copyText(t){try{await navigator.clipboard.writeText(t||"");showToast("Copied ✓")}catch{showToast("Copy failed")}}
+function startGetPrompt(raw){currentPrompt=JSON.parse(raw);document.getElementById("loadingScreen").classList.add("show");setTimeout(()=>{document.getElementById("loadingScreen").classList.remove("show");showPromptModal()},420)}
+function showPromptModal(){const x=currentPrompt||{};const gp=x.girlPrompt||x.prompt||"",bp=x.boyPrompt||"";document.getElementById("promptModalContent").innerHTML=`<div class="promptBox"><h3>👩 Girl Version</h3><div class="promptText">${esc(gp||"No girl prompt added.")}</div><button class="action primary" onclick='copyText(${JSON.stringify(gp)})'>📋 Copy Girl Prompt</button></div>${bp?`<div class="promptBox"><h3>👨 Boy Version</h3><div class="promptText">${esc(bp)}</div><button class="action" onclick='copyText(${JSON.stringify(bp)})'>📋 Copy Boy Prompt</button></div>`:""}<button class="action" onclick="openAIModal()">🤖 Open AI Tool</button>`;document.getElementById("promptModal").classList.add("open")}
+function closePromptModal(){document.getElementById("promptModal").classList.remove("open")}
+function openAIModal(){closePromptModal();currentAIMode=null;document.getElementById("aiTitle").textContent="Choose AI Tool";document.getElementById("aiSub").textContent="Choose where you want to send the prompt.";document.getElementById("aiModalContent").innerHTML=`<div class="aiChoice"><button class="action primary" onclick="chooseAI('gpt')">🤖 GPT</button><button class="action" onclick="chooseAI('gemini')">✨ Gemini</button></div>`;document.getElementById("aiModal").classList.add("open")}
+function chooseAI(tool){currentAIMode=tool;document.getElementById("aiTitle").textContent="Who are you creating this for?";document.getElementById("aiSub").textContent=`Choose the version you want to send to ${tool==='gpt'?'GPT':'Gemini'}.`;document.getElementById("aiModalContent").innerHTML=`<div class="genderChoice"><button class="action primary" onclick="sendPromptToAI('girl')">👩 Girl</button><button class="action" onclick="sendPromptToAI('boy')">👨 Boy</button></div><button class="action" onclick="openAIModal()">← Back</button>`}
+async function sendPromptToAI(gender){const p=gender==='girl'?(currentPrompt?.girlPrompt||currentPrompt?.prompt||""):(currentPrompt?.boyPrompt||"");if(!p){showToast("That version is not available.");return}try{await navigator.clipboard.writeText(p);showToast("Prompt copied — opening tool…")}catch{}setTimeout(()=>{const u=currentAIMode==='gpt'?`https://chatgpt.com/?q=${encodeURIComponent(p.slice(0,2800))}`:`https://gemini.google.com/app?q=${encodeURIComponent(p.slice(0,2800))}`;window.open(u,"_blank","noopener")},250)}
+function closeAIModal(){document.getElementById("aiModal").classList.remove("open")}
+function showSection(section){const tp=document.getElementById("templatePage"),pp=document.getElementById("promptPage");tp.classList.toggle("hidden",section!=="templates");pp.classList.toggle("active",section==="prompts");document.getElementById("templateSwitch").classList.toggle("active",section==="templates");document.getElementById("promptSwitch").classList.toggle("active",section==="prompts");document.getElementById("navTemplates").classList.toggle("active",section==="templates");document.getElementById("navPrompts").classList.toggle("active",section==="prompts");document.getElementById("navHome").classList.remove("active");window.scrollTo({top:0,behavior:"smooth"})}
+function goHome(){closeMenu();closeDetail();showSection("templates");document.getElementById("navHome").classList.add("active");window.scrollTo({top:0,behavior:"smooth"})}function showExplore(){showToast("Explore is ready — shared cards open directly from their links.")}
+function openAISearch(){document.getElementById("aiTitle").textContent="AI Search";document.getElementById("aiSub").textContent="Search templates or prompts by number/title.";document.getElementById("aiModalContent").innerHTML=`<div class="aiChoice"><button class="action primary" onclick="setSearchType('template')">🎬 Template</button><button class="action" onclick="setSearchType('prompt')">🖼️ Prompt</button></div><div class="search glass" style="margin-top:12px"><input id="aiInput" placeholder="e.g. #400"><button class="searchbtn" onclick="runAISearch()">Search</button></div>`;document.getElementById("aiModal").classList.add("open");aiType="template"}function setSearchType(t){aiType=t;showToast(t==='template'?"Template search selected":"Prompt search selected")}function runAISearch(){const q=document.getElementById("aiInput")?.value||"";closeAIModal();showSection(aiType==='template'?"templates":"prompts");const el=document.getElementById(aiType==='template'?"templateSearch":"promptSearch");el.value=q;aiType==='template'?renderTemplates():renderPrompts()}
+function closeMenu(){document.getElementById("menuOverlay").classList.remove("open")}document.getElementById("menuBtn").onclick=()=>document.getElementById("menuOverlay").classList.add("open");document.getElementById("menuOverlay").onclick=e=>{if(e.target.id==='menuOverlay')closeMenu()};document.getElementById("themeBtn").onclick=()=>{const n=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=n;localStorage.setItem('eg_theme',n);document.getElementById('themeBtn').textContent=n==='light'?'☀':'☾'};const saved=localStorage.getItem('eg_theme')||'dark';document.documentElement.dataset.theme=saved;document.getElementById('themeBtn').textContent=saved==='light'?'☀':'☾';function showToast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.classList.remove('show'),1800)}window.showToast=showToast;
+window.setTF=f=>{tFilter=f;renderTemplateFilters();renderTemplates()};window.setPF=f=>{pFilter=f;renderPromptFilters();renderPrompts()};window.renderTemplates=renderTemplates;window.renderPrompts=renderPrompts;window.openDetail=openDetail;window.closeDetail=closeDetail;window.shareCurrent=shareCurrent;window.copyText=copyText;window.startGetPrompt=startGetPrompt;window.closePromptModal=closePromptModal;window.openAIModal=openAIModal;window.closeAIModal=closeAIModal;window.chooseAI=chooseAI;window.sendPromptToAI=sendPromptToAI;window.showSection=showSection;window.goHome=goHome;window.showExplore=showExplore;window.openAISearch=openAISearch;window.setSearchType=setSearchType;window.runAISearch=runAISearch;window.closeMenu=closeMenu;window.openExternal=openExternal;
+window.addEventListener('popstate',()=>{if(document.getElementById('detail').classList.contains('open'))closeDetail();checkHash()});renderTemplateFilters();renderPromptFilters();listen();
+</script></body></html>
