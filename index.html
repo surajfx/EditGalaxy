@@ -249,6 +249,7 @@ const firebaseConfig={
 };
 const app=initializeApp(firebaseConfig),db=getDatabase(app);
 let templates=[],prompts=[],tFilter="all",pFilter="all",aiType="template";
+let legacyUses={}; // old surajfx.in schema stored counts at uses/<templateId>, separate from templates/<id>/totalUses
 
 const templateCats=["all","trending","cinematic","hindi","english","funk","ai prompt"];
 const promptCats=["all","trending","cinematic","4k","anime","portrait","fantasy","static"];
@@ -258,6 +259,12 @@ function listen(){
    const d=s.val()||{}; templates=Object.entries(d).map(([id,x])=>({id,...x}));
    renderTemplateFilters();renderTemplates();
    if(location.hash.startsWith("#template/")) setTimeout(handleHash,0);
+ });
+ // Old surajfx.in site stored per-template use counts at uses/<id> (not inside templates/<id>).
+ // Read that here so Trending reflects real historical popularity, not just brand-new activity.
+ onValue(ref(db,"uses"),s=>{
+   legacyUses=s.val()||{};
+   renderTemplates();
  });
  onValue(ref(db,"prompts"),s=>{
    const d=s.val()||{}; prompts=Object.entries(d).map(([id,x])=>({id,...x}));
@@ -393,9 +400,10 @@ function historyCount(history,days=0){
 }
 function trendingScore(x,type){
  const totalField=type==="template"?Number(x.totalUses||0):Number(x.totalCopies||x.copyCount||0);
+ const legacyTotal=type==="template"?Number(legacyUses[x.id]||0):0; // old surajfx.in usage history
  const history=type==="template"?x.useHistory:x.copyHistory;
  const historyTotal=historyCount(history);
- const total=Math.max(totalField,historyTotal);
+ const total=Math.max(totalField,historyTotal,legacyTotal);
  const recent=historyCount(history,7);
  const active=(total>0||recent>0)?1:0;
  return [active,recent,total,numberValue(x)];
