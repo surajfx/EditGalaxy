@@ -33,22 +33,17 @@ window.saveTemplateEdit=async id=>{
  const old=templates.find(x=>x.id===id);
  if(!old)return toast('Template not found. Refresh the admin page.');
  try{
-   if(!auth.currentUser) throw Object.assign(new Error('Not signed in'),{code:'auth/not-authenticated'});
-   await auth.currentUser.getIdToken(true);
-   const payload={
+   await update(ref(db,'templates/'+id),{
      num,name,category,cat:category,imageUrl:img,thumb:img,
      instagramUrl:video,video,capcut,capcutUrl:capcut,
      howToUseVideo:how,howto:how,
      extraButtonEnabled:extraEnabled,extraButtonName:extraName,extraButtonLink:extraLink,
      addedAt:old.addedAt||old.createdAt||Date.now(),updatedAt:Date.now()
-   };
-   await update(ref(db,'templates/'+id),payload);
-   const verify=await get(ref(db,'templates/'+id));
-   if(!verify.exists() || Number(verify.val().num)!==num) throw new Error('Save verification failed');
-   closeEdit();toast('Template saved ✓');
+   });
+   closeEdit();toast('Template updated ✓');
  }catch(err){
    console.error(err);
-   toast('Save failed: '+(err?.code==='PERMISSION_DENIED'?'Firebase permission denied — check Admin UID/rules':(err?.code||'Check Firebase rules/login')));
+   toast('Save failed: '+(err?.code||'Check Firebase rules/login'));
  }
 };
 window.savePromptEdit=async id=>{
@@ -60,31 +55,15 @@ window.savePromptEdit=async id=>{
  const old=prompts.find(x=>x.id===id);
  if(!old)return toast('Prompt not found. Refresh the admin page.');
  try{
-   if(!auth.currentUser) throw Object.assign(new Error('Not signed in'),{code:'auth/not-authenticated'});
-   await auth.currentUser.getIdToken(true);
-   const payload={
+   await update(ref(db,'prompts/'+id),{
      num,number:num,title,promptTitle:title,category,imageUrl:img,
      girlPrompt:girl,boyPrompt:boy,tips,description:tips,aiTool,
      addedAt:old.addedAt||old.createdAt||Date.now(),updatedAt:Date.now()
-   };
-   await update(ref(db,'prompts/'+id),payload);
-   const verify=await get(ref(db,'prompts/'+id));
-   if(!verify.exists() || Number(verify.val().num)!==num) throw new Error('Save verification failed');
-   closeEdit();toast('Prompt saved ✓');
+   });
+   closeEdit();toast('Prompt updated ✓');
  }catch(err){
    console.error(err);
-   toast('Save failed: '+(err?.code==='PERMISSION_DENIED'?'Firebase permission denied — check Admin UID/rules':(err?.code||'Check Firebase rules/login')));
+   toast('Save failed: '+(err?.code||'Check Firebase rules/login'));
  }
 };
-document.addEventListener('keydown',e=>{
- if(e.key!=='Enter') return;
- const modal=$('editModal');
- if(!modal || !modal.classList.contains('open')) return;
- const tag=(e.target.tagName||'').toLowerCase();
- if(tag==='textarea') return;
- e.preventDefault();
- const save=modal.querySelector('.editActions .primary');
- if(save && !save.disabled) save.click();
-});
-
 function countWindow(history,days){const now=Date.now(),min=now-days*86400000;return Object.keys(history||{}).filter(k=>Number(k)>=min).length}function countByDay(days){const min=Date.now()-days*86400000;return templates.reduce((a,t)=>a+Object.keys(t.useHistory||{}).filter(k=>Number(k)>=min).length,0)}function refreshAnalysis(){$('tTotal').textContent=templates.length;$('tUses').textContent=templates.reduce((a,t)=>a+Number(t.totalUses||0),0);$('t7').textContent=countByDay(7);$('t30').textContent=countByDay(30);$('pTotal').textContent=prompts.length;$('pCopies').textContent=prompts.reduce((a,p)=>a+Number(p.totalCopies||p.copyCount||0),0);$('p7').textContent=prompts.reduce((a,p)=>a+countWindow(p.copyHistory,7),0);$('p30').textContent=prompts.reduce((a,p)=>a+countWindow(p.copyHistory,30),0);$('tAnalytics').innerHTML=templates.map(t=>`<div class="item" style="margin-bottom:8px"><div class="row"><b>#${safe(t.num)} ${safe(t.name||'')}</b><span>${Number(t.totalUses||0)} total</span></div><div class="small muted">Last 7d: ${countWindow(t.useHistory,7)} · Last 30d: ${countWindow(t.useHistory,30)}</div></div>`).join('')||'<p class="muted">No data.</p>';$('pAnalytics').innerHTML=prompts.map(p=>`<div class="item" style="margin-bottom:8px"><div class="row"><b>#${safe(p.num)} ${safe(p.title)}</b><span>${Number(p.totalCopies||p.copyCount||0)} copies</span></div><div class="small muted">Last 7d: ${countWindow(p.copyHistory,7)} · Last 30d: ${countWindow(p.copyHistory,30)}</div></div>`).join('')||'<p class="muted">No data.</p>'}</script></body></html>
