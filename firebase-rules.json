@@ -1,3 +1,4 @@
+
 {
   "rules": {
     ".read": false,
@@ -36,6 +37,12 @@
           "$event": {
             ".write": true,
             ".validate": "newData.val() === true"
+          }
+        },
+        "copiesByDay": {
+          "$day": {
+            ".write": true,
+            ".validate": "(!data.exists() && newData.isNumber() && newData.val() == 1) || (data.isNumber() && newData.isNumber() && newData.val() == data.val() + 1)"
           }
         }
       }
