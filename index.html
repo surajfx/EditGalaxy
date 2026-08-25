@@ -57,10 +57,10 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 .search{display:flex;gap:8px;padding:8px;border-radius:18px;margin:0 auto 12px;max-width:850px}
 .search input{flex:1;border:0;outline:0;background:transparent;color:var(--text);padding:12px 10px;min-width:0}
 .search input::placeholder{color:var(--muted)}.searchbtn{padding:0 17px;font-weight:800}
-.aiSearchBox.searching{animation:aiPulse .65s ease-in-out 2;border-color:rgba(139,220,255,.65)}
+.aiSearchBox.searching{animation:aiPulse .65s ease-in-out infinite;border-color:rgba(139,220,255,.72)}.aiSearchBox.searching::after{content:"";display:block;position:absolute;inset:3px;border:2px solid transparent;border-top-color:rgba(139,220,255,.8);border-radius:inherit;animation:aiRing .7s linear infinite;pointer-events:none}.aiSearchBox{position:relative}.aiSearchBox.searchNoResult{animation:aiNoResult .5s ease}
 .aiSearchBox.searching .searchbtn{animation:aiSpin .8s linear infinite}.normalSearchResult{animation:normalSearchIn .28s ease}@keyframes normalSearchIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes aiPulse{0%,100%{transform:scale(1);box-shadow:var(--shadow)}50%{transform:scale(1.015);box-shadow:0 0 0 8px rgba(139,220,255,.08),0 20px 70px rgba(0,0,0,.35)}}
-@keyframes aiSpin{to{transform:rotate(360deg)}}
+@keyframes aiSpin{to{transform:rotate(360deg)}}@keyframes aiRing{to{transform:rotate(360deg)}}@keyframes aiNoResult{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .filters{display:flex;gap:7px;overflow:auto;padding:4px 2px 16px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap;padding:9px 13px;color:var(--text);font-size:13px;font-weight:700}
 [data-theme="light"] .filter{color:#000}
@@ -654,11 +654,10 @@ window.runAISearch=async()=>{
  const input=document.getElementById("aiInput"), box=input.closest(".search"), btn=box.querySelector(".searchbtn");
  const q=input.value.trim();
  if(!q){showToast("Type a name or number first");input.focus();return;}
- box.classList.add("searching"); btn.textContent="✦"; btn.disabled=true;
+ box.classList.add("searching"); box.setAttribute("aria-busy","true"); btn.textContent="Searching…"; btn.disabled=true;
+ const startedAt=performance.now();
  const type=aiType;
  try{
-   // Always refresh the selected collection before AI search so newly added/edited
-   // Firebase records are searchable immediately, even if the page listener is stale.
    const path=type==="template"?"templates":"prompts";
    let source=type==="template"?templates:prompts;
    try{
@@ -667,18 +666,22 @@ window.runAISearch=async()=>{
      source=Object.entries(data).map(([id,x])=>({id,...x}));
    }catch(e){console.warn("AI search refresh failed; using live cache",e);}
    const item=aiFindItem(q,type,source);
+   const elapsed=performance.now()-startedAt;
+   if(elapsed<650) await new Promise(r=>setTimeout(r,650-elapsed));
    if(item){
      closeAI();
      showSection(type==="template"?"templates":"prompts");
-     setTimeout(()=>window.openDetail(JSON.stringify(item),type),120);
+     setTimeout(()=>window.openDetail(JSON.stringify(item),type),180);
    }else{
+     box.classList.add("searchNoResult");
+     setTimeout(()=>box.classList.remove("searchNoResult"),500);
      showToast(`No ${type} found for “${q}”`);
    }
  }catch(err){
    console.error(err);
    showToast("Search failed. Please try again.");
  }finally{
-   box.classList.remove("searching"); btn.textContent="✦ Search"; btn.disabled=false;
+   box.classList.remove("searching"); box.removeAttribute("aria-busy"); btn.textContent="✦ Search"; btn.disabled=false;
  }
 }
 document.getElementById("templateSearch").addEventListener("input",()=>renderTemplates());

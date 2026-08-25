@@ -35,7 +35,7 @@ window.saveTemplateEdit=async id=>{
  try{
    if(!auth.currentUser) throw Object.assign(new Error('Not signed in'),{code:'auth/not-authenticated'});
    await auth.currentUser.getIdToken(true);
-   await update(ref(db,'templates/'+id),{
+   await set(ref(db,'templates/'+id),{...old,
      num,name,category,cat:category,imageUrl:img,thumb:img,
      instagramUrl:video,video,capcut,capcutUrl:capcut,
      howToUseVideo:how,howto:how,
@@ -59,7 +59,7 @@ window.savePromptEdit=async id=>{
  try{
    if(!auth.currentUser) throw Object.assign(new Error('Not signed in'),{code:'auth/not-authenticated'});
    await auth.currentUser.getIdToken(true);
-   await update(ref(db,'prompts/'+id),{
+   await set(ref(db,'prompts/'+id),{...old,
      num,number:num,title,promptTitle:title,category,imageUrl:img,
      girlPrompt:girl,boyPrompt:boy,tips,description:tips,aiTool,
      addedAt:old.addedAt||old.createdAt||Date.now(),updatedAt:Date.now()
