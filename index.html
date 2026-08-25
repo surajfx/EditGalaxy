@@ -95,6 +95,7 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 .toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(15px);z-index:500;opacity:0;pointer-events:none;padding:11px 16px;border-radius:999px;background:rgba(20,22,30,.88);border:1px solid var(--line);backdrop-filter:blur(16px);transition:.25s;font-size:13px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}.hero{padding-top:28px}.stats{gap:7px}.stat{padding:14px 7px}.stat b{font-size:20px}.bottom{border-radius:18px}.navitem{font-size:10px}}
+@media(min-width:901px){.bottom{display:none}}
 
 /* Lightweight rendering for slower phones / 4G connections */
 .card{content-visibility:auto;contain-intrinsic-size:0 310px}
@@ -326,12 +327,28 @@ function renderTemplates(){
  const q=document.getElementById("templateSearch").value.trim();
  let list=templates.filter(x=>matches(x,q));
  if(tFilter==="trending"){
-   list=list.sort((a,b)=>{const A=trendingScore(a,"template"),B=trendingScore(b,"template");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
+   list=list.filter(x=>trendingScore(x,"template")[0]>0).sort((a,b)=>{const A=trendingScore(a,"template"),B=trendingScore(b,"template");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
  }else{
    list=list.filter(x=>categoryMatch(x,tFilter)).sort(newestNumberFirst);
  }
  document.getElementById("templateCount").textContent=list.length+" results";
  document.getElementById("templateGrid").innerHTML=list.length?list.map(x=>card(x,"template")).join(""):`<div class="empty">No templates found yet.</div>`;
+}
+function renderSearchResults(type){
+ if(type==="template") renderTemplates(); else renderPrompts();
+}
+window.runSectionSearch=(type)=>{
+ const id=type==="template"?"templateSearch":"promptSearch";
+ const input=document.getElementById(id);
+ if(!input)return;
+ renderSearchResults(type);
+ input.focus();
+};
+function clearSectionSearch(type){
+ const id=type==="template"?"templateSearch":"promptSearch";
+ const input=document.getElementById(id);
+ if(!input)return;
+ if(input.value){input.value="";renderSearchResults(type);}
 }
 const demoPrompts=[
  {id:"demo1",num:1,title:"Cinematic Portrait",category:"cinematic",imageUrl:"https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",girlPrompt:"Premium cinematic portrait, soft natural light, realistic skin, shallow depth of field, editorial photography.",boyPrompt:"Premium cinematic male portrait, soft natural light, realistic skin, shallow depth of field, editorial photography."},
@@ -400,12 +417,25 @@ function dayMapCount(map,days=7){
  }
  return total;
 }
+function activityHistory(x,type){
+ return type==="template"
+   ? (x.useHistory||x.usageHistory||x.usesHistory||{})
+   : (x.copyHistory||x.copiesHistory||x.promptCopyHistory||{});
+}
+function activityDayMap(x,type){
+ return type==="template"
+   ? (x.usesByDay||x.usageByDay||{})
+   : (x.copiesByDay||x.copyByDay||{});
+}
+function activityTotal(x,type){
+ return type==="template"
+   ? Number(x.totalUses??x.useCount??x.uses??0)
+   : Number(x.totalCopies??x.copyCount??x.copies??0);
+}
 function trendingScore(x,type){
- const totalField=type==="template"?Number(x.totalUses||0):Number(x.totalCopies||0);
- const history=type==="template"?x.useHistory:x.copyHistory;
- const dayMap=type==="template"?x.usesByDay:x.copiesByDay;
- const historyTotal=historyCount(history);
- const total=Math.max(totalField,historyTotal);
+ const history=activityHistory(x,type);
+ const dayMap=activityDayMap(x,type);
+ const total=Math.max(activityTotal(x,type),historyCount(history));
  const recent7=Math.max(dayMapCount(dayMap,7),historyCount(history,7));
  const recent24=historyCount(history,1);
  return [recent7,recent24,total,numberValue(x)];
@@ -414,7 +444,8 @@ function renderTrending(type,current){
  const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
  const currentKey=String(current.id||current.num||current.number||"");
  const others=source.filter(x=>String(x.id||x.num||x.number||"")!==currentKey);
- let list=[...others].sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
+ // Only show items that actually received activity in the rolling 7-day window.
+ let list=[...others].filter(x=>trendingScore(x,type)[0]>0).sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
  if(!list.length)return "";
  const heading=type==="template"?"🔥 Trending Templates":"🔥 Trending Prompts";
  return `<section class="promptTrending"><h3>${heading}</h3><div class="grid">${list.map(x=>card(x,type,true)).join("")}</div></section>`;
@@ -530,8 +561,8 @@ window.copyText=async (t,id)=>{
    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);}else{const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();}
    if(id){
      try{
-       const item=prompts.find(p=>String(p.id)===String(id));
-       if(item){item.totalCopies=Number(item.totalCopies||item.copyCount||0)+1;item.copyHistory=item.copyHistory||{};item.copyHistory[String(Date.now())+"_"+Math.random().toString(36).slice(2,8)]=true;renderPrompts();}
+       const item=prompts.find(p=>String(p.id)===String(id)||String(p.num||p.number||"")===String(id));
+       if(item){item.totalCopies=Number(item.totalCopies||item.copyCount||item.copies||0)+1;item.copyHistory=item.copyHistory||{};item.copyHistory[String(Date.now())+"_"+Math.random().toString(36).slice(2,8)]=true;renderPrompts();}
        const stamp=Date.now()+"_"+Math.random().toString(36).slice(2,8);
        const day=new Date().toISOString().slice(0,10);
        await runTransaction(ref(db,"prompts/"+id+"/totalCopies"),current=>Number(current||0)+1);
@@ -552,8 +583,8 @@ window.useTemplateByKey=async(key,event)=>{
  const url=x.capcut||x.capcutUrl||x.capcutLink||"#";
  if(x.id){
    try{
-     const item=templates.find(t=>String(t.id)===String(x.id));
-     if(item){item.totalUses=Number(item.totalUses||0)+1;item.useHistory=item.useHistory||{};item.useHistory[String(Date.now())+"_"+Math.random().toString(36).slice(2,8)]=true;renderTemplates();}
+     const item=templates.find(t=>String(t.id)===String(x.id)||String(t.num||t.number||"")===String(x.id));
+     if(item){item.totalUses=Number(item.totalUses||item.useCount||item.uses||0)+1;item.useHistory=item.useHistory||{};item.useHistory[String(Date.now())+"_"+Math.random().toString(36).slice(2,8)]=true;renderTemplates();}
      const now=Date.now(),day=new Date(now).toISOString().slice(0,10),stamp=now+"_"+Math.random().toString(36).slice(2,8);
      await runTransaction(ref(db,"templates/"+x.id+"/totalUses"),current=>Number(current||0)+1);
      await set(ref(db,"templates/"+x.id+"/useHistory/"+stamp),true);
@@ -596,9 +627,22 @@ window.closeExplore=()=>{const o=document.getElementById("exploreOverlay");if(!o
 function openAISearch(){const o=document.getElementById("aiOverlay");if(o.classList.contains("open"))return;o.classList.add("open");document.body.style.overflow="hidden";history.pushState({overlay:"ai"},"",location.href.split("#")[0]+"#ai-search")}
 window.openAISearch=openAISearch;window.closeAI=()=>{const o=document.getElementById("aiOverlay");if(!o.classList.contains("open"))return;if(location.hash==="#ai-search"){history.back();return;}o.classList.remove("open");document.body.style.overflow=""};
 window.setAIType=t=>{aiType=t;document.getElementById("aiTemplate").classList.toggle("primary",t==="template");document.getElementById("aiPrompt").classList.toggle("primary",t==="prompt")}
+function scoreItem(item,q){
+ const query=normalize(q);
+ if(!query)return 0;
+ const number=String(item.num||item.number||item.templateNumber||item.promptNumber||"");
+ const title=normalize(item.title||item.name||item.templateName||item.promptTitle||"");
+ const haystack=normalize([item.title,item.name,item.templateName,item.promptTitle,item.category,item.cat,item.promptCategory,item.prompt,item.girlPrompt,item.boyPrompt,item.description,number,"#"+number].join(" "));
+ let score=0;
+ if(normalize(number)===query||normalize("#"+number)===query)score+=100;
+ if(title===query)score+=80;
+ if(title.includes(query))score+=50;
+ if(haystack.includes(query))score+=20;
+ return score;
+}
 function aiFindItem(q,type){
  const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
- return source.map(x=>({x,score:scoreItem(x,q)})).filter(v=>v.score>0).sort((a,b)=>b.score-a.score)[0]?.x||null;
+ return source.map(x=>({x,score:scoreItem(x,q)})).filter(v=>v.score>0).sort((a,b)=>b.score-a.score||newestNumberFirst(a.x,b.x))[0]?.x||null;
 }
 window.runAISearch=()=>{
  const input=document.getElementById("aiInput"), box=input.closest(".search"), btn=box.querySelector(".searchbtn");
@@ -606,16 +650,20 @@ window.runAISearch=()=>{
  if(!q){showToast("Type a name or number first");input.focus();return;}
  box.classList.add("searching"); btn.textContent="✦";
  const type=aiType;
- setTimeout(()=>{
+ requestAnimationFrame(()=>{
    const item=aiFindItem(q,type);
    box.classList.remove("searching"); btn.textContent="✦ Search";
    if(item){
      closeAI();
      if(type==="template"){showSection("templates")}else{showSection("prompts")}
-     setTimeout(()=>window.openDetail(JSON.stringify(item),type),350);
+     setTimeout(()=>window.openDetail(JSON.stringify(item),type),180);
    }else{showToast(`No ${type} found for “${q}”`);}
- },700);
+ });
 }
+document.getElementById("templateSearch").addEventListener("input",()=>renderTemplates());
+document.getElementById("promptSearch").addEventListener("input",()=>renderPrompts());
+document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();window.runSectionSearch("template")}if(e.key==="Escape")clearSectionSearch("template")});
+document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();window.runSectionSearch("prompt")}if(e.key==="Escape")clearSectionSearch("prompt")});
 document.getElementById("aiInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();window.runAISearch()}});
 function closeMenu(){const m=document.getElementById("menuOverlay");if(!m.classList.contains("open"))return;if(location.hash==="#menu"){history.back();return;}m.classList.remove("open");document.body.classList.remove("menu-open")}
 document.getElementById("menuBtn").onclick=()=>{document.getElementById("menuOverlay").classList.add("open");document.body.classList.add("menu-open");history.pushState({overlay:"menu"},"",location.href.split("#")[0]+"#menu")};
