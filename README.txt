@@ -1,14 +1,11 @@
-EditGalaxy FINAL v24 FIXED
+EditGalaxy FINAL v21 FIXED
 
-Preserves the v22 UI/design and fixes only the broken search + live trending/analytics flow.
+- Preserves the V14-style UI and existing pages.
+- Public Template/Prompt usage analytics use Firebase atomic increments.
+- Trending uses real Use Template / Copy Prompt activity, including timestamp history.
+- Analytics updates optimistically in the UI and persist to Firebase.
+- Search clearing restores all cards.
+- Admin authentication and existing management pages are preserved.
+- This package contains only one project root; no duplicate nested v19 project.
 
-Fixes:
-- AI Search now has a working scorer and search action.
-- Template/Prompt section Search buttons are globally callable from HTML.
-- Search supports Enter and live typing; clearing returns all cards.
-- Template use analytics uses an atomic Firebase update and waits for the write before opening CapCut.
-- Prompt copy analytics uses an atomic Firebase update.
-- Trending is activity-based from recent use/copy data.
-- Trending sections refresh live when Firebase data changes.
-- Detail-page Trending refreshes immediately after a local use/copy and after Firebase sync.
-- No UI redesign or data migration is performed.
+V22: Trending ranks by recent 7-day activity first, then 24-hour activity, then total activity. Use/Copy analytics use Firebase transactions and daily counters.
