@@ -296,15 +296,21 @@ function imgFor(x){
  return x.imageUrl||x.imageURL||x.imageLink||x.previewImage||x.previewImageUrl||x.thumbnail||x.thumbnailUrl||x.thumbnailLink||x.thumb||x.customThumbnail||x.image||
  "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="100%" height="100%" fill="#111522"/><text x="50%" y="50%" fill="#7f879d" text-anchor="middle" font-size="28">EditGalaxy</text></svg>`)
 }
+let cardSeq=0;
+const cardStore=new Map();
 function card(x,type){
  const title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
  const cat=x.category||x.cat||"General";
  const catText=catLabel(normalize(cat));
- return `<article class="card" onclick='window.openDetail(${JSON.stringify(JSON.stringify(x))},"${type}")'>
+ const key=`c${++cardSeq}`;
+ cardStore.set(key,{...x});
+ if(cardStore.size>5000){ const first=cardStore.keys().next().value; cardStore.delete(first); }
+ return `<article class="card" onclick="window.openDetailByKey('${key}','${type}')">
   <div class="thumb"><img loading="lazy" decoding="async" src="${escapeAttr(imgFor(x))}" alt="${escapeAttr(title)}"><span class="badge">${escapeHtml(catText)}</span></div>
   <div class="cardbody"><div class="cardtitle">${escapeHtml(title)}</div><div class="number">#${escapeHtml(x.num||x.number||"—")}</div></div>
  </article>`;
 }
+window.openDetailByKey=(key,type)=>{const x=cardStore.get(key);if(x)window.openDetail(JSON.stringify(x),type);};
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function escapeAttr(s){return escapeHtml(s)}
 window.setTF=f=>{tFilter=f;renderTemplateFilters();renderTemplates()}
@@ -318,6 +324,8 @@ function renderTemplates(){
  const q=document.getElementById("templateSearch").value.trim();
  let list=templates.filter(x=>matches(x,q));
  if(tFilter==="trending"){
+   const active=list.filter(x=>normalize(x.category||x.cat)==="trending" || Number(x.totalUses||0)>0);
+   list=(active.length?active:list);
    list.sort((a,b)=>
      Number(b.totalUses||0)-Number(a.totalUses||0) ||
      Number(b.last7Uses||b.weekUses||0)-Number(a.last7Uses||a.weekUses||0) ||
@@ -340,6 +348,8 @@ function renderPrompts(){
  let source=prompts.length?prompts:demoPrompts;
  let list=source.filter(x=>matches(x,q));
  if(pFilter==="trending"){
+   const active=list.filter(x=>normalize(x.category||x.cat)==="trending" || Number(x.totalCopies||x.copyCount||0)>0);
+   list=(active.length?active:list);
    list.sort((a,b)=>
      Number(b.totalCopies||b.copyCount||0)-Number(a.totalCopies||a.copyCount||0) ||
      newestNumberFirst(a,b)
@@ -364,11 +374,12 @@ window.openDetail=(raw,type,opts={})=>{
    const desc="First, download CapCut Pro and open this template. If CapCut works without VPN on your phone, you do not need a VPN. If CapCut is not available without VPN, connect a VPN first. Then tap “Use Template on CapCut” above. In CapCut, open the template, add your own photos or videos, adjust the clips if needed, preview your edit, and export your finished video. For an easy visual guide, tap “How to Use Video”.";
    const insta=x.instagramUrl||x.instagramVideo||x.video||x.instagram||"#";
    html+=`<div class="detailInfo glass"><p>${escapeHtml(desc)}</p><div class="detailLinks"><a href="${escapeAttr(cap)}" target="_blank" rel="noopener">✨ CapCut Template</a><a href="${escapeAttr(insta)}" target="_blank" rel="noopener">📷 Instagram Video</a></div></div>`;
+   html+=renderTrending(type,x);
  } else {
    const gp=x.girlPrompt||x.prompt||"", bp=x.boyPrompt||"";
    html+=`<div class="actions"><button class="action primary wideAction" onclick='openPromptLoader(${JSON.stringify(JSON.stringify(x))})'>✨ Get Prompt</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share</button></div>`;
    html+=`<div class="detailInfo glass"><p>${escapeHtml(x.description||x.tips||"Copy the prompt and use it with your preferred image generator.")}</p></div>`;
-   html+=renderPromptTrending(x);
+   html+=renderTrending(type,x);
  }
  html+=siteDetails();
  document.getElementById("detailContent").innerHTML=html;
@@ -381,12 +392,23 @@ window.openDetail=(raw,type,opts={})=>{
  window.currentShare={title,url:location.href};
  rememberRecent(type,x);
 }
-function renderPromptTrending(current){
- const source=(prompts.length?prompts:demoPrompts).filter(x=>String(x.id||"")!==String(current.id||"") && (normalize(x.category||x.cat)==="trending" || (x.trending===true)));
- const fallback=(prompts.length?prompts:demoPrompts).filter(x=>String(x.id||"")!==String(current.id||"") && !source.some(y=>String(y.id||"")===String(x.id||"")));
- const list=[...source,...fallback].sort(newestNumberFirst).slice(0,10);
- if(!list.length) return "";
- return `<section class="promptTrending"><h3>🔥 Trending Prompts</h3><div class="grid">${list.map(x=>card(x,"prompt")).join("")}</div></section>`;
+function trendingScore(x,type){
+ const total=type==="template"?Number(x.totalUses||0):Number(x.totalCopies||x.copyCount||0);
+ const recent=type==="template"?Number(x.last7Uses||x.weekUses||0):Number(x.last7Copies||x.weekCopies||0);
+ return [total,recent,numberValue(x)];
+}
+function renderTrending(type,current){
+ const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
+ const others=source.filter(x=>String(x.id||x.num||x.number||"")!==String(current.id||current.num||current.number||""));
+ let list=others.filter(x=>normalize(x.category||x.cat)==="trending" || trendingScore(x,type)[0]>0);
+ if(!list.length) list=others;
+ list.sort((a,b)=>{
+   const A=trendingScore(a,type),B=trendingScore(b,type);
+   return B[0]-A[0] || B[1]-A[1] || B[2]-A[2];
+ }).slice(0,10);
+ if(!list.length)return "";
+ const heading=type==="template"?"🔥 Trending Templates":"🔥 Trending Prompts";
+ return `<section class="promptTrending"><h3>${heading}</h3><div class="grid">${list.map(x=>card(x,type)).join("")}</div></section>`;
 }
 window.openPromptLoader=(raw)=>{
  const x=JSON.parse(raw), modal=document.getElementById("promptModal"), body=document.getElementById("promptModalBody");
