@@ -144,14 +144,14 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 </section>
 
 <section id="templatePage" class="content templatepage">
-  <div class="search glass"><input id="templateSearch" placeholder="Search by number, #number, title or full name…" ><button class="searchbtn" type="button" onclick="runSectionSearch('template')">Search</button></div>
+  <div class="search glass"><input id="templateSearch" placeholder="Search by number, #number, title or full name…" autocomplete="off" enterkeyhint="search" onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();runSectionSearch('template');this.blur();}"><button class="searchbtn" type="button" onclick="runSectionSearch('template')">Search</button></div>
   <div id="templateFilters" class="filters"></div>
   <div class="sectionhead"><h2 id="templateHeading">Premium Templates</h2><span id="templateCount"></span></div>
   <div id="templateGrid" class="grid"></div>
 </section>
 
 <section id="promptPage" class="content promptpage">
-  <div class="search glass"><input id="promptSearch" placeholder="Search prompts by number, title or text…" ><button class="searchbtn" type="button" onclick="runSectionSearch('prompt')">Search</button></div>
+  <div class="search glass"><input id="promptSearch" placeholder="Search prompts by number, title or text…" autocomplete="off" enterkeyhint="search" onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();runSectionSearch('prompt');this.blur();}"><button class="searchbtn" type="button" onclick="runSectionSearch('prompt')">Search</button></div>
   <div id="promptFilters" class="filters"></div>
   <div class="sectionhead"><h2>AI Image Prompts</h2><span id="promptCount"></span></div>
   <div id="promptGrid" class="grid"></div>
@@ -208,7 +208,7 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
     <button id="aiTemplate" class="action primary" onclick="setAIType('template')">🎬 Template</button>
     <button id="aiPrompt" class="action" onclick="setAIType('prompt')">🖼️ Prompt</button>
   </div>
-  <div class="search glass aiSearchBox"><input id="aiInput" placeholder="e.g. #251 or Hindi Song"><button class="searchbtn" onclick="runAISearch()">✦ Search</button></div>
+  <div class="search glass aiSearchBox"><input id="aiInput" placeholder="e.g. #251 or Hindi Song" autocomplete="off" enterkeyhint="search" onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();runAISearch();this.blur();}"><button class="searchbtn" type="button" onclick="runAISearch()">✦ Search</button></div>
  </article>
 </div>
 <div id="exploreOverlay" class="detail" onclick="if(event.target===this)closeExplore()">
@@ -342,7 +342,7 @@ window.runSectionSearch=(type)=>{
  const input=document.getElementById(id);
  if(!input)return;
  renderSearchResults(type);
- input.focus();
+ input.blur();
 };
 function clearSectionSearch(type){
  const id=type==="template"?"templateSearch":"promptSearch";
@@ -653,6 +653,7 @@ function aiFindItem(q,type,source){
 window.runAISearch=async()=>{
  const input=document.getElementById("aiInput"), box=input.closest(".search"), btn=box.querySelector(".searchbtn");
  const q=input.value.trim();
+ input.blur();
  if(!q){showToast("Type a name or number first");input.focus();return;}
  box.classList.add("searching"); box.setAttribute("aria-busy","true"); btn.textContent="Searching…"; btn.disabled=true;
  const startedAt=performance.now();
@@ -686,11 +687,8 @@ window.runAISearch=async()=>{
 }
 document.getElementById("templateSearch").addEventListener("input",()=>renderTemplates());
 document.getElementById("promptSearch").addEventListener("input",()=>renderPrompts());
-document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();window.runSectionSearch("template")}if(e.key==="Escape")clearSectionSearch("template")});
-document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();window.runSectionSearch("prompt")}if(e.key==="Escape")clearSectionSearch("prompt")});
-document.getElementById("aiInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();e.stopPropagation();if(!e.repeat)window.runAISearch()}});
-document.getElementById("templateSearch").addEventListener("keyup",e=>{if(e.key==="Enter")e.stopPropagation()});
-document.getElementById("promptSearch").addEventListener("keyup",e=>{if(e.key==="Enter")e.stopPropagation()});
+document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Escape")clearSectionSearch("template")});
+document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Escape")clearSectionSearch("prompt")});
 function closeMenu(){const m=document.getElementById("menuOverlay");if(!m.classList.contains("open"))return;if(location.hash==="#menu"){history.back();return;}m.classList.remove("open");document.body.classList.remove("menu-open")}
 document.getElementById("menuBtn").onclick=()=>{document.getElementById("menuOverlay").classList.add("open");document.body.classList.add("menu-open");history.pushState({overlay:"menu"},"",location.href.split("#")[0]+"#menu")};
 document.getElementById("menuOverlay").onclick=e=>{if(e.target.id==="menuOverlay")closeMenu()}

@@ -1,11 +1,12 @@
-EditGalaxy FINAL v27 FIXED
+EditGalaxy FINAL v29 FIXED
 
-Based on v26, preserving the existing UI and functionality.
+Based on v28, preserving the existing UI, Firebase structure, trending logic and card design.
 
-Fixes:
-1. Admin template/prompt edit save: uses authenticated admin set() writes and refreshed auth token; Firebase rules now grant admin write access at the templates/prompts collection while keeping public analytics child writes.
-2. AI Search: always refreshes selected Firebase collection before searching; exact number/title matching preserved.
-3. AI Search animation: visible loading/search animation is held for at least 650ms, with a visible ring/pulse and no-result feedback.
+Fixes in v29:
+1. Mobile Search Enter: pressing the keyboard Enter/Search key now runs the same search as the Search button and blurs the field so the mobile keyboard closes.
+2. AI Search Enter: pressing the keyboard Enter/Search key triggers AI Search and closes the keyboard.
+3. Admin Edit Save: save now explicitly validates the signed-in Firebase admin UID, refreshes the auth token, performs the existing Firebase update without removing analytics/history fields, verifies the saved record, and provides a clear Saving/Saved/Failed state.
+4. Edit buttons are explicitly type=button to avoid mobile/browser form-submit conflicts.
 
 Admin UID in firebase-rules.json:
 i3J3kuqMLtUglNE1EyC7JZCzaFi1
