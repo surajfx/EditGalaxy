@@ -4,8 +4,8 @@
     ".write": false,
     "templates": {
       ".read": true,
+      ".write": "auth != null && auth.uid === \"i3J3kuqMLtUglNE1EyC7JZCzaFi1\"",
       "$id": {
-        ".write": "auth != null && auth.uid === \"i3J3kuqMLtUglNE1EyC7JZCzaFi1\"",
         "totalUses": {
           ".write": true,
           ".validate": "(!data.exists() && newData.isNumber() && newData.val() == 1) || (data.isNumber() && newData.isNumber() && newData.val() == data.val() + 1)"
@@ -26,8 +26,8 @@
     },
     "prompts": {
       ".read": true,
+      ".write": "auth != null && auth.uid === \"i3J3kuqMLtUglNE1EyC7JZCzaFi1\"",
       "$id": {
-        ".write": "auth != null && auth.uid === \"i3J3kuqMLtUglNE1EyC7JZCzaFi1\"",
         "totalCopies": {
           ".write": true,
           ".validate": "(!data.exists() && newData.isNumber() && newData.val() == 1) || (data.isNumber() && newData.isNumber() && newData.val() == data.val() + 1)"
@@ -48,3 +48,4 @@
     }
   }
 }
+
