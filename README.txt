@@ -7,3 +7,5 @@ EditGalaxy FINAL v21 FIXED
 - Search clearing restores all cards.
 - Admin authentication and existing management pages are preserved.
 - This package contains only one project root; no duplicate nested v19 project.
+
+V22: Trending ranks by recent 7-day activity first, then 24-hour activity, then total activity. Use/Copy analytics use Firebase transactions and daily counters.

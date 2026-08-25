@@ -235,7 +235,7 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {getDatabase,ref,onValue,update,increment} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import {getDatabase,ref,onValue,update,increment,runTransaction,set} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyBgPllgUNMUo6j_Rbd7wg0NjR6z4YFy6uU",
@@ -249,7 +249,6 @@ const firebaseConfig={
 };
 const app=initializeApp(firebaseConfig),db=getDatabase(app);
 let templates=[],prompts=[],tFilter="all",pFilter="all",aiType="template";
-let legacyUses={}; // old surajfx.in schema stored counts at uses/<templateId>, separate from templates/<id>/totalUses
 
 const templateCats=["all","trending","cinematic","hindi","english","funk","ai prompt"];
 const promptCats=["all","trending","cinematic","4k","anime","portrait","fantasy","static"];
@@ -259,12 +258,6 @@ function listen(){
    const d=s.val()||{}; templates=Object.entries(d).map(([id,x])=>({id,...x}));
    renderTemplateFilters();renderTemplates();
    if(location.hash.startsWith("#template/")) setTimeout(handleHash,0);
- });
- // Old surajfx.in site stored per-template use counts at uses/<id> (not inside templates/<id>).
- // Read that here so Trending reflects real historical popularity, not just brand-new activity.
- onValue(ref(db,"uses"),s=>{
-   legacyUses=s.val()||{};
-   renderTemplates();
  });
  onValue(ref(db,"prompts"),s=>{
    const d=s.val()||{}; prompts=Object.entries(d).map(([id,x])=>({id,...x}));
@@ -333,12 +326,7 @@ function renderTemplates(){
  const q=document.getElementById("templateSearch").value.trim();
  let list=templates.filter(x=>matches(x,q));
  if(tFilter==="trending"){
-   try{
-     list=list.sort((a,b)=>{const A=trendingScore(a,"template"),B=trendingScore(b,"template");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
-   }catch(err){
-     console.error("Trending sort (templates) failed, falling back to newest-first:",err);
-     list=list.sort(newestNumberFirst).slice(0,30);
-   }
+   list=list.sort((a,b)=>{const A=trendingScore(a,"template"),B=trendingScore(b,"template");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
  }else{
    list=list.filter(x=>categoryMatch(x,tFilter)).sort(newestNumberFirst);
  }
@@ -356,12 +344,7 @@ function renderPrompts(){
  let source=prompts.length?prompts:demoPrompts;
  let list=source.filter(x=>matches(x,q));
  if(pFilter==="trending"){
-   try{
-     list=list.sort((a,b)=>{const A=trendingScore(a,"prompt"),B=trendingScore(b,"prompt");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
-   }catch(err){
-     console.error("Trending sort (prompts) failed, falling back to newest-first:",err);
-     list=list.sort(newestNumberFirst).slice(0,30);
-   }
+   list=list.sort((a,b)=>{const A=trendingScore(a,"prompt"),B=trendingScore(b,"prompt");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
  }else{
    list=list.filter(x=>categoryMatch(x,pFilter)).sort(newestNumberFirst);
  }
@@ -408,27 +391,30 @@ function historyCount(history,days=0){
  const cutoff=days?Date.now()-days*86400000:0;
  return Object.keys(history||{}).filter(k=>{const ts=Number(String(k).split("_")[0]);return Number.isFinite(ts)&&ts>=cutoff;}).length;
 }
+function dayMapCount(map,days=7){
+ const now=new Date(); let total=0;
+ for(let i=0;i<days;i++){
+  const d=new Date(now); d.setDate(d.getDate()-i);
+  const key=d.toISOString().slice(0,10);
+  total+=Number((map||{})[key]||0);
+ }
+ return total;
+}
 function trendingScore(x,type){
- const totalField=type==="template"?Number(x.totalUses||0):Number(x.totalCopies||x.copyCount||0);
- const legacyTotal=type==="template"?Number(legacyUses[x.id]||0):0; // old surajfx.in usage history
+ const totalField=type==="template"?Number(x.totalUses||0):Number(x.totalCopies||0);
  const history=type==="template"?x.useHistory:x.copyHistory;
+ const dayMap=type==="template"?x.usesByDay:x.copiesByDay;
  const historyTotal=historyCount(history);
- const total=Math.max(totalField,historyTotal,legacyTotal);
- const recent=historyCount(history,7);
- const active=(total>0||recent>0)?1:0;
- return [active,recent,total,numberValue(x)];
+ const total=Math.max(totalField,historyTotal);
+ const recent7=Math.max(dayMapCount(dayMap,7),historyCount(history,7));
+ const recent24=historyCount(history,1);
+ return [recent7,recent24,total,numberValue(x)];
 }
 function renderTrending(type,current){
  const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
  const currentKey=String(current.id||current.num||current.number||"");
  const others=source.filter(x=>String(x.id||x.num||x.number||"")!==currentKey);
- let list;
- try{
-   list=[...others].sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
- }catch(err){
-   console.error("renderTrending sort failed, falling back to newest-first:",err);
-   list=[...others].sort(newestNumberFirst).slice(0,10);
- }
+ let list=[...others].sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
  if(!list.length)return "";
  const heading=type==="template"?"🔥 Trending Templates":"🔥 Trending Prompts";
  return `<section class="promptTrending"><h3>${heading}</h3><div class="grid">${list.map(x=>card(x,type,true)).join("")}</div></section>`;
@@ -547,7 +533,10 @@ window.copyText=async (t,id)=>{
        const item=prompts.find(p=>String(p.id)===String(id));
        if(item){item.totalCopies=Number(item.totalCopies||item.copyCount||0)+1;item.copyHistory=item.copyHistory||{};item.copyHistory[String(Date.now())+"_"+Math.random().toString(36).slice(2,8)]=true;renderPrompts();}
        const stamp=Date.now()+"_"+Math.random().toString(36).slice(2,8);
-       await update(ref(db,"prompts/"+id),{totalCopies:increment(1),["copyHistory/"+stamp]:true});
+       const day=new Date().toISOString().slice(0,10);
+       await runTransaction(ref(db,"prompts/"+id+"/totalCopies"),current=>Number(current||0)+1);
+       await set(ref(db,"prompts/"+id+"/copyHistory/"+stamp),true);
+       await runTransaction(ref(db,"prompts/"+id+"/copiesByDay/"+day),current=>Number(current||0)+1);
      }catch(err){console.error("Prompt copy analytics failed",err);}
    }
    showToast("Copied ✓");
@@ -566,7 +555,9 @@ window.useTemplateByKey=async(key,event)=>{
      const item=templates.find(t=>String(t.id)===String(x.id));
      if(item){item.totalUses=Number(item.totalUses||0)+1;item.useHistory=item.useHistory||{};item.useHistory[String(Date.now())+"_"+Math.random().toString(36).slice(2,8)]=true;renderTemplates();}
      const now=Date.now(),day=new Date(now).toISOString().slice(0,10),stamp=now+"_"+Math.random().toString(36).slice(2,8);
-     await update(ref(db,"templates/"+x.id),{totalUses:increment(1),["useHistory/"+stamp]:true,["usesByDay/"+day]:increment(1)});
+     await runTransaction(ref(db,"templates/"+x.id+"/totalUses"),current=>Number(current||0)+1);
+     await set(ref(db,"templates/"+x.id+"/useHistory/"+stamp),true);
+     await runTransaction(ref(db,"templates/"+x.id+"/usesByDay/"+day),current=>Number(current||0)+1);
    }catch(err){console.error("Template usage analytics failed",err);}
  }
  if(url&&url!=="#")window.location.href=url;return false;
