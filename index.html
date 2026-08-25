@@ -316,8 +316,16 @@ function numberValue(x){return Number(x.num??x.number??x.templateNumber??x.promp
 function newestNumberFirst(a,b){const av=numberValue(a),bv=numberValue(b);if(Number.isFinite(av)||Number.isFinite(bv))return (Number.isFinite(bv)?bv:-Infinity)-(Number.isFinite(av)?av:-Infinity);return newestFirst(a,b)}
 function renderTemplates(){
  const q=document.getElementById("templateSearch").value.trim();
- let list=templates.filter(x=>categoryMatch(x,tFilter)&&matches(x,q));
- if(tFilter==="trending") list.sort((a,b)=>(b.last7Uses||b.weekUses||0)-(a.last7Uses||a.weekUses||0)||newestNumberFirst(a,b)); else list.sort(newestNumberFirst);
+ let list=templates.filter(x=>matches(x,q));
+ if(tFilter==="trending"){
+   list.sort((a,b)=>
+     Number(b.totalUses||0)-Number(a.totalUses||0) ||
+     Number(b.last7Uses||b.weekUses||0)-Number(a.last7Uses||a.weekUses||0) ||
+     newestNumberFirst(a,b)
+   );
+ }else{
+   list=list.filter(x=>categoryMatch(x,tFilter)).sort(newestNumberFirst);
+ }
  document.getElementById("templateCount").textContent=list.length+" results";
  document.getElementById("templateGrid").innerHTML=list.length?list.map(x=>card(x,"template")).join(""):`<div class="empty">No templates found yet.</div>`;
 }
@@ -330,8 +338,15 @@ const demoPrompts=[
 function renderPrompts(){
  const q=document.getElementById("promptSearch").value.trim();
  let source=prompts.length?prompts:demoPrompts;
- let list=source.filter(x=>categoryMatch(x,pFilter)&&matches(x,q));
- list.sort(newestNumberFirst);
+ let list=source.filter(x=>matches(x,q));
+ if(pFilter==="trending"){
+   list.sort((a,b)=>
+     Number(b.totalCopies||b.copyCount||0)-Number(a.totalCopies||a.copyCount||0) ||
+     newestNumberFirst(a,b)
+   );
+ }else{
+   list=list.filter(x=>categoryMatch(x,pFilter)).sort(newestNumberFirst);
+ }
  document.getElementById("promptCount").textContent=list.length+" results";
  document.getElementById("promptGrid").innerHTML=list.length?list.map(x=>card(x,"prompt")).join(""):`<div class="empty">No prompts found.</div>`;
 }
@@ -471,7 +486,23 @@ function rememberRecent(type,x){const item={type,id:x.id||"",num:x.num||x.number
 function renderExplore(){const grid=document.getElementById("exploreGrid"),count=document.getElementById("exploreCount");if(!grid)return;const list=getRecentViews();if(count)count.textContent=`${list.length} viewed`;grid.innerHTML=list.length?`<div class="grid">${list.map(x=>card(x,x.type)).join("")}</div>`:`<div class="exploreEmpty glass">Nothing viewed yet. Open a template or prompt and it will appear here.</div>`;}
 window.clearRecentViews=()=>{try{localStorage.removeItem("eg_recent_views")}catch{}renderExplore();showToast("Recently viewed cleared ✓")};
 window.closeDetail=()=>{const d=document.getElementById("detail");if(!d.classList.contains("open"))return;if(location.hash.startsWith("#template/")||location.hash.startsWith("#prompt/")){history.back();return;}d.classList.remove("open");document.body.style.overflow=""};
-window.copyText=async (t,id)=>{try{await navigator.clipboard.writeText(t||"");if(id){try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,ref,update}=m;const r=ref(db,"prompts/"+id);const s=await get(ref(db,"prompts/"+id+"/totalCopies"));const next=(s.val()||0)+1;await update(r,{totalCopies:next,["copyHistory/"+Date.now()]:true});}catch{}}showToast("Copied ✓")}catch{showToast("Copy failed")}}
+window.copyText=async (t,id)=>{
+ try{
+   await navigator.clipboard.writeText(t||"");
+   if(id){
+     try{
+       const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+       const {ref,update,increment}=m;
+       const stamp=Date.now()+"_"+Math.random().toString(36).slice(2,8);
+       await update(ref(db,"prompts/"+id),{
+         totalCopies:increment(1),
+         ["copyHistory/"+stamp]:true
+       });
+     }catch(err){console.error("Prompt copy analytics failed",err)}
+   }
+   showToast("Copied ✓");
+ }catch(err){console.error(err);showToast("Copy failed")}
+}
 window.shareCurrent=async()=>{
  const url=window.currentShare?.url||location.href;
  const title=window.currentShare?.title||"EditGalaxy";
@@ -522,7 +553,20 @@ document.getElementById("templateSearch").addEventListener("input",e=>{if(!e.tar
 document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("template")}});
 document.getElementById("promptSearch").addEventListener("input",e=>{if(!e.target.value.trim())renderPrompts();});
 document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("prompt")}});
-window.trackUse=async id=>{if(!id)return;try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,update,ref}=m;const r=ref(db,"templates/"+id);const s=await get(ref(db,"templates/"+id+"/totalUses"));const next=(s.val()||0)+1;const now=Date.now();const day=new Date(now).toISOString().slice(0,10);await update(r,{totalUses:next,["useHistory/"+now]:true,["usesByDay/"+day]:((await get(ref(db,"templates/"+id+"/usesByDay/"+day))).val()||0)+1});}catch{}}
+window.trackUse=async id=>{
+ if(!id)return;
+ try{
+   const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+   const {ref,update,increment}=m;
+   const now=Date.now(), day=new Date(now).toISOString().slice(0,10);
+   const stamp=now+"_"+Math.random().toString(36).slice(2,8);
+   await update(ref(db,"templates/"+id),{
+     totalUses:increment(1),
+     ["useHistory/"+stamp]:true,
+     ["usesByDay/"+day]:increment(1)
+   });
+ }catch(err){console.error("Template usage analytics failed",err)}
+}
 window.showSection=section=>{
  const isPrompt=section==="prompts";
  const target=isPrompt?document.getElementById("promptPage"):document.getElementById("templatePage");
