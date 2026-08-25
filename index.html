@@ -326,7 +326,7 @@ function renderTemplates(){
  const q=document.getElementById("templateSearch").value.trim();
  let list=templates.filter(x=>matches(x,q));
  if(tFilter==="trending"){
-   list=list.sort((a,b)=>{const A=trendingScore(a,"template"),B=trendingScore(b,"template");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
+   list=list.filter(x=>trendingScore(x,"template")[0]>=0).sort((a,b)=>{const A=trendingScore(a,"template"),B=trendingScore(b,"template");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
  }else{
    list=list.filter(x=>categoryMatch(x,tFilter)).sort(newestNumberFirst);
  }
@@ -344,7 +344,7 @@ function renderPrompts(){
  let source=prompts.length?prompts:demoPrompts;
  let list=source.filter(x=>matches(x,q));
  if(pFilter==="trending"){
-   list=list.sort((a,b)=>{const A=trendingScore(a,"prompt"),B=trendingScore(b,"prompt");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
+   list=list.filter(x=>trendingScore(x,"prompt")[0]>=0).sort((a,b)=>{const A=trendingScore(a,"prompt"),B=trendingScore(b,"prompt");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
  }else{
    list=list.filter(x=>categoryMatch(x,pFilter)).sort(newestNumberFirst);
  }
@@ -401,20 +401,23 @@ function dayMapCount(map,days=7){
  return total;
 }
 function trendingScore(x,type){
- const totalField=type==="template"?Number(x.totalUses||0):Number(x.totalCopies||0);
- const history=type==="template"?x.useHistory:x.copyHistory;
- const dayMap=type==="template"?x.usesByDay:x.copiesByDay;
- const historyTotal=historyCount(history);
- const total=Math.max(totalField,historyTotal);
+ const totalField=type==="template"
+   ? Number(x.totalUses||x.useCount||x.uses||x.usageCount||0)
+   : Number(x.totalCopies||x.copyCount||x.copies||0);
+ const history=type==="template"?(x.useHistory||{}):(x.copyHistory||{});
+ const dayMap=type==="template"?(x.usesByDay||{}):(x.copiesByDay||{});
  const recent7=Math.max(dayMapCount(dayMap,7),historyCount(history,7));
- const recent24=historyCount(history,1);
+ const recent24=Math.max(historyCount(history,1),dayMapCount(dayMap,1));
+ const total=Math.max(totalField,historyCount(history));
+ // Trending is activity-based: an old item with no recent activity must not stay trending forever.
+ if(recent7<=0) return [-1,0,0,numberValue(x)];
  return [recent7,recent24,total,numberValue(x)];
 }
 function renderTrending(type,current){
  const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
  const currentKey=String(current.id||current.num||current.number||"");
  const others=source.filter(x=>String(x.id||x.num||x.number||"")!==currentKey);
- let list=[...others].sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
+ let list=[...others].filter(x=>trendingScore(x,type)[0]>=0).sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
  if(!list.length)return "";
  const heading=type==="template"?"🔥 Trending Templates":"🔥 Trending Prompts";
  return `<section class="promptTrending"><h3>${heading}</h3><div class="grid">${list.map(x=>card(x,type,true)).join("")}</div></section>`;
@@ -528,16 +531,22 @@ window.copyText=async (t,id)=>{
  try{
    const text=t||"";
    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);}else{const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();}
-   if(id){
-     try{
-       const item=prompts.find(p=>String(p.id)===String(id));
-       if(item){item.totalCopies=Number(item.totalCopies||item.copyCount||0)+1;item.copyHistory=item.copyHistory||{};item.copyHistory[String(Date.now())+"_"+Math.random().toString(36).slice(2,8)]=true;renderPrompts();}
-       const stamp=Date.now()+"_"+Math.random().toString(36).slice(2,8);
-       const day=new Date().toISOString().slice(0,10);
-       await runTransaction(ref(db,"prompts/"+id+"/totalCopies"),current=>Number(current||0)+1);
-       await set(ref(db,"prompts/"+id+"/copyHistory/"+stamp),true);
-       await runTransaction(ref(db,"prompts/"+id+"/copiesByDay/"+day),current=>Number(current||0)+1);
-     }catch(err){console.error("Prompt copy analytics failed",err);}
+   if(id && !String(id).startsWith("demo")){
+     const item=prompts.find(p=>String(p.id)===String(id));
+     const stamp=Date.now()+"_"+Math.random().toString(36).slice(2,8);
+     const day=new Date().toISOString().slice(0,10);
+     if(item){
+       item.totalCopies=Number(item.totalCopies||item.copyCount||item.copies||0)+1;
+       item.copyCount=item.totalCopies;
+       item.copyHistory={...(item.copyHistory||{}),[stamp]:true};
+       item.copiesByDay={...(item.copiesByDay||{}),[day]:Number((item.copiesByDay||{})[day]||0)+1};
+       renderPrompts();
+     }
+     Promise.all([
+       runTransaction(ref(db,"prompts/"+id+"/totalCopies"),current=>Number(current||0)+1),
+       set(ref(db,"prompts/"+id+"/copyHistory/"+stamp),true),
+       runTransaction(ref(db,"prompts/"+id+"/copiesByDay/"+day),current=>Number(current||0)+1)
+     ]).catch(err=>console.error("Prompt copy analytics failed",err));
    }
    showToast("Copied ✓");
  }catch(err){console.error(err);showToast("Copy failed");}
@@ -550,17 +559,25 @@ window.useTemplateByKey=async(key,event)=>{
  if(event)event.preventDefault();
  const x=detailStore.get(key);if(!x)return false;
  const url=x.capcut||x.capcutUrl||x.capcutLink||"#";
- if(x.id){
-   try{
-     const item=templates.find(t=>String(t.id)===String(x.id));
-     if(item){item.totalUses=Number(item.totalUses||0)+1;item.useHistory=item.useHistory||{};item.useHistory[String(Date.now())+"_"+Math.random().toString(36).slice(2,8)]=true;renderTemplates();}
-     const now=Date.now(),day=new Date(now).toISOString().slice(0,10),stamp=now+"_"+Math.random().toString(36).slice(2,8);
-     await runTransaction(ref(db,"templates/"+x.id+"/totalUses"),current=>Number(current||0)+1);
-     await set(ref(db,"templates/"+x.id+"/useHistory/"+stamp),true);
-     await runTransaction(ref(db,"templates/"+x.id+"/usesByDay/"+day),current=>Number(current||0)+1);
-   }catch(err){console.error("Template usage analytics failed",err);}
+ if(x.id && !String(x.id).startsWith("demo")){
+   const item=templates.find(t=>String(t.id)===String(x.id));
+   const now=Date.now(),day=new Date(now).toISOString().slice(0,10),stamp=now+"_"+Math.random().toString(36).slice(2,8);
+   if(item){
+     item.totalUses=Number(item.totalUses||item.useCount||item.uses||0)+1;
+     item.useCount=item.totalUses;
+     item.useHistory={...(item.useHistory||{}),[stamp]:true};
+     item.usesByDay={...(item.usesByDay||{}),[day]:Number((item.usesByDay||{})[day]||0)+1};
+     renderTemplates();
+   }
+   // Write without blocking the CapCut launch. Firebase onValue will reconcile the live UI.
+   Promise.all([
+     runTransaction(ref(db,"templates/"+x.id+"/totalUses"),current=>Number(current||0)+1),
+     set(ref(db,"templates/"+x.id+"/useHistory/"+stamp),true),
+     runTransaction(ref(db,"templates/"+x.id+"/usesByDay/"+day),current=>Number(current||0)+1)
+   ]).catch(err=>console.error("Template usage analytics failed",err));
  }
- if(url&&url!=="#")window.location.href=url;return false;
+ if(url&&url!=="#")window.location.href=url;
+ return false;
 };
 window.showSection=section=>{
  const isPrompt=section==="prompts";
@@ -593,6 +610,19 @@ window.showExplore=()=>openExplore();
 function openExplore(){const o=document.getElementById("exploreOverlay");if(o.classList.contains("open"))return;renderExplore();o.classList.add("open");document.body.style.overflow="hidden";history.pushState({overlay:"explore"},"",location.href.split("#")[0]+"#explore")}
 window.openExplore=openExplore;
 window.closeExplore=()=>{const o=document.getElementById("exploreOverlay");if(!o.classList.contains("open"))return;if(location.hash==="#explore"){history.back();return;}o.classList.remove("open");document.body.style.overflow=""};
+window.runSectionSearch=function(type){
+ const input=document.getElementById(type==="template"?"templateSearch":"promptSearch");
+ const q=input.value.trim();
+ if(type==="template"){ tFilter="all"; renderTemplateFilters(); renderTemplates(); }
+ else { pFilter="all"; renderPromptFilters(); renderPrompts(); }
+ if(q){ showToast((type==="template"?"Template":"Prompt")+" search updated ✓"); }
+ input.focus();
+}
+document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("template")}});
+document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("prompt")}});
+document.getElementById("templateSearch").addEventListener("input",()=>renderTemplates());
+document.getElementById("promptSearch").addEventListener("input",()=>renderPrompts());
+
 function openAISearch(){const o=document.getElementById("aiOverlay");if(o.classList.contains("open"))return;o.classList.add("open");document.body.style.overflow="hidden";history.pushState({overlay:"ai"},"",location.href.split("#")[0]+"#ai-search")}
 window.openAISearch=openAISearch;window.closeAI=()=>{const o=document.getElementById("aiOverlay");if(!o.classList.contains("open"))return;if(location.hash==="#ai-search"){history.back();return;}o.classList.remove("open");document.body.style.overflow=""};
 window.setAIType=t=>{aiType=t;document.getElementById("aiTemplate").classList.toggle("primary",t==="template");document.getElementById("aiPrompt").classList.toggle("primary",t==="prompt")}
