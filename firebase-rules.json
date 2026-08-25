@@ -8,10 +8,20 @@
         ".write": "auth != null",
         "totalUses": {
           ".write": true,
-          ".validate": "newData.isNumber() && (!data.exists() || newData.val() == data.val() + 1)"
+          ".validate": "(!data.exists() && newData.isNumber() && newData.val() == 1) || (data.isNumber() && newData.isNumber() && newData.val() == data.val() + 1)"
         },
-        "useHistory": { ".write": true },
-        "usesByDay": { ".write": true }
+        "useHistory": {
+          "$event": {
+            ".write": true,
+            ".validate": "newData.val() === true"
+          }
+        },
+        "usesByDay": {
+          "$day": {
+            ".write": true,
+            ".validate": "(!data.exists() && newData.isNumber() && newData.val() == 1) || (data.isNumber() && newData.isNumber() && newData.val() == data.val() + 1)"
+          }
+        }
       }
     },
     "prompts": {
@@ -20,11 +30,15 @@
         ".write": "auth != null",
         "totalCopies": {
           ".write": true,
-          ".validate": "newData.isNumber() && (!data.exists() || newData.val() == data.val() + 1)"
+          ".validate": "(!data.exists() && newData.isNumber() && newData.val() == 1) || (data.isNumber() && newData.isNumber() && newData.val() == data.val() + 1)"
         },
-        "copyHistory": { ".write": true }
+        "copyHistory": {
+          "$event": {
+            ".write": true,
+            ".validate": "newData.val() === true"
+          }
+        }
       }
     }
   }
 }
-
