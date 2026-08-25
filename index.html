@@ -333,7 +333,12 @@ function renderTemplates(){
  const q=document.getElementById("templateSearch").value.trim();
  let list=templates.filter(x=>matches(x,q));
  if(tFilter==="trending"){
-   list=list.sort((a,b)=>{const A=trendingScore(a,"template"),B=trendingScore(b,"template");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
+   try{
+     list=list.sort((a,b)=>{const A=trendingScore(a,"template"),B=trendingScore(b,"template");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
+   }catch(err){
+     console.error("Trending sort (templates) failed, falling back to newest-first:",err);
+     list=list.sort(newestNumberFirst).slice(0,30);
+   }
  }else{
    list=list.filter(x=>categoryMatch(x,tFilter)).sort(newestNumberFirst);
  }
@@ -351,7 +356,12 @@ function renderPrompts(){
  let source=prompts.length?prompts:demoPrompts;
  let list=source.filter(x=>matches(x,q));
  if(pFilter==="trending"){
-   list=list.sort((a,b)=>{const A=trendingScore(a,"prompt"),B=trendingScore(b,"prompt");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
+   try{
+     list=list.sort((a,b)=>{const A=trendingScore(a,"prompt"),B=trendingScore(b,"prompt");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,30);
+   }catch(err){
+     console.error("Trending sort (prompts) failed, falling back to newest-first:",err);
+     list=list.sort(newestNumberFirst).slice(0,30);
+   }
  }else{
    list=list.filter(x=>categoryMatch(x,pFilter)).sort(newestNumberFirst);
  }
@@ -412,7 +422,13 @@ function renderTrending(type,current){
  const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
  const currentKey=String(current.id||current.num||current.number||"");
  const others=source.filter(x=>String(x.id||x.num||x.number||"")!==currentKey);
- let list=[...others].sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
+ let list;
+ try{
+   list=[...others].sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
+ }catch(err){
+   console.error("renderTrending sort failed, falling back to newest-first:",err);
+   list=[...others].sort(newestNumberFirst).slice(0,10);
+ }
  if(!list.length)return "";
  const heading=type==="template"?"🔥 Trending Templates":"🔥 Trending Prompts";
  return `<section class="promptTrending"><h3>${heading}</h3><div class="grid">${list.map(x=>card(x,type,true)).join("")}</div></section>`;
