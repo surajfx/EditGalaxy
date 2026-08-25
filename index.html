@@ -312,10 +312,12 @@ window.setPF=f=>{pFilter=f;renderPromptFilters();renderPrompts()}
 window.renderTemplates=renderTemplates;window.renderPrompts=renderPrompts;
 function createdValue(x){ return Number(x.createdAt||x.timestamp||x.addedAt||x.created||0) || 0; }
 function newestFirst(a,b){ const av=createdValue(a),bv=createdValue(b); if(av||bv) return bv-av; return String(b.id||"").localeCompare(String(a.id||"")); }
+function numberValue(x){return Number(x.num??x.number??x.templateNumber??x.promptNumber??-Infinity)}
+function newestNumberFirst(a,b){const av=numberValue(a),bv=numberValue(b);if(Number.isFinite(av)||Number.isFinite(bv))return (Number.isFinite(bv)?bv:-Infinity)-(Number.isFinite(av)?av:-Infinity);return newestFirst(a,b)}
 function renderTemplates(){
  const q=document.getElementById("templateSearch").value.trim();
  let list=templates.filter(x=>categoryMatch(x,tFilter)&&matches(x,q));
- if(tFilter==="trending") list.sort((a,b)=>(b.last7Uses||b.weekUses||0)-(a.last7Uses||a.weekUses||0)); else list.sort(newestFirst);
+ if(tFilter==="trending") list.sort((a,b)=>(b.last7Uses||b.weekUses||0)-(a.last7Uses||a.weekUses||0)||newestNumberFirst(a,b)); else list.sort(newestNumberFirst);
  document.getElementById("templateCount").textContent=list.length+" results";
  document.getElementById("templateGrid").innerHTML=list.length?list.map(x=>card(x,"template")).join(""):`<div class="empty">No templates found yet.</div>`;
 }
@@ -329,6 +331,7 @@ function renderPrompts(){
  const q=document.getElementById("promptSearch").value.trim();
  let source=prompts.length?prompts:demoPrompts;
  let list=source.filter(x=>categoryMatch(x,pFilter)&&matches(x,q));
+ list.sort(newestNumberFirst);
  document.getElementById("promptCount").textContent=list.length+" results";
  document.getElementById("promptGrid").innerHTML=list.length?list.map(x=>card(x,"prompt")).join(""):`<div class="empty">No prompts found.</div>`;
 }
@@ -366,7 +369,7 @@ window.openDetail=(raw,type,opts={})=>{
 function renderPromptTrending(current){
  const source=(prompts.length?prompts:demoPrompts).filter(x=>String(x.id||"")!==String(current.id||"") && (normalize(x.category||x.cat)==="trending" || (x.trending===true)));
  const fallback=(prompts.length?prompts:demoPrompts).filter(x=>String(x.id||"")!==String(current.id||"") && !source.some(y=>String(y.id||"")===String(x.id||"")));
- const list=[...source,...fallback].slice(0,10);
+ const list=[...source,...fallback].sort(newestNumberFirst).slice(0,10);
  if(!list.length) return "";
  return `<section class="promptTrending"><h3>🔥 Trending Prompts</h3><div class="grid">${list.map(x=>card(x,"prompt")).join("")}</div></section>`;
 }
@@ -494,7 +497,7 @@ window.runSectionSearch=type=>{
  if(btn) btn.textContent="Search";
  box?.classList.add("normalSearchResult");
  setTimeout(()=>{
-   const list=source.filter(x=>(type==="template"?categoryMatch(x,tFilter):categoryMatch(x,pFilter)) && scoreItem(x,q)>0);
+   const list=source.filter(x=>(type==="template"?categoryMatch(x,tFilter):categoryMatch(x,pFilter)) && scoreItem(x,q)>0).sort(newestNumberFirst);
    const grid=document.getElementById(type==="template"?"templateGrid":"promptGrid");
    const count=document.getElementById(type==="template"?"templateCount":"promptCount");
    count.textContent=list.length+" results";
@@ -515,9 +518,9 @@ function scoreItem(x,q){
  return score;
 }
 let searchTimers={};
-document.getElementById("templateSearch").addEventListener("input",()=>{});
+document.getElementById("templateSearch").addEventListener("input",e=>{if(!e.target.value.trim())renderTemplates();});
 document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("template")}});
-document.getElementById("promptSearch").addEventListener("input",()=>{});
+document.getElementById("promptSearch").addEventListener("input",e=>{if(!e.target.value.trim())renderPrompts();});
 document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("prompt")}});
 window.trackUse=async id=>{if(!id)return;try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {get,set,update,ref}=m;const r=ref(db,"templates/"+id);const s=await get(ref(db,"templates/"+id+"/totalUses"));const next=(s.val()||0)+1;const now=Date.now();const day=new Date(now).toISOString().slice(0,10);await update(r,{totalUses:next,["useHistory/"+now]:true,["usesByDay/"+day]:((await get(ref(db,"templates/"+id+"/usesByDay/"+day))).val()||0)+1});}catch{}}
 window.showSection=section=>{
