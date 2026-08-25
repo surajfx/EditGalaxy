@@ -236,7 +236,7 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {getDatabase,ref,onValue,update,increment,runTransaction,set} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import {getDatabase,ref,onValue,update,increment,runTransaction,set,get} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyBgPllgUNMUo6j_Rbd7wg0NjR6z4YFy6uU",
@@ -640,25 +640,46 @@ function scoreItem(item,q){
  if(haystack.includes(query))score+=20;
  return score;
 }
-function aiFindItem(q,type){
- const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
- return source.map(x=>({x,score:scoreItem(x,q)})).filter(v=>v.score>0).sort((a,b)=>b.score-a.score||newestNumberFirst(a.x,b.x))[0]?.x||null;
+function aiFindItem(q,type,source){
+ const query=normalize(q).replace(/^#/,"").trim();
+ if(!query)return null;
+ const list=Array.isArray(source)?source:[];
+ const exactNumber=Number(query);
+ const scored=list.map(x=>({x,score:scoreItem(x,q)}));
+ const exact=scored.find(v=>Number.isFinite(exactNumber) && Number(v.x.num??v.x.number??v.x.templateNumber??v.x.promptNumber)===exactNumber);
+ if(exact)return exact.x;
+ return scored.filter(v=>v.score>0).sort((a,b)=>b.score-a.score||newestNumberFirst(a.x,b.x))[0]?.x||null;
 }
-window.runAISearch=()=>{
+window.runAISearch=async()=>{
  const input=document.getElementById("aiInput"), box=input.closest(".search"), btn=box.querySelector(".searchbtn");
  const q=input.value.trim();
  if(!q){showToast("Type a name or number first");input.focus();return;}
- box.classList.add("searching"); btn.textContent="✦";
+ box.classList.add("searching"); btn.textContent="✦"; btn.disabled=true;
  const type=aiType;
- requestAnimationFrame(()=>{
-   const item=aiFindItem(q,type);
-   box.classList.remove("searching"); btn.textContent="✦ Search";
+ try{
+   // Always refresh the selected collection before AI search so newly added/edited
+   // Firebase records are searchable immediately, even if the page listener is stale.
+   const path=type==="template"?"templates":"prompts";
+   let source=type==="template"?templates:prompts;
+   try{
+     const snap=await get(ref(db,path));
+     const data=snap.val()||{};
+     source=Object.entries(data).map(([id,x])=>({id,...x}));
+   }catch(e){console.warn("AI search refresh failed; using live cache",e);}
+   const item=aiFindItem(q,type,source);
    if(item){
      closeAI();
-     if(type==="template"){showSection("templates")}else{showSection("prompts")}
-     setTimeout(()=>window.openDetail(JSON.stringify(item),type),180);
-   }else{showToast(`No ${type} found for “${q}”`);}
- });
+     showSection(type==="template"?"templates":"prompts");
+     setTimeout(()=>window.openDetail(JSON.stringify(item),type),120);
+   }else{
+     showToast(`No ${type} found for “${q}”`);
+   }
+ }catch(err){
+   console.error(err);
+   showToast("Search failed. Please try again.");
+ }finally{
+   box.classList.remove("searching"); btn.textContent="✦ Search"; btn.disabled=false;
+ }
 }
 document.getElementById("templateSearch").addEventListener("input",()=>renderTemplates());
 document.getElementById("promptSearch").addEventListener("input",()=>renderPrompts());
