@@ -298,10 +298,12 @@ function imgFor(x){
 }
 let cardSeq=0;
 const cardStore=new Map();
-function card(x,type){
+let detailSeq=0;
+const detailStore=new Map();
+function card(x,type,forceTrending=false){
  const title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
  const cat=x.category||x.cat||"General";
- const catText=catLabel(normalize(cat));
+ const catText=forceTrending?"🔥 Trending":catLabel(normalize(cat));
  const key=`c${++cardSeq}`;
  cardStore.set(key,{...x});
  if(cardStore.size>5000){ const first=cardStore.keys().next().value; cardStore.delete(first); }
@@ -324,13 +326,7 @@ function renderTemplates(){
  const q=document.getElementById("templateSearch").value.trim();
  let list=templates.filter(x=>matches(x,q));
  if(tFilter==="trending"){
-   const active=list.filter(x=>normalize(x.category||x.cat)==="trending" || Number(x.totalUses||0)>0);
-   list=(active.length?active:list);
-   list.sort((a,b)=>
-     Number(b.totalUses||0)-Number(a.totalUses||0) ||
-     Number(b.last7Uses||b.weekUses||0)-Number(a.last7Uses||a.weekUses||0) ||
-     newestNumberFirst(a,b)
-   );
+   list=list.sort((a,b)=>{const A=trendingScore(a,"template"),B=trendingScore(b,"template");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2];}).slice(0,30);
  }else{
    list=list.filter(x=>categoryMatch(x,tFilter)).sort(newestNumberFirst);
  }
@@ -348,12 +344,7 @@ function renderPrompts(){
  let source=prompts.length?prompts:demoPrompts;
  let list=source.filter(x=>matches(x,q));
  if(pFilter==="trending"){
-   const active=list.filter(x=>normalize(x.category||x.cat)==="trending" || Number(x.totalCopies||x.copyCount||0)>0);
-   list=(active.length?active:list);
-   list.sort((a,b)=>
-     Number(b.totalCopies||b.copyCount||0)-Number(a.totalCopies||a.copyCount||0) ||
-     newestNumberFirst(a,b)
-   );
+   list=list.sort((a,b)=>{const A=trendingScore(a,"prompt"),B=trendingScore(b,"prompt");return B[0]-A[0]||B[1]-A[1]||B[2]-A[2];}).slice(0,30);
  }else{
    list=list.filter(x=>categoryMatch(x,pFilter)).sort(newestNumberFirst);
  }
@@ -361,7 +352,11 @@ function renderPrompts(){
  document.getElementById("promptGrid").innerHTML=list.length?list.map(x=>card(x,"prompt")).join(""):`<div class="empty">No prompts found.</div>`;
 }
 window.openDetail=(raw,type,opts={})=>{
- const x=JSON.parse(raw), title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
+ const x=JSON.parse(raw);
+ const detailKey=`d${++detailSeq}`;
+ detailStore.set(detailKey,{...x});
+ if(detailStore.size>5000){const first=detailStore.keys().next().value;detailStore.delete(first);}
+ const title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
  const img=imgFor(x);
  let html=`<div class="detailmedia"><img src="${escapeAttr(img)}" alt="${escapeAttr(title)}">${type==="template"?`<button class="play" aria-label="Play template video" onclick='openVideoModal(${JSON.stringify(x.instagramUrl||x.video||x.instagram||"")},"instagram")'>▶</button>`:""}</div><h2>${escapeHtml(title)}</h2>`;
  if(type==="template") {
@@ -370,14 +365,14 @@ window.openDetail=(raw,type,opts={})=>{
    const extraName=x.extraButtonName||x.extraName||"More Details";
    const extraLink=x.extraButtonLink||x.extraLink||"#";
    const extraHtml=extraEnabled?`<a class="action wideAction extraAction" href="${escapeAttr(extraLink)}" target="_blank" rel="noopener">${escapeHtml(extraName)} ↗</a>`:"";
-   html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="window.trackUse('${escapeAttr(x.id||"")}')">✨ Use Template on CapCut</a>${extraHtml}${how?`<button class="action wideAction" onclick='openVideoModal(${JSON.stringify(how)},"auto")'>▶ How to Use Video</button>`:`<button class="action wideAction" onclick="showToast('How-to-use video link is not added yet.')">▶ How to Use Video</button>`}<button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share Template</button></div>`;
+   html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="return window.useTemplateByKey('${detailKey}',event)">✨ Use Template on CapCut</a>${extraHtml}${how?`<button class="action wideAction" onclick='openVideoModal(${JSON.stringify(how)},"auto")'>▶ How to Use Video</button>`:`<button class="action wideAction" onclick="showToast('How-to-use video link is not added yet.')">▶ How to Use Video</button>`}<button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share Template</button></div>`;
    const desc="First, download CapCut Pro and open this template. If CapCut works without VPN on your phone, you do not need a VPN. If CapCut is not available without VPN, connect a VPN first. Then tap “Use Template on CapCut” above. In CapCut, open the template, add your own photos or videos, adjust the clips if needed, preview your edit, and export your finished video. For an easy visual guide, tap “How to Use Video”.";
    const insta=x.instagramUrl||x.instagramVideo||x.video||x.instagram||"#";
-   html+=`<div class="detailInfo glass"><p>${escapeHtml(desc)}</p><div class="detailLinks"><a href="${escapeAttr(cap)}" target="_blank" rel="noopener">✨ CapCut Template</a><a href="${escapeAttr(insta)}" target="_blank" rel="noopener">📷 Instagram Video</a></div></div>`;
+   html+=`<div class="detailInfo glass"><p>${escapeHtml(desc)}</p><div class="detailLinks"><a href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="return window.useTemplateByKey('${detailKey}',event)">✨ CapCut Template</a><a href="${escapeAttr(insta)}" target="_blank" rel="noopener">📷 Instagram Video</a></div></div>`;
    html+=renderTrending(type,x);
  } else {
    const gp=x.girlPrompt||x.prompt||"", bp=x.boyPrompt||"";
-   html+=`<div class="actions"><button class="action primary wideAction" onclick='openPromptLoader(${JSON.stringify(JSON.stringify(x))})'>✨ Get Prompt</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share</button></div>`;
+   html+=`<div class="actions"><button class="action primary wideAction" onclick="openPromptLoaderByKey('${detailKey}')">✨ Get Prompt</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share</button></div>`;
    html+=`<div class="detailInfo glass"><p>${escapeHtml(x.description||x.tips||"Copy the prompt and use it with your preferred image generator.")}</p></div>`;
    html+=renderTrending(type,x);
  }
@@ -392,41 +387,51 @@ window.openDetail=(raw,type,opts={})=>{
  window.currentShare={title,url:location.href};
  rememberRecent(type,x);
 }
+function historyCount(history,days=0){
+ const cutoff=days?Date.now()-days*86400000:0;
+ return Object.keys(history||{}).filter(k=>Number(k)>=cutoff).length;
+}
 function trendingScore(x,type){
- const total=type==="template"?Number(x.totalUses||0):Number(x.totalCopies||x.copyCount||0);
- const recent=type==="template"?Number(x.last7Uses||x.weekUses||0):Number(x.last7Copies||x.weekCopies||0);
+ const totalField=type==="template"?Number(x.totalUses||0):Number(x.totalCopies||x.copyCount||0);
+ const history=type==="template"?x.useHistory:x.copyHistory;
+ const historyTotal=historyCount(history);
+ const total=Math.max(totalField,historyTotal);
+ const recent=historyCount(history,7);
  return [total,recent,numberValue(x)];
 }
 function renderTrending(type,current){
  const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
- const others=source.filter(x=>String(x.id||x.num||x.number||"")!==String(current.id||current.num||current.number||""));
- let list=others.filter(x=>normalize(x.category||x.cat)==="trending" || trendingScore(x,type)[0]>0);
- if(!list.length) list=others;
- list.sort((a,b)=>{
-   const A=trendingScore(a,type),B=trendingScore(b,type);
-   return B[0]-A[0] || B[1]-A[1] || B[2]-A[2];
- }).slice(0,10);
+ const currentKey=String(current.id||current.num||current.number||"");
+ const others=source.filter(x=>String(x.id||x.num||x.number||"")!==currentKey);
+ let list=[...others].sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2];}).slice(0,10);
  if(!list.length)return "";
  const heading=type==="template"?"🔥 Trending Templates":"🔥 Trending Prompts";
- return `<section class="promptTrending"><h3>${heading}</h3><div class="grid">${list.map(x=>card(x,type)).join("")}</div></section>`;
+ return `<section class="promptTrending"><h3>${heading}</h3><div class="grid">${list.map(x=>card(x,type,true)).join("")}</div></section>`;
 }
+window.openPromptLoaderByKey=(key)=>{const x=detailStore.get(key);if(x)window.openPromptLoader(JSON.stringify(x));};
+window.copyTextByKey=async(type,key)=>{const x=detailStore.get(key);if(!x)return;const text=type==="girl"?(x.girlPrompt||x.prompt||""):(x.boyPrompt||"");await copyText(text,x.id||"");};
 window.openPromptLoader=(raw)=>{
- const x=JSON.parse(raw), modal=document.getElementById("promptModal"), body=document.getElementById("promptModalBody");
+ const x=JSON.parse(raw);
+ const detailKey=`d${++detailSeq}`;
+ detailStore.set(detailKey,{...x});
+ const modal=document.getElementById("promptModal"), body=document.getElementById("promptModalBody");
  body.innerHTML=`<div class="promptLoading"><div class="promptSpinner"></div><strong>Preparing your prompt…</strong><span class="meta">Loading the girl and boy versions</span></div>`;
  modal.classList.add("open");
  setTimeout(()=>{
    const gp=x.girlPrompt||x.prompt||"", bp=x.boyPrompt||"";
    body.innerHTML=`<h3>Get Prompt</h3>
-   <div class="promptBox"><h4>👩 Girl Version</h4><div class="promptText">${escapeHtml(gp)}</div><button class="action primary wideAction copyPrompt" onclick='copyText(${JSON.stringify(gp)},${JSON.stringify(x.id||"")})'>📋 Copy Girl Prompt</button></div>
-   ${bp?`<div class="promptBox"><h4>👨 Boy Version</h4><div class="promptText">${escapeHtml(bp)}</div><button class="action primary wideAction copyPrompt" onclick='copyText(${JSON.stringify(bp)},${JSON.stringify(x.id||"")})'>📋 Copy Boy Prompt</button></div>`:""}
-   <button class="action wideAction promptTool" onclick='openAITool(${JSON.stringify(JSON.stringify(x))})'>🤖 Open AI Tool</button>`;
+   <div class="promptBox"><h4>👩 Girl Version</h4><div class="promptText">${escapeHtml(gp)}</div><button class="action primary wideAction copyPrompt" onclick="copyTextByKey('girl','${detailKey}')">📋 Copy Girl Prompt</button></div>
+   ${bp?`<div class="promptBox"><h4>👨 Boy Version</h4><div class="promptText">${escapeHtml(bp)}</div><button class="action primary wideAction copyPrompt" onclick="copyTextByKey('boy','${detailKey}')">📋 Copy Boy Prompt</button></div>`:""}
+   <button class="action wideAction promptTool" onclick="openAIToolByKey('${detailKey}')">🤖 Open AI Tool</button>`;
  },520);
 };
 window.closePromptModal=()=>{const m=document.getElementById("promptModal");m.classList.remove("open");document.getElementById("promptModalBody").innerHTML="";window.aiToolItem=null};
 
+window.openAIToolByKey=(key)=>{const x=detailStore.get(key);if(x)window.openAITool(JSON.stringify(x));};
 window.openAITool=(raw)=>{
  const x=JSON.parse(raw);
  window.aiToolItem=x;
+ window.aiToolKey=`d${++detailSeq}`; detailStore.set(window.aiToolKey,{...x});
  const body=document.getElementById("promptModalBody");
  body.innerHTML=`<h3>🤖 Choose AI Tool</h3>
    <p class="aiChooserText">Choose where you want to use this prompt.</p>
@@ -446,7 +451,7 @@ window.chooseAITool=(tool)=>{
      <button class="action primary aiChoice" onclick="sendPromptToAI('girl')">👩 Girl</button>
      <button class="action aiChoice" onclick="sendPromptToAI('boy')">👨 Boy</button>
    </div>
-   <button class="action wideAction aiBack" onclick="openAITool(${JSON.stringify(JSON.stringify(window.aiToolItem||{}))})">← Back</button>`;
+   <button class="action wideAction aiBack" onclick="openAIToolByKey(window.aiToolKey)">← Back</button>`;
 };
 window.sendPromptToAI=(gender)=>{
  const x=window.aiToolItem||{};
@@ -510,85 +515,26 @@ window.clearRecentViews=()=>{try{localStorage.removeItem("eg_recent_views")}catc
 window.closeDetail=()=>{const d=document.getElementById("detail");if(!d.classList.contains("open"))return;if(location.hash.startsWith("#template/")||location.hash.startsWith("#prompt/")){history.back();return;}d.classList.remove("open");document.body.style.overflow=""};
 window.copyText=async (t,id)=>{
  try{
-   await navigator.clipboard.writeText(t||"");
+   const text=t||"";
+   if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);}else{const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();}
    if(id){
-     try{
-       const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-       const {ref,update,increment}=m;
-       const stamp=Date.now()+"_"+Math.random().toString(36).slice(2,8);
-       await update(ref(db,"prompts/"+id),{
-         totalCopies:increment(1),
-         ["copyHistory/"+stamp]:true
-       });
-     }catch(err){console.error("Prompt copy analytics failed",err)}
+     try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {ref,update,increment}=m;const stamp=Date.now()+"_"+Math.random().toString(36).slice(2,8);await update(ref(db,"prompts/"+id),{totalCopies:increment(1),["copyHistory/"+stamp]:true});}
+     catch(err){console.error("Prompt copy analytics failed",err);}
    }
    showToast("Copied ✓");
- }catch(err){console.error(err);showToast("Copy failed")}
-}
-window.shareCurrent=async()=>{
- const url=window.currentShare?.url||location.href;
- const title=window.currentShare?.title||"EditGalaxy";
- try{
-   if(navigator.share){await navigator.share({title,url});showToast("Share sheet opened ✓");}
-   else{await navigator.clipboard.writeText(url);showToast("Link copied ✓");}
- }catch(err){
-   if(err?.name==="AbortError") return;
-   try{await navigator.clipboard.writeText(url);showToast("Link copied ✓")}catch{showToast("Could not share link")}
- }
-}
-window.runSectionSearch=type=>{
- const el=document.getElementById(type==="prompt"?"promptSearch":"templateSearch");
- const q=(el?.value||"").trim();
- const box=el?.closest(".search"), btn=box?.querySelector(".searchbtn");
- el?.blur();
- const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
- if(!q){
-   if(type==="prompt") renderPrompts(); else renderTemplates();
-   showToast(`Showing all ${type}s`);
-   return;
- }
- if(btn) btn.textContent="Search";
- box?.classList.add("normalSearchResult");
- setTimeout(()=>{
-   const list=source.filter(x=>(type==="template"?categoryMatch(x,tFilter):categoryMatch(x,pFilter)) && scoreItem(x,q)>0).sort(newestNumberFirst);
-   const grid=document.getElementById(type==="template"?"templateGrid":"promptGrid");
-   const count=document.getElementById(type==="template"?"templateCount":"promptCount");
-   count.textContent=list.length+" results";
-   grid.innerHTML=list.length?list.map(x=>card(x,type)).join(""):`<div class="empty">No ${type}s found for “${escapeHtml(q)}”.</div>`;
-   grid.classList.remove("normalSearchResult"); void grid.offsetWidth; grid.classList.add("normalSearchResult");
-   setTimeout(()=>box?.classList.remove("normalSearchResult"),320);
- },180);
+ }catch(err){console.error(err);showToast("Copy failed");}
 };
-function scoreItem(x,q){
- const n=normalize(q), number=String(x.num||x.number||x.templateNumber||x.promptNumber||"");
- const title=normalize(x.title||x.name||x.templateName||x.promptTitle||"");
- const hay=[title,normalize(number),normalize("#"+number),normalize(x.category||x.cat||""),normalize(x.prompt||x.girlPrompt||x.boyPrompt||""),normalize(x.description||x.tips||"")];
- let score=0;
- if(n===normalize(number)||n===normalize("#"+number)) score+=1000;
- if(n===title) score+=900;
- if(title.includes(n)) score+=600;
- if(hay.some(v=>v.includes(n))) score+=300;
- return score;
-}
-let searchTimers={};
-document.getElementById("templateSearch").addEventListener("input",e=>{if(!e.target.value.trim())renderTemplates();});
-document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("template")}});
-document.getElementById("promptSearch").addEventListener("input",e=>{if(!e.target.value.trim())renderPrompts();});
-document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSectionSearch("prompt")}});
-window.trackUse=async id=>{
- if(!id)return;
- try{
-   const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-   const {ref,update,increment}=m;
-   const now=Date.now(), day=new Date(now).toISOString().slice(0,10);
-   const stamp=now+"_"+Math.random().toString(36).slice(2,8);
-   await update(ref(db,"templates/"+id),{
-     totalUses:increment(1),
-     ["useHistory/"+stamp]:true,
-     ["usesByDay/"+day]:increment(1)
-   });
- }catch(err){console.error("Template usage analytics failed",err)}
-}
+window.shareCurrent=async()=>{
+ const url=window.currentShare?.url||location.href;const title=window.currentShare?.title||"EditGalaxy";
+ try{if(navigator.share){await navigator.share({title,url});showToast("Share sheet opened ✓");}else{await navigator.clipboard.writeText(url);showToast("Link copied ✓");}}catch(err){if(err?.name==="AbortError")return;try{await navigator.clipboard.writeText(url);showToast("Link copied ✓")}catch{showToast("Could not share link")}}
+};
+window.useTemplateByKey=async(key,event)=>{
+ if(event)event.preventDefault();
+ const x=detailStore.get(key);if(!x)return false;
+ const url=x.capcut||x.capcutUrl||x.capcutLink||"#";
+ if(x.id){try{const m=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");const {ref,update,increment}=m;const now=Date.now(),day=new Date(now).toISOString().slice(0,10),stamp=now+"_"+Math.random().toString(36).slice(2,8);await update(ref(db,"templates/"+x.id),{totalUses:increment(1),["useHistory/"+stamp]:true,["usesByDay/"+day]:increment(1)});}catch(err){console.error("Template usage analytics failed",err);}}
+ if(url&&url!=="#")window.location.href=url;return false;
+};
 window.showSection=section=>{
  const isPrompt=section==="prompts";
  const target=isPrompt?document.getElementById("promptPage"):document.getElementById("templatePage");
