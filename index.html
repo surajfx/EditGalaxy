@@ -753,7 +753,7 @@ document.getElementById("templateSearch").addEventListener("input",()=>renderTem
 document.getElementById("promptSearch").addEventListener("input",()=>renderPrompts());
 document.getElementById("templateSearch").addEventListener("keydown",e=>{if(e.key==="Escape")clearSectionSearch("template")});
 document.getElementById("promptSearch").addEventListener("keydown",e=>{if(e.key==="Escape")clearSectionSearch("prompt")});
-function closeMenu(){const m=document.getElementById("menuOverlay");if(!m.classList.contains("open"))return;if(location.hash==="#menu"){history.back();return;}m.classList.remove("open");document.body.classList.remove("menu-open")}
+function closeMenu(){const m=document.getElementById("menuOverlay");if(!m.classList.contains("open"))return;if(location.hash==="#menu"){history.back();return;}m.classList.remove("open");document.body.classList.remove("menu-open")}\nwindow.closeMenu=closeMenu;
 document.getElementById("menuBtn").onclick=()=>{document.getElementById("menuOverlay").classList.add("open");document.body.classList.add("menu-open");history.pushState({overlay:"menu"},"",location.href.split("#")[0]+"#menu")};
 document.getElementById("menuOverlay").onclick=e=>{if(e.target.id==="menuOverlay")closeMenu()}
 document.getElementById("themeBtn").onclick=()=>{const next=document.documentElement.dataset.theme==="light"?"dark":"light";document.documentElement.dataset.theme=next;localStorage.setItem("eg_theme",next);document.getElementById("themeBtn").textContent=next==="light"?"☀":"☾"}
