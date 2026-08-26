@@ -1,14 +1,22 @@
-EditGalaxy FINAL v29 FIXED
+EditGalaxy FINAL v30
 
-Based on v28, preserving the existing UI, Firebase structure, trending logic and card design.
+Based on the previous working build. Existing Firebase structure, live template/prompt usage analytics, search, admin authentication and card design are preserved.
 
-Fixes in v29:
-1. Mobile Search Enter: pressing the keyboard Enter/Search key now runs the same search as the Search button and blurs the field so the mobile keyboard closes.
-2. AI Search Enter: pressing the keyboard Enter/Search key triggers AI Search and closes the keyboard.
-3. Admin Edit Save: save now explicitly validates the signed-in Firebase admin UID, refreshes the auth token, performs the existing Firebase update without removing analytics/history fields, verifies the saved record, and provides a clear Saving/Saved/Failed state.
-4. Edit buttons are explicitly type=button to avoid mobile/browser form-submit conflicts.
+Changes in v30:
+1. Template detail now uses “How to Use Template” as a text accordion instead of a required how-to video button.
+2. Template detail now includes Template Info, Description and Links sections.
+3. Template Info supports Template, Style, Best for, Format, Platform, App and Difficulty.
+4. Prompt detail now includes Get Prompt, How to Use Prompt and Share buttons.
+5. Prompt detail now includes Prompt Info, Description and How to Use Prompt sections.
+6. Admin Add/Edit forms now support the new template/prompt information fields and save them to Firebase without removing usage history.
+7. Homepage SEO metadata, canonical URL, Open Graph, Twitter metadata and JSON-LD structured data were added.
+8. Dynamic detail pages update page title and description when opened.
+9. robots.txt, sitemap.xml and llms.txt were added for search-engine and AI discovery.
+10. PWA manifest and lightweight service worker were added for web-app installation and basic offline shell caching.
+11. Supporting About/Contact/Privacy/Terms/Trust/Copyright/Team pages received basic SEO descriptions and canonical URLs.
+12. Admin and bulk-upload pages are excluded from search crawling.
 
-Admin UID in firebase-rules.json:
+AdSense is intentionally NOT added yet. Add the Google-provided AdSense code only after the site is public, indexed, and ready for application.
+
+Firebase admin UID:
 i3J3kuqMLtUglNE1EyC7JZCzaFi1
-
-Apply firebase-rules.json in Firebase Realtime Database > Rules before testing admin saves.

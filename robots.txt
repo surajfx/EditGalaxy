@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /EditGalaxy/
+Disallow: /EditGalaxy/admin.html
+Disallow: /EditGalaxy/bulk_upload.html
+Disallow: /EditGalaxy/firebase-rules.json
+Sitemap: https://surajfx.github.io/EditGalaxy/sitemap.xml

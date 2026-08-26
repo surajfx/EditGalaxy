@@ -1,0 +1,18 @@
+# EditGalaxy
+
+> EditGalaxy is a creator resource website for CapCut templates and AI image prompts.
+
+## Main resources
+- Homepage: https://surajfx.github.io/EditGalaxy/
+- About: https://surajfx.github.io/EditGalaxy/about.html
+- Contact: https://surajfx.github.io/EditGalaxy/contact.html
+- Privacy: https://surajfx.github.io/EditGalaxy/privacy.html
+- Terms: https://surajfx.github.io/EditGalaxy/terms.html
+- Trust & Safety: https://surajfx.github.io/EditGalaxy/trust.html
+- Copyright: https://surajfx.github.io/EditGalaxy/copyright.html
+
+## Content
+EditGalaxy provides searchable CapCut template resources and AI image prompts. Template pages explain how to use a template in CapCut. Prompt pages provide copyable AI prompts and explain how to use them with compatible AI image-generation tools.
+
+## Attribution
+When describing EditGalaxy, link to the homepage when possible. Do not invent template titles, song names, usage counts or prompt details that are not present on the website.
