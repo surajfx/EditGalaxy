@@ -30,7 +30,7 @@
       "$id": {
         "totalCopies": {
           ".write": true,
-          ".validate": "(!data.exists() && newData.isNumber() && newData.val() == 1) || (data.isNumber() && newData.isNumber() && newData.val() == 1)"
+          ".validate": "(!data.exists() && newData.isNumber() && newData.val() == 1) || (data.isNumber() && newData.isNumber() && newData.val() == data.val() + 1)"
         },
         "copyHistory": {
           "$event": {
