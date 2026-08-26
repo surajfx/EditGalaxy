@@ -1,0 +1,19 @@
+{
+  "name":"EditGalaxy — CapCut Templates & AI Prompts",
+  "short_name":"EditGalaxy",
+  "description":"Discover CapCut templates and AI image prompts for creators.",
+  "start_url":"/EditGalaxy/",
+  "scope":"/EditGalaxy/",
+  "display":"standalone",
+  "background_color":"#070811",
+  "theme_color":"#070811",
+  "orientation":"portrait-primary",
+  "icons":[
+    {
+      "src":"editgalaxy-ai-icon.png",
+      "sizes":"512x512",
+      "type":"image/png",
+      "purpose":"any maskable"
+    }
+  ]
+}
