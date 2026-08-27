@@ -141,6 +141,14 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
   .sectionhead h2{font-size:22px}
 }
 </style>
+
+<style id="how-to-video-v33">
+.howVideo{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12)}
+.howVideoTitle{font-weight:700;margin-bottom:10px}
+.howVideoFrame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:16px;background:#000}
+.howVideoFrame iframe{width:100%;height:100%;border:0;display:block}
+.howVideoLink{display:inline-block;margin-top:10px;text-decoration:none;font-weight:700}
+</style>
 </head>
 <body>
 <header class="header">
@@ -397,6 +405,7 @@ const defaultPromptHowToUse=`<ol><li>Tap <b>Get Prompt</b> and choose the versio
 function categoryStyle(c){const n=normalize(c);return n==="cinematic"?"Cinematic / Beat Edit":n==="hindi"?"Hindi / Trending Edit":n==="english"?"English / Trending Edit":n==="funk"?"Funk / Beat Edit":n==="anime"?"Anime / Stylized":n==="portrait"?"Portrait / Editorial":n==="fantasy"?"Fantasy / Creative":n==="4k"?"4K / High Detail":"Trending Creative Edit"}
 function infoRow(label,value){return `<div class="infoRow"><span class="infoLabel">${escapeHtml(label)}</span><span class="infoValue">${escapeHtml(value||"—")}</span></div>`}
 function formatHowText(text,fallback){const raw=String(text||"").trim();if(!raw)return fallback; if(raw.includes("<ol")||raw.includes("<ul")||raw.includes("<p>"))return raw; const lines=raw.split(/\n+/).map(v=>v.trim()).filter(Boolean); return `<ol>${lines.map(v=>`<li>${escapeHtml(v)}</li>`).join("")}</ol>`;}
+function howToVideoHtml(url,label){const raw=String(url||"").trim();if(!raw)return "";try{const u=new URL(raw);let video=raw;let isYouTube=false;let id="";if(u.hostname.includes("youtube.com")){id=u.searchParams.get("v")||((u.pathname.match(/\/(?:shorts|embed)\/([^/?#]+)/)||[])[1]||"");isYouTube=!!id}else if(u.hostname==="youtu.be"){id=u.pathname.slice(1).split(/[/?#]/)[0];isYouTube=!!id}if(isYouTube&&id){video=`https://www.youtube.com/embed/${encodeURIComponent(id)}?rel=0`;return `<div class="howVideo"><div class="howVideoTitle">▶ ${escapeHtml(label||"How-to-Use Video")}</div><div class="howVideoFrame"><iframe src="${escapeAttr(video)}" title="${escapeAttr(label||"How-to-Use Video")}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><a class="howVideoLink" href="${escapeAttr(raw)}" target="_blank" rel="noopener">Open video on YouTube ↗</a></div>`}return `<div class="howVideo"><a class="howVideoLink" href="${escapeAttr(raw)}" target="_blank" rel="noopener">▶ ${escapeHtml(label||"Watch How-to-Use Video")} ↗</a></div>`}catch{return `<div class="howVideo"><a class="howVideoLink" href="${escapeAttr(raw)}" target="_blank" rel="noopener">▶ ${escapeHtml(label||"Watch How-to-Use Video")} ↗</a></div>`}}
 window.toggleHowToUse=(id)=>{const e=document.getElementById(id);if(e)e.classList.toggle("hidden")};
 window.openDetail=(raw,type,opts={})=>{
  const x=JSON.parse(raw);
@@ -421,9 +430,10 @@ window.openDetail=(raw,type,opts={})=>{
    const difficulty=x.difficulty||"Easy";
    const desc=x.templateDescription||x.description||"Discover this CapCut template and create your own edit with your photos or short video clips.";
    const howText=x.howToUseTemplate||defaultTemplateHowToUse;
+   const howVideo=x.howToUseVideo||x.howToUseVideoUrl||x.howVideo||x.howToUseLink||"";
    const insta=x.instagramUrl||x.instagramVideo||x.video||x.instagram||"#";
    html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="return window.useTemplateByKey('${detailKey}',event)">✨ Use Template on CapCut</a>${extraHtml}<button class="action wideAction" onclick="toggleHowToUse('templateHow')">📖 How to Use Template</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share Template</button></div>`;
-   html+=`<div id="templateHow" class="howToBox glass hidden"><h3>📖 How to Use Template</h3>${formatHowText(howText,defaultTemplateHowToUse)}</div>`;
+   html+=`<div id="templateHow" class="howToBox glass hidden"><h3>📖 How to Use Template</h3>${formatHowText(howText,defaultTemplateHowToUse)}${howToVideoHtml(howVideo,"How to Use Template Video")}</div>`;
    html+=`<div class="detailInfoGrid"><div class="infoCard"><h3>📋 Template Info</h3><div class="infoList">${infoRow("Template",`#${n}${title&&String(title)!==`Template #${n}`?` — ${title}`:""}`)}${infoRow("Style",style)}${infoRow("Best for",bestFor)}${infoRow("Format",format)}${infoRow("Platform",platform)}${infoRow("App",app)}${infoRow("Difficulty",difficulty)}</div></div><div class="infoCard"><h3>📝 Description</h3><p>${escapeHtml(desc)}</p></div></div>`;
    html+=`<div class="detailInfo linksBox glass"><h3>🔗 Links</h3><div class="detailLinks"><a href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="return window.useTemplateByKey('${detailKey}',event)">✨ CapCut Template</a>${insta!=="#"?`<a href="${escapeAttr(insta)}" target="_blank" rel="noopener">📷 Instagram Video</a>`:""}${extraEnabled?`<a href="${escapeAttr(extraLink)}" target="_blank" rel="noopener">↗ ${escapeHtml(extraName)}</a>`:""}</div></div>`;
    html+=renderTrending(type,x);
@@ -431,6 +441,7 @@ window.openDetail=(raw,type,opts={})=>{
    const gp=x.girlPrompt||x.prompt||"", bp=x.boyPrompt||"";
    const promptDesc=x.promptDescription||x.description||x.tips||"Copy the prompt and use it with your preferred image generator.";
    const promptHow=x.howToUsePrompt||defaultPromptHowToUse;
+   const promptHowVideo=x.howToUsePromptVideo||x.promptHowToUseVideo||x.howToUseVideo||x.howVideo||"";
    const pStyle=x.style||x.promptStyle||categoryStyle(x.category||x.cat);
    const pBest=x.bestFor||"AI image generation and creative edits";
    const pFormat=x.format||"4:5 / 9:16 / 1:1";
@@ -438,7 +449,7 @@ window.openDetail=(raw,type,opts={})=>{
    const pTool=x.aiTool||"ChatGPT / Gemini / other AI tools";
    const pDifficulty=x.difficulty||"Easy";
    html+=`<div class="actions"><button class="action primary wideAction" onclick="openPromptLoaderByKey('${detailKey}')">✨ Get Prompt</button><button class="action wideAction" onclick="toggleHowToUse('promptHow')">📖 How to Use Prompt</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share</button></div>`;
-   html+=`<div id="promptHow" class="howToBox glass hidden"><h3>📖 How to Use Prompt</h3>${formatHowText(promptHow,defaultPromptHowToUse)}</div>`;
+   html+=`<div id="promptHow" class="howToBox glass hidden"><h3>📖 How to Use Prompt</h3>${formatHowText(promptHow,defaultPromptHowToUse)}${howToVideoHtml(promptHowVideo,"How to Use Prompt Video")}</div>`;
    html+=`<div class="detailInfoGrid"><div class="infoCard"><h3>📋 Prompt Info</h3><div class="infoList">${infoRow("Prompt",`#${x.num||x.number||""}${title?` — ${title}`:""}`)}${infoRow("Style",pStyle)}${infoRow("Best for",pBest)}${infoRow("Format",pFormat)}${infoRow("Platform",pPlatform)}${infoRow("AI tools",pTool)}${infoRow("Difficulty",pDifficulty)}</div></div><div class="infoCard"><h3>📝 Description</h3><p>${escapeHtml(promptDesc)}</p></div></div>`;
    html+=renderTrending(type,x);
  }
