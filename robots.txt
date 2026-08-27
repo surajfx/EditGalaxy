@@ -2,4 +2,4 @@ User-agent: *
 Allow: /EditGalaxy/
 Disallow: /EditGalaxy/admin.html
 Disallow: /EditGalaxy/bulk_upload.html
-Sitemap: https://surajfx.github.io/EditGalaxy/sitemap.xml
+Sitemap: https://surajfx.in/sitemap.xml

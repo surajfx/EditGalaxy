@@ -7,8 +7,8 @@ EditGalaxy is a creator resource website focused on CapCut templates and AI imag
 - AI Image Prompts: searchable prompt cards with copyable girl/boy prompt versions, usage instructions, descriptions and live copy-based trending.
 
 ## Important pages
-- https://surajfx.github.io/EditGalaxy/
-- https://surajfx.github.io/EditGalaxy/about.html
-- https://surajfx.github.io/EditGalaxy/contact.html
-- https://surajfx.github.io/EditGalaxy/privacy.html
-- https://surajfx.github.io/EditGalaxy/terms.html
+- https://surajfx.in/
+- https://surajfx.in/about.html
+- https://surajfx.in/contact.html
+- https://surajfx.in/privacy.html
+- https://surajfx.in/terms.html
