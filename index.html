@@ -401,7 +401,7 @@ window.toggleHowToUse=(id)=>{const e=document.getElementById(id);if(e)e.classLis
 window.openDetail=(raw,type,opts={})=>{
  const x=JSON.parse(raw);
  const detailKey=`d${++detailSeq}`;
- detailStore.set(detailKey,{...x});
+ detailStore.set(detailKey,{...x});window.__currentDetailKey=detailKey;
  if(detailStore.size>5000){const first=detailStore.keys().next().value;detailStore.delete(first);}
  const title=x.title||x.name||`${type==="template"?"Template":"Prompt"} #${x.num||x.number||""}`;
  const img=imgFor(x);
@@ -422,7 +422,7 @@ window.openDetail=(raw,type,opts={})=>{
    const desc=x.templateDescription||x.description||"Discover this CapCut template and create your own edit with your photos or short video clips.";
    const howText=x.howToUseTemplate||defaultTemplateHowToUse;
    const insta=x.instagramUrl||x.instagramVideo||x.video||x.instagram||"#";
-   html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="return window.useTemplateByKey('${detailKey}',event)">✨ Use Template on CapCut</a>${extraHtml}<button class="action wideAction" onclick="openVideoModal((x.howToUseVideo||x.howto||''),'youtube')">📖 How to Use Template</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share Template</button></div>`;
+   html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="return window.useTemplateByKey('${detailKey}',event)">✨ Use Template on CapCut</a>${extraHtml}<button type="button" class="action wideAction" onclick="openHowToVideo('template')">📖 How to Use Template</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share Template</button></div>`;
    html+=`<div id="templateHow" class="howToBox glass"><h3>📖 How to Use Template</h3>${formatHowText(howText)}</div>`;
    html+=`<div class="detailInfoGrid"><div class="infoCard"><h3>📋 Template Info</h3><div class="infoList">${infoRow("Template",`#${n}${title&&String(title)!==`Template #${n}`?` — ${title}`:""}`)}${infoRow("Style",style)}${infoRow("Best for",bestFor)}${infoRow("Format",format)}${infoRow("Platform",platform)}${infoRow("App",app)}${infoRow("Difficulty",difficulty)}</div></div><div class="infoCard"><h3>📝 Description</h3><p>${escapeHtml(desc)}</p></div></div>`;
    html+=`<div class="detailInfo linksBox glass"><h3>🔗 Links</h3><div class="detailLinks"><a href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="return window.useTemplateByKey('${detailKey}',event)">✨ CapCut Template</a>${insta!=="#"?`<a href="${escapeAttr(insta)}" target="_blank" rel="noopener">📷 Instagram Video</a>`:""}${extraEnabled?`<a href="${escapeAttr(extraLink)}" target="_blank" rel="noopener">↗ ${escapeHtml(extraName)}</a>`:""}</div></div>`;
@@ -437,7 +437,7 @@ window.openDetail=(raw,type,opts={})=>{
    const pPlatform=x.platform||"Instagram / TikTok / YouTube";
    const pTool=x.aiTool||"ChatGPT / Gemini / other AI tools";
    const pDifficulty=x.difficulty||"Easy";
-   html+=`<div class="actions"><button class="action primary wideAction" onclick="openPromptLoaderByKey('${detailKey}')">✨ Get Prompt</button><button class="action wideAction" onclick="openVideoModal((x.howToUsePromptVideo||x.howToUsePromptVideoUrl||''),'youtube')">📖 How to Use Prompt</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share</button></div>`;
+   html+=`<div class="actions"><button class="action primary wideAction" onclick="openPromptLoaderByKey('${detailKey}')">✨ Get Prompt</button><button type="button" class="action wideAction" onclick="openHowToVideo('prompt')">📖 How to Use Prompt</button><button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share</button></div>`;
    html+=`<div id="promptHow" class="howToBox glass"><h3>📖 How to Use Prompt</h3>${formatHowText(promptHow)}</div>`;
    html+=`<div class="detailInfoGrid"><div class="infoCard"><h3>📋 Prompt Info</h3><div class="infoList">${infoRow("Prompt",`#${x.num||x.number||""}${title?` — ${title}`:""}`)}${infoRow("Style",pStyle)}${infoRow("Best for",pBest)}${infoRow("Format",pFormat)}${infoRow("Platform",pPlatform)}${infoRow("AI tools",pTool)}${infoRow("Difficulty",pDifficulty)}</div></div><div class="infoCard"><h3>📝 Description</h3><p>${escapeHtml(promptDesc)}</p></div></div>`;
    html+=renderTrending(type,x);
@@ -555,6 +555,14 @@ window.sendPromptToAI=(gender)=>{
    : `https://chatgpt.com/?q=${encoded}`;
  try{window.open(url,'_blank','noopener');}catch{location.href=url;}
  showToast(`${gender==='girl'?'Girl':'Boy'} prompt prepared for ${tool==='gemini'?'Gemini':'GPT'} ✓`);
+};
+
+window.openHowToVideo=(kind)=>{
+ const key=window.__currentDetailKey;
+ const x=key?detailStore.get(key):null;
+ const url=kind==='template'?(x?.howToUseVideo||x?.howto||x?.howToUseTemplateVideo||''):(x?.howToUsePromptVideo||x?.howToUsePromptVideoUrl||'');
+ if(!url){showToast(kind==='template'?'How to Use Template video is not added yet.':'How to Use Prompt video is not added yet.');return;}
+ openVideoModal(url,'youtube');
 };
 
 function normalizeVideoUrl(url){
