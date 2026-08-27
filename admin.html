@@ -42,40 +42,52 @@ window.closeEdit=()=>{$('editModal').classList.remove('open');document.body.styl
 window.saveTemplateEdit=async id=>{
  const saveBtn=document.querySelector('#editModal .editActions .primary');
  if(saveBtn&&saveBtn.disabled)return;
- const num=+$('e_num').value,name=$('e_name').value.trim(),category=$('e_cat').value,
- img=$('e_img').value.trim(),video=$('e_video').value.trim(),capcut=$('e_cap').value.trim(),
- how=$('e_how').value.trim(),style=$('e_style').value.trim(),bestFor=$('e_bestFor').value.trim(),format=$('e_format').value.trim(),platform=$('e_platform').value.trim(),app=$('e_app').value.trim(),difficulty=$('e_difficulty').value,description=$('e_description').value.trim(),howToUseTemplate=$('e_howText').value.trim(),extraEnabled=$('e_extraEnabled').checked,
- extraName=$('e_extraName').value.trim(),extraLink=$('e_extraLink').value.trim();
- if(!num||!img||!video||!capcut){
-   toast('Fill number, image, Instagram video and CapCut link.');
-   if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='✨ Save Template';}
-   return;
- }
- if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='Saving…';}
- const old=templates.find(x=>x.id===id);
- if(!old)return toast('Template not found. Refresh the admin page.');
  try{
-   const user=currentAdminUser||auth.currentUser;
-   if(!user) throw Object.assign(new Error('Not signed in'),{code:'auth/not-authenticated'});
-   if(user.uid!==ADMIN_UID) throw Object.assign(new Error('Wrong admin account'),{code:'auth/admin-uid-mismatch'});
-   const payload={
-     num,name,category,cat:category,imageUrl:img,thumb:img,
-     instagramUrl:video,video,capcut,capcutUrl:capcut,
-     howToUseVideo:how,howto:how,style,templateStyle:style,bestFor,format,platform,app,difficulty,templateDescription:description,description,howToUseTemplate,
-     extraButtonEnabled:extraEnabled,extraButtonName:extraName,extraButtonLink:extraLink,
-     addedAt:old.addedAt||old.createdAt||Date.now(),updatedAt:Date.now(),
-     totalUses:Number(old.totalUses||0),
-     useHistory:old.useHistory||{},
-     usesByDay:old.usesByDay||{}
-   };
-   await update(ref(db,'templates/'+id),payload);
-   const verify=await get(ref(db,'templates/'+id));
-   if(!verify.exists() || Number(verify.val().num)!==num) throw new Error('Save verification failed');
-   closeEdit();toast('Template saved ✓');
+  const num=Number($('e_num')?.value||0),name=$('e_name')?.value.trim()||'',category=$('e_cat')?.value||'trending',
+  img=$('e_img')?.value.trim()||'',video=$('e_video')?.value.trim()||'',capcut=$('e_cap')?.value.trim()||'',
+  how=$('e_how')?.value.trim()||'',style=$('e_style')?.value.trim()||'',bestFor=$('e_bestFor')?.value.trim()||'',
+  format=$('e_format')?.value.trim()||'',platform=$('e_platform')?.value.trim()||'',app=$('e_app')?.value.trim()||'CapCut',
+  difficulty=$('e_difficulty')?.value||'Easy',description=$('e_description')?.value.trim()||'',
+  howToUseTemplate=$('e_howText')?.value.trim()||'',extraEnabled=Boolean($('e_extraEnabled')?.checked),
+  extraName=$('e_extraName')?.value.trim()||'',extraLink=$('e_extraLink')?.value.trim()||'';
+
+  if(!num||!img||!video||!capcut){
+   toast('Fill number, image, Instagram video and CapCut link.');
+   return;
+  }
+  const old=templates.find(x=>x.id===id);
+  if(!old){toast('Template not found. Refresh the admin page.');return;}
+
+  const user=currentAdminUser||auth.currentUser;
+  if(!user){toast('Not signed in. Please login again.');return;}
+  if(user.uid!==ADMIN_UID){toast('Wrong admin account.');return;}
+
+  if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='Saving…';}
+
+  const payload={
+   num,name,category,cat:category,imageUrl:img,thumb:img,
+   instagramUrl:video,video,capcut,capcutUrl:capcut,
+   howToUseVideo:how,howto:how,style,templateStyle:style,bestFor,format,platform,app,difficulty,
+   templateDescription:description,description,howToUseTemplate,
+   extraButtonEnabled:extraEnabled,extraButtonName:extraName,extraButtonLink:extraLink,
+   addedAt:old.addedAt||old.createdAt||Date.now(),updatedAt:Date.now()
+  };
+
+  await Promise.race([
+   update(ref(db,'templates/'+id),payload),
+   new Promise((_,reject)=>setTimeout(()=>reject(Object.assign(new Error('Save timed out'),{code:'save/timeout'})),15000))
+  ]);
+
+  const verify=await get(ref(db,'templates/'+id));
+  if(!verify.exists()||Number(verify.val().num)!==num)throw new Error('Save verification failed');
+  closeEdit();toast('Template saved ✓');
  }catch(err){
-   console.error(err);
-   toast('Save failed: '+(err?.code==='PERMISSION_DENIED'?'Firebase permission denied — check Admin UID/rules':(err?.code||'Check Firebase rules/login')));
- }finally{if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='✨ Save Template';}}
+  console.error('Template save error:',err);
+  const code=err?.code||'';
+  toast('Save failed: '+(code==='PERMISSION_DENIED'?'Firebase permission denied — check Rules/Admin UID':code==='save/timeout'?'Firebase save timed out — check connection':'Please try again'));
+ }finally{
+  if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='✨ Save Template';}
+ }
 };
 window.savePromptEdit=async id=>{
  const saveBtn=document.querySelector('#editModal .editActions .primary');
