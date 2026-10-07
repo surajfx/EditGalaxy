@@ -159,7 +159,7 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
   </div>
   <h1>Create. Edit. <em>Explore.</em></h1>
   <p>Discover premium CapCut templates and carefully crafted AI image prompts — made for creators who want to create faster and better.</p>
-  <a class="cta" href="https://app.surajfx.in" target="_blank" rel="noopener">👑 CapCut Pro — Download Now ↗</a>
+  <button class="cta" type="button" onclick="openCommunityModal()">👥 Join Our Community</button>
   <div class="stats">
     <div class="stat glass"><b id="statTemplates">500+</b><small>Templates</small></div>
     <div class="stat glass"><b id="statPrompts">100+</b><small>Prompts</small></div>
@@ -250,6 +250,17 @@ border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:p
   <div id="videoBody"></div>
  </div>
 </div>
+<div id="communityModal" class="videoModal" onclick="if(event.target===this)closeCommunityModal()">
+ <div class="videoSheet" style="max-width:420px;text-align:center;padding:28px 20px">
+  <button class="videoClose" onclick="closeCommunityModal()">✕</button>
+  <h2 style="margin:4px 0 8px;font-size:22px">Join Our Community</h2>
+  <p style="color:var(--muted);margin:0 0 20px;font-size:14px">Get new templates, prompts and updates first — join us on WhatsApp or Telegram.</p>
+  <div style="display:grid;gap:10px">
+   <a class="action primary wideAction" href="https://whatsapp.com/channel/0029Vb8LDSC7z4kcrtFkae2k" target="_blank" rel="noopener">🟢 Join on WhatsApp</a>
+   <a class="action wideAction" href="https://t.me/trending_edit_day" target="_blank" rel="noopener">🔵 Join on Telegram</a>
+  </div>
+ </div>
+</div>
 <div id="promptModal" class="promptModal" onclick="if(event.target===this)closePromptModal()">
  <div class="promptSheet">
   <button class="promptModalClose" onclick="closePromptModal()">✕</button>
@@ -278,6 +289,16 @@ const firebaseConfig={
 };
 const app=initializeApp(firebaseConfig),db=getDatabase(app);
 let templates=[],prompts=[],tFilter="all",pFilter="all",aiType="template";
+function updateStats(){
+ const te=document.getElementById("statTemplates"); if(te) te.textContent=String(templates.length);
+ const pe=document.getElementById("statPrompts"); if(pe) pe.textContent=String(prompts.length);
+ const ue=document.getElementById("statUses");
+ if(ue){
+   const uses=templates.reduce((a,t)=>a+Number(t.totalUses||t.useCount||t.uses||0),0)
+             +prompts.reduce((a,p)=>a+Number(p.totalCopies||p.copyCount||0),0);
+   ue.textContent = uses>=1000 ? (Math.round(uses/100)/10)+"K+" : String(uses);
+ }
+}
 
 const templateCats=["all","trending","cinematic","hindi","english","funk","ai prompt"];
 const promptCats=["all","trending","cinematic","4k","anime","portrait","fantasy","static"];
@@ -287,22 +308,22 @@ function listen(){
  const pre=window.__PRELOADED_DATA__;
  if(pre && Array.isArray(pre.templates) && pre.templates.length){
    templates=pre.templates;
-   renderTemplateFilters();renderTemplates();
+   renderTemplateFilters();renderTemplates();updateStats();
    if(location.hash.startsWith("#template/")) setTimeout(handleHash,0);
  }
  if(pre && Array.isArray(pre.prompts) && pre.prompts.length){
    prompts=pre.prompts;
-   renderPromptFilters();renderPrompts();
+   renderPromptFilters();renderPrompts();updateStats();
    if(location.hash.startsWith("#prompt/")) setTimeout(handleHash,0);
  }
  onValue(ref(db,"templates"),s=>{
    const d=s.val()||{}; templates=Object.entries(d).map(([id,x])=>({id,...x}));
-   renderTemplateFilters();renderTemplates();
+   renderTemplateFilters();renderTemplates();updateStats();
    if(location.hash.startsWith("#template/")) setTimeout(handleHash,0);
  });
  onValue(ref(db,"prompts"),s=>{
    const d=s.val()||{}; prompts=Object.entries(d).map(([id,x])=>({id,...x}));
-   renderPromptFilters();renderPrompts();
+   renderPromptFilters();renderPrompts();updateStats();
    if(location.hash.startsWith("#prompt/")) setTimeout(handleHash,0);
  });
 }
@@ -520,8 +541,8 @@ function renderTrending(type,current){
  const source=type==="template"?(templates.length?templates:[]):(prompts.length?prompts:demoPrompts);
  const currentKey=String(current.id||current.num||current.number||"");
  const others=source.filter(x=>String(x.id||x.num||x.number||"")!==currentKey);
- // Only show items that actually received activity in the rolling 7-day window.
- let list=[...others].filter(x=>trendingScore(x,type)[0]>0).sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
+ // Always show up to 10 cards, ranked by recent/total activity (falls back to newest when nothing has usage yet).
+ let list=[...others].sort((a,b)=>{const A=trendingScore(a,type),B=trendingScore(b,type);return B[0]-A[0]||B[1]-A[1]||B[2]-A[2]||B[3]-A[3];}).slice(0,10);
  if(!list.length)return "";
  const heading=type==="template"?"🔥 Trending Templates":"🔥 Trending Prompts";
  return `<section class="promptTrending"><h3>${heading}</h3><div class="grid">${list.map(x=>card(x,type,true)).join("")}</div></section>`;
@@ -635,7 +656,9 @@ window.openVideoModal=(url,type="auto")=>{
  else body.innerHTML=`<iframe class="videoFrame ${type==="instagram"?"vertical":""}" src="${escapeAttr(v.src)}" title="EditGalaxy video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe><div class="videoHint">If the platform blocks embedded playback, use the button below.</div>${fallback}`;
  document.getElementById("videoModal").classList.add("open");
 };
-window.closeVideoModal=()=>{const m=document.getElementById("videoModal");m.classList.remove("open");document.getElementById("videoBody").innerHTML=""};
+window.closeVideoModal=()=>{const m=document.getElementById("videoModal");m.classList.remove("open");document.getElementById("videoBody").innerHTML=""}
+window.openCommunityModal=()=>{const m=document.getElementById("communityModal");if(m){m.classList.add("open");document.body.style.overflow="hidden";}}
+window.closeCommunityModal=()=>{const m=document.getElementById("communityModal");if(m){m.classList.remove("open");document.body.style.overflow="";}};
 
 function siteDetails(){ return `<div class="detailFooter"><div class="detailLinks"><a href="about.html">About</a><a href="contact.html">Contact</a><a href="team.html">Team</a><a href="privacy.html">Privacy Policy</a><a href="trust.html">Trust & Safety</a><a href="terms.html">Terms</a><a href="copyright.html">Copyright</a><a href="https://www.instagram.com/trending_edit_day/" target="_blank" rel="noopener">Instagram</a><a href="https://t.me/trending_edit_day" target="_blank" rel="noopener">Telegram</a><a href="https://youtube.com/@surajfx2.0" target="_blank" rel="noopener">YouTube</a><a href="https://www.tiktok.com/@trending_edit_day" target="_blank" rel="noopener">TikTok</a><a href="https://www.facebook.com/profile.php?id=61565474049934" target="_blank" rel="noopener">Facebook</a><a href="https://www.threads.com/@trending_edit_day" target="_blank" rel="noopener">Threads</a></div></div>` }
 function recentKey(type,x){return `${type}:${x.id||x.num||x.number||x.title||x.name||""}`;}
