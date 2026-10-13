@@ -71,7 +71,15 @@ async function generate() {
     process.exit(1);
   }
 
-  const payload = { templates, prompts };
+  // Optional: site settings (card numbers, wishes button, etc.). Missing is fine.
+  let settings = {};
+  try {
+    settings = (await db.ref("settings/site").once("value")).val() || {};
+  } catch (e) {
+    console.warn("settings/site padha gelo na, default dhorbo:", e.message);
+  }
+
+  const payload = { templates, prompts, settings };
   const safeJson = JSON.stringify(payload).replace(/</g, "\\u003c");
 
   const replacement =

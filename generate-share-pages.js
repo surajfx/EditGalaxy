@@ -60,8 +60,42 @@ function safeFilename(id) {
   return String(id).replace(/[^A-Za-z0-9_-]/g, "_");
 }
 
+// Same field list the website itself uses, so share pages never fall back to the logo
+// when a preview image exists under another field name.
 function imgFor(x) {
-  return x.imageUrl || x.thumbnailUrl || x.thumb || FALLBACK_IMAGE;
+  return x.imageUrl || x.imageURL || x.imageLink || x.previewImage || x.previewImageUrl ||
+    x.thumbnail || x.thumbnailUrl || x.thumbnailLink || x.thumb || x.customThumbnail || x.image ||
+    FALLBACK_IMAGE;
+}
+
+const isHttp = u => /^https?:\/\//i.test(String(u || ""));
+const article = w => (/^[aeiou]/i.test(String(w || "").trim()) ? "an" : "a");
+// Cut text at a word boundary instead of mid-word.
+function clip(text, max) {
+  const t = String(text || "").replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  return cut.slice(0, Math.max(cut.lastIndexOf(" "), 40)).replace(/[,.;:\-–—\s]+$/, "") + "…";
+}
+const isGenericCat = c => !c || /^(all|general)$/i.test(String(c).trim());
+const CAT_BLURB = {
+  trending: "Trending templates follow the edit styles that are getting the most attention on Reels and Shorts right now, so they suit quick, eye-catching posts.",
+  cinematic: "Cinematic templates focus on smooth transitions, dramatic pacing and a film-like mood — a good fit for travel clips, portraits and storytelling edits.",
+  hindi: "Hindi-song templates are timed to the beat and lyrics of popular tracks, which makes them popular for festival, friendship, love and daily-life reels.",
+  english: "English-song templates are timed to popular international tracks and work well for stylish, modern photo and video edits.",
+  funk: "Funk templates use fast, bass-heavy beat cuts and punchy effects, ideal for energetic and attitude-style reels.",
+  "ai prompt": "AI-prompt templates pair a CapCut edit with an AI-generated look, so you can combine your own photos with a trending AI style.",
+};
+function displayTitle(x, type) {
+  const raw = String(x.title || x.name || x.promptTitle || "").trim();
+  const num = x.num || x.number || "";
+  const generic = new RegExp("^(template|prompt)\\s*#?\\s*" + num + "$", "i");
+  if (raw && !generic.test(raw)) return raw;
+  if (type === "template") {
+    const c = x.category || x.cat;
+    return `${isGenericCat(c) ? "" : catLabel(c) + " "}CapCut Template${num ? " #" + num : ""}`;
+  }
+  return `AI Image Prompt${num ? " #" + num : ""}`;
 }
 
 function catLabel(c) {
@@ -165,9 +199,11 @@ function relatedHtml(items, current, type) {
 }
 
 function buildTemplatePage(x, allTemplates) {
-  const title = x.title || x.name || `Template #${x.num || x.number || ""}`;
+  const title = displayTitle(x, "template");
   const category = catLabel(x.category || x.cat);
+  const catPhrase = isGenericCat(x.category || x.cat) ? "" : category + " ";
   const image = imgFor(x);
+  const textPrompt = (x.textPromptEnabled === true || x.textPromptEnabled === "true") && String(x.textPromptText || "").trim() ? String(x.textPromptText).trim() : "";
   const desc = x.templateDescription || x.description ||
     "A free CapCut template from EditGalaxy — open the link below and create your own edit with your own photos or clips.";
   const bestFor = x.bestFor || "photos and short video clips";
@@ -179,7 +215,7 @@ function buildTemplatePage(x, allTemplates) {
   const how = nl2ol(x.howToUseTemplate) || DEFAULT_TEMPLATE_STEPS;
   const pid = safeFilename(x.id);
   const pageUrl = `${SITE_URL}/template/${pid}.html`;
-  const metaDesc = `${title} — a free ${category} CapCut template from EditGalaxy. ${desc.slice(0, 140)}`;
+  const metaDesc = clip(`${title} — a free ${catPhrase}CapCut template from EditGalaxy. ${desc}`, 155);
 
   const detailsRows = [
     ["Category", category], ["Difficulty", difficulty], ["Format", fmt],
@@ -194,7 +230,9 @@ function buildTemplatePage(x, allTemplates) {
 <a class="shp-cta" href="${esc(cap)}" target="_blank" rel="noopener">✨ Use This Template on CapCut</a>
 
 <h2>What this template is</h2>
-<p>This is a ${esc(difficulty).toLowerCase()} ${esc(app)} template built for ${esc(bestFor).toLowerCase()}, designed to be posted on ${esc(platform)} in ${esc(fmt)} format. It's part of EditGalaxy's curated ${esc(category)} collection.</p>
+<p>This is ${article(difficulty)} ${esc(difficulty).toLowerCase()} ${esc(app)} template built for ${esc(bestFor).toLowerCase()}, designed to be posted on ${esc(platform)} in ${esc(fmt)} format.${catPhrase ? ` It's part of EditGalaxy's ${esc(category)} collection.` : ""}</p>
+${CAT_BLURB[String(x.category || x.cat || "").toLowerCase()] ? `<p>${esc(CAT_BLURB[String(x.category || x.cat || "").toLowerCase()])}</p>` : ""}
+${textPrompt ? `<h2>Text prompt for this template</h2><p>The creator of this template shared the text below. Copy it and use it together with the template.</p><div class="shp-promptbox">${esc(textPrompt)}</div>` : ""}
 
 <h2>Who it's best for</h2>
 <p>Creators who want a quick, ready-made edit for ${esc(platform)} without building a timeline from scratch — just drop in your own ${esc(bestFor).toLowerCase()} and export.</p>
@@ -223,13 +261,13 @@ ${relatedHtml(allTemplates, x, "template")}
 </dl>
 `;
 
-  const ogImage = image.startsWith("http") ? image : FALLBACK_IMAGE;
+  const ogImage = isHttp(image) ? image : FALLBACK_IMAGE;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${esc(title)} — Free CapCut Template | EditGalaxy</title>
+<title>${esc(title)}${/CapCut Template/i.test(title) ? "" : " — Free CapCut Template"} | EditGalaxy</title>
 <meta name="description" content="${esc(metaDesc)}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="${pageUrl}">
@@ -256,7 +294,7 @@ ${FOOTER}
 }
 
 function buildPromptPage(x, allPrompts) {
-  const title = x.title || x.promptTitle || `Prompt #${x.num || x.number || ""}`;
+  const title = displayTitle(x, "prompt");
   const category = catLabel(x.category || x.cat);
   const image = imgFor(x);
   const desc = x.description || x.tips || "A free AI image prompt from EditGalaxy — copy it and paste it into your favourite AI image tool.";
@@ -270,7 +308,7 @@ function buildPromptPage(x, allPrompts) {
   const how = nl2ol(x.howToUsePrompt) || DEFAULT_PROMPT_STEPS;
   const pid = safeFilename(x.id);
   const pageUrl = `${SITE_URL}/prompt/${pid}.html`;
-  const metaDesc = `${title} — a free ${category} AI image prompt from EditGalaxy, works great with ${tool}.`;
+  const metaDesc = clip(`${title} — a free ${isGenericCat(x.category || x.cat) ? "" : category + " "}AI image prompt from EditGalaxy that works great with ${tool}. ${desc}`, 155);
 
   const detailsRows = [
     ["Category", category], ["Difficulty", difficulty], ["Format", fmt],
@@ -328,7 +366,7 @@ ${relatedHtml(allPrompts, x, "prompt")}
 </dl>
 `;
 
-  const ogImage = image.startsWith("http") ? image : FALLBACK_IMAGE;
+  const ogImage = isHttp(image) ? image : FALLBACK_IMAGE;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>

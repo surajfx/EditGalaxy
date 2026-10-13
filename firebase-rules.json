@@ -45,6 +45,10 @@
           }
         }
       }
+    },
+    "settings": {
+      ".read": true,
+      ".write": "auth != null && auth.uid === \"i3J3kuqMLtUglNE1EyC7JZCzaFi1\""
     }
   }
 }
