@@ -164,6 +164,7 @@ p{color:#e7e9f5}
 .shp-table td:first-child{color:var(--muted);font-weight:700;width:40%}
 .shp-promptbox{position:relative;padding:16px;border-radius:14px;border:1px solid var(--line);background:#0b0d18;white-space:pre-wrap;font-family:monospace;font-size:13px;color:#dfe3ff;margin:10px 0}
 .shp-copybtn{display:inline-block;margin-top:8px;padding:9px 16px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:#fff;font-weight:800;font-size:13px;cursor:pointer}
+.shp-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:420px;margin:-6px auto 18px}.shp-gallery img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
 .shp-related{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
 .shp-relcard{display:block;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:#fff;text-decoration:none;font-size:13px;font-weight:700}
 .shp-relcard img{width:100%;border-radius:10px;aspect-ratio:4/5;object-fit:cover;margin-bottom:8px;display:block}
@@ -174,6 +175,19 @@ p{color:#e7e9f5}
 .shp-footlinks a{color:var(--muted);text-decoration:none;font-weight:700}
 @media(max-width:600px){.shp-related{grid-template-columns:1fr}}
 `;
+
+
+// Extra gallery images the admin enabled for this card (shown under the main image).
+function extraImgsHtml(x, title) {
+  const out = [];
+  for (let i = 1; i <= 5; i++) {
+    const u = String(x["extraImg" + i + "Url"] || "").trim();
+    const on = x["extraImg" + i + "On"];
+    if (u && isHttp(u) && !(on === false || on === "false")) out.push(u);
+  }
+  if (!out.length) return "";
+  return `<div class="shp-gallery">${out.map((u, i) => `<img src="${esc(u)}" alt="${esc(title)} — image ${i + 2}" loading="lazy">`).join("")}</div>`;
+}
 
 function relatedItems(items, current, n = 4) {
   const curCat = String(current.category || current.cat || "").toLowerCase();
@@ -224,6 +238,7 @@ function buildTemplatePage(x, allTemplates) {
 
   const body = `
 <div class="shp-media"><img src="${esc(image)}" alt="${esc(title)}"></div>
+${extraImgsHtml(x, title)}
 <h1>${esc(title)}</h1>
 <div class="shp-badges"><span class="shp-badge">${esc(category)}</span><span class="shp-badge">${esc(difficulty)}</span><span class="shp-badge">${esc(fmt)}</span></div>
 <p>${esc(desc)}</p>
@@ -324,6 +339,7 @@ function buildPromptPage(x, allPrompts) {
 
   const body = `
 <div class="shp-media"><img src="${esc(image)}" alt="${esc(title)}"></div>
+${extraImgsHtml(x, title)}
 <h1>${esc(title)}</h1>
 <div class="shp-badges"><span class="shp-badge">${esc(category)}</span><span class="shp-badge">${esc(difficulty)}</span><span class="shp-badge">${esc(tool)}</span></div>
 <p>${esc(desc)}</p>
