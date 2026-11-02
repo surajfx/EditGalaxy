@@ -33,6 +33,7 @@
 
 const admin = require("firebase-admin");
 const fs = require("fs");
+const { normalizeHome, buildCardPage } = require("./home-pages.js");
 const path = require("path");
 
 const serviceAccount = require("./serviceAccountKey.json");
@@ -423,6 +424,11 @@ async function generate() {
   const psnap = await db.ref("prompts").once("value");
   const prompts = Object.entries(psnap.val() || {}).map(([id, x]) => ({ id, ...x }));
 
+  let homeRaw = null;
+  try { homeRaw = (await db.ref("settings/home").once("value")).val(); }
+  catch (e) { console.warn("settings/home unavailable, using built-in cards:", e.message); }
+  const home = normalizeHome(homeRaw);
+
   const tOut = path.join(__dirname, "output", "template");
   const pOut = path.join(__dirname, "output", "prompt");
   fs.mkdirSync(tOut, { recursive: true });
@@ -440,6 +446,21 @@ async function generate() {
     fs.writeFileSync(path.join(pOut, `${pid}.html`), buildPromptPage(x, prompts), "utf-8");
     sitemapUrls.push(`${SITE_URL}/prompt/${pid}.html`);
     console.log(`✔ prompt/${pid}.html`);
+  });
+
+  // Home card pages (c/<slug>.html): real article-style pages with text, pictures and links
+  const cOut = path.join(__dirname, "output", "c");
+  fs.mkdirSync(cOut, { recursive: true });
+  const ctx = {
+    SITE_URL, esc, safeFilename, BASE_CSS, NAV, FOOTER, imgFor,
+    displayTitle: (x, type) => x.title || x.promptTitle || x.name || `${type === "template" ? "Template" : "Prompt"} #${x.num || x.number || ""}`,
+  };
+  home.cards.forEach(card => {
+    const html = buildCardPage(card, home, templates, prompts, ctx);
+    if (!html) return;
+    fs.writeFileSync(path.join(cOut, `${card.slug}.html`), html, "utf-8");
+    sitemapUrls.push(`${SITE_URL}/c/${card.slug}.html`);
+    console.log(`✔ c/${card.slug}.html`);
   });
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

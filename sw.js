@@ -1,4 +1,4 @@
-const CACHE_NAME='editgalaxy-v35';
+const CACHE_NAME='editgalaxy-v36';
 
 const CORE=[
   './',
