@@ -49,13 +49,14 @@ jobs:
           mkdir -p template prompt
           cp -r output/template/* ./template/ 2>/dev/null || true
           cp -r output/prompt/* ./prompt/ 2>/dev/null || true
+          mkdir -p c && cp -r output/c/* ./c/ 2>/dev/null || true
           cp output/sitemap-items.xml ./sitemap-items.xml 2>/dev/null || true
 
       - name: Change ache ki check kori, thakle commit+push kori
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html template/ prompt/ sitemap-items.xml
+          git add index.html template/ prompt/ c/ sitemap-items.xml
           if git diff --cached --quiet; then
             echo "Kono notun data nei, deploy korar dorkar nei."
           else
