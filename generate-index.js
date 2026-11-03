@@ -79,17 +79,7 @@ async function generate() {
     console.warn("settings/site padha gelo na, default dhorbo:", e.message);
   }
 
-  // Home page cards / social links (created in admin -> Home Page). Missing is fine:
-  // the site then falls back to its built-in default cards.
-  let home = null;
-  try {
-    home = (await db.ref("settings/home").once("value")).val() || null;
-  } catch (e) {
-    console.warn("settings/home padha gelo na, default card dhorbo:", e.message);
-  }
-
   const payload = { templates, prompts, settings };
-  if (home) payload.home = home;
   const safeJson = JSON.stringify(payload).replace(/</g, "\\u003c");
 
   const replacement =

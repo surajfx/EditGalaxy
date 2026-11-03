@@ -33,7 +33,6 @@
 
 const admin = require("firebase-admin");
 const fs = require("fs");
-const { normalizeHome, buildCardPage } = require("./home-pages.js");
 const path = require("path");
 
 const serviceAccount = require("./serviceAccountKey.json");
@@ -133,9 +132,12 @@ const NAV = `<header class="shp-header"><a class="shp-logo" href="${SITE_URL}/in
 <nav class="shp-nav"><a href="${SITE_URL}/index.html">Home</a><a href="${SITE_URL}/index.html#templates">Templates</a>
 <a href="${SITE_URL}/index.html#prompts">Prompts</a><a href="${SITE_URL}/about.html">About</a></nav></header>`;
 
-const FOOTER = `<footer id="sfootHost"></footer>
-<noscript><p style="text-align:center;padding:20px"><a href="${SITE_URL}/about.html">About</a> · <a href="${SITE_URL}/contact.html">Contact</a> · <a href="${SITE_URL}/privacy.html">Privacy</a> · <a href="${SITE_URL}/terms.html">Terms</a> · <a href="${SITE_URL}/copyright.html">Copyright</a></p></noscript>
-<script src="${SITE_URL}/site-footer.js" defer></script>`;
+const FOOTER = `<footer class="shp-footer"><p>EditGalaxy is an independent template and creative-resource website and is
+not affiliated with or endorsed by CapCut or other third-party services mentioned on this page.
+Third-party trademarks belong to their respective owners.</p>
+<div class="shp-footlinks"><a href="${SITE_URL}/about.html">About</a><a href="${SITE_URL}/contact.html">Contact</a>
+<a href="${SITE_URL}/privacy.html">Privacy</a><a href="${SITE_URL}/terms.html">Terms</a>
+<a href="${SITE_URL}/copyright.html">Copyright</a></div></footer>`;
 
 const BASE_CSS = `
 :root{--bg:#070811;--bg2:#0b0d18;--panel:rgba(255,255,255,.055);--line:rgba(255,255,255,.10);--text:#fff;--muted:#b7bcd6;--accent:#8bdcff}
@@ -421,11 +423,6 @@ async function generate() {
   const psnap = await db.ref("prompts").once("value");
   const prompts = Object.entries(psnap.val() || {}).map(([id, x]) => ({ id, ...x }));
 
-  let homeRaw = null;
-  try { homeRaw = (await db.ref("settings/home").once("value")).val(); }
-  catch (e) { console.warn("settings/home unavailable, using built-in cards:", e.message); }
-  const home = normalizeHome(homeRaw);
-
   const tOut = path.join(__dirname, "output", "template");
   const pOut = path.join(__dirname, "output", "prompt");
   fs.mkdirSync(tOut, { recursive: true });
@@ -443,21 +440,6 @@ async function generate() {
     fs.writeFileSync(path.join(pOut, `${pid}.html`), buildPromptPage(x, prompts), "utf-8");
     sitemapUrls.push(`${SITE_URL}/prompt/${pid}.html`);
     console.log(`✔ prompt/${pid}.html`);
-  });
-
-  // Home card pages (c/<slug>.html): real article-style pages with text, pictures and links
-  const cOut = path.join(__dirname, "output", "c");
-  fs.mkdirSync(cOut, { recursive: true });
-  const ctx = {
-    SITE_URL, esc, safeFilename, BASE_CSS, NAV, FOOTER, imgFor,
-    displayTitle: (x, type) => x.title || x.promptTitle || x.name || `${type === "template" ? "Template" : "Prompt"} #${x.num || x.number || ""}`,
-  };
-  home.cards.forEach(card => {
-    const html = buildCardPage(card, home, templates, prompts, ctx);
-    if (!html) return;
-    fs.writeFileSync(path.join(cOut, `${card.slug}.html`), html, "utf-8");
-    sitemapUrls.push(`${SITE_URL}/c/${card.slug}.html`);
-    console.log(`✔ c/${card.slug}.html`);
   });
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
