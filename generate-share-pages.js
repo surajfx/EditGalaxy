@@ -133,12 +133,9 @@ const NAV = `<header class="shp-header"><a class="shp-logo" href="${SITE_URL}/in
 <nav class="shp-nav"><a href="${SITE_URL}/index.html">Home</a><a href="${SITE_URL}/index.html#templates">Templates</a>
 <a href="${SITE_URL}/index.html#prompts">Prompts</a><a href="${SITE_URL}/about.html">About</a></nav></header>`;
 
-const FOOTER = `<footer class="shp-footer"><p>EditGalaxy is an independent template and creative-resource website and is
-not affiliated with or endorsed by CapCut or other third-party services mentioned on this page.
-Third-party trademarks belong to their respective owners.</p>
-<div class="shp-footlinks"><a href="${SITE_URL}/about.html">About</a><a href="${SITE_URL}/contact.html">Contact</a>
-<a href="${SITE_URL}/privacy.html">Privacy</a><a href="${SITE_URL}/terms.html">Terms</a>
-<a href="${SITE_URL}/copyright.html">Copyright</a></div></footer>`;
+const FOOTER = `<footer id="sfootHost"></footer>
+<noscript><p style="text-align:center;padding:20px"><a href="${SITE_URL}/about.html">About</a> · <a href="${SITE_URL}/contact.html">Contact</a> · <a href="${SITE_URL}/privacy.html">Privacy</a> · <a href="${SITE_URL}/terms.html">Terms</a> · <a href="${SITE_URL}/copyright.html">Copyright</a></p></noscript>
+<script src="${SITE_URL}/site-footer.js" defer></script>`;
 
 const BASE_CSS = `
 :root{--bg:#070811;--bg2:#0b0d18;--panel:rgba(255,255,255,.055);--line:rgba(255,255,255,.10);--text:#fff;--muted:#b7bcd6;--accent:#8bdcff}

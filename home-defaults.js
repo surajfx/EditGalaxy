@@ -20,7 +20,7 @@ const DEFAULT_HOME={
  cards:[
   {id:"all-templates",slug:"all-templates",order:1,on:true,title:"All CapCut Templates",titleOn:true,
    short:"Browse free CapCut templates for Reels, Shorts and photo videos — open one, add your clips and export.",shortOn:true,
-   cover:"",coverOn:true,bylineOn:true,socialOn:true,homeChips:true,
+   cover:"",coverOn:true,bylineOn:true,socialOn:true,homeChips:false,
    boxes:[
     {heading:"Free CapCut templates, ready to use",text:"EditGalaxy collects CapCut templates for Instagram Reels, YouTube Shorts and photo videos. Every template opens inside CapCut in one tap, so all you do is add your own photos or short clips and export the finished video.",on:true},
     {heading:"How to use a template",text:"Pick a template you like, tap Use Template on CapCut, choose your photos or clips in the order you want, preview the edit and export it. Most templates take only a couple of minutes.",on:true},
@@ -29,7 +29,7 @@ const DEFAULT_HOME={
    imgs:[],link:{type:"templates"},chipsT:"all,trending,cinematic,hindi,english,funk,ai prompt",chipsP:"",startFilter:"all",custom:[]},
   {id:"ai-prompts",slug:"ai-image-prompts",order:2,on:true,title:"AI Image Prompts",titleOn:true,
    short:"Copy ready-made AI image prompts — portraits, cinematic looks, anime, fantasy and more.",shortOn:true,
-   cover:"",coverOn:true,bylineOn:true,socialOn:true,homeChips:true,
+   cover:"",coverOn:true,bylineOn:true,socialOn:true,homeChips:false,
    boxes:[
     {heading:"Ready-to-copy AI image prompts",text:"Each prompt on EditGalaxy is written to work with popular AI image tools such as ChatGPT, Gemini and Leonardo AI. Choose a prompt, copy it, upload your own photo if the prompt asks for one and generate your image.",on:true},
     {heading:"How to use a prompt",text:"Open a prompt, tap Get Prompt, pick the girl or boy version, copy the text and paste it into your AI tool. If the first result is not perfect, generate again or change a few words such as colours, outfit or background.",on:true},

@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /admin.html
-Disallow: /bulk_upload.html
-
-Sitemap: https://surajfx.in/sitemap.xml
-Sitemap: https://surajfx.in/sitemap-items.xml

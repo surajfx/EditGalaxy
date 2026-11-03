@@ -438,7 +438,7 @@ const firebaseConfig={
 };
 const app=initializeApp(firebaseConfig),db=getDatabase(app);
 let templates=[],prompts=[],tFilter="all",pFilter="all",aiType="template";
-const DEFAULT_SETTINGS={showNumbers:false,wishesOn:true,wishesLabel:"Wishes",wishesUrl:"https://wishverse.surajfx.in/",showHow:true,showShare:true,showVideo:true,showInfo:true,showLinks:true,showCommunity:true,showTrending:true,showDesc:true,showDownload:true,adGateOn:false,whatsappUrl:"https://whatsapp.com/channel/0029Vb8LDSC7z4kcrtFkae2k",telegramUrl:"https://t.me/trending_edit_day"};
+const DEFAULT_SETTINGS={showNumbers:false,wishesOn:true,wishesLabel:"Wishes",wishesUrl:"https://wishverse.surajfx.in/",showHow:true,showShare:true,showVideo:true,showInfo:true,showLinks:true,showCommunity:true,showTrending:true,showDesc:true,showDownload:true,showVideoDownload:true,adGateOn:false,whatsappUrl:"https://whatsapp.com/channel/0029Vb8LDSC7z4kcrtFkae2k",telegramUrl:"https://t.me/trending_edit_day"};
 let S={...DEFAULT_SETTINGS};
 let H=null,activeCard=null;const trendSeen=new Set();
 function safeUrl(u,fb){try{const x=new URL(String(u||""));return x.protocol==="https:"||x.protocol==="http:"?x.href:fb}catch{return fb}}
@@ -715,7 +715,7 @@ window.openDetail=(raw,type,opts={})=>{
    const desc=x.templateDescription||x.description||"Discover this CapCut template and create your own edit with your photos or short video clips.";
    const howText=x.howToUseTemplate||defaultTemplateHowToUse;
    const insta=x.instagramUrl||x.instagramVideo||x.video||x.instagram||"#";
-   html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="return window.useTemplateByKey('${detailKey}',event)">✨ Use Template on CapCut</a>${extraHtml}${show(x,"How")?`<button type="button" class="action wideAction" onclick="openHowToVideo('template')">📖 How to Use Template</button>`:""}${show(x,"Share")?`<button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share Template</button>`:""}</div>`;
+   html+=`<div class="actions"><a class="action primary wideAction" href="${escapeAttr(cap)}" target="_blank" rel="noopener" onclick="return window.useTemplateByKey('${detailKey}',event)">✨ Use Template on CapCut</a>${extraHtml}${(S.showVideoDownload!==false&&safeUrl(x.downloadUrl,""))?`<button type="button" class="action wideAction" onclick="downloadVideoFile('${escapeAttr(safeUrl(x.downloadUrl,""))}','${escapeAttr(String(x.title||x.name||("template-"+(x.num||x.number||""))))}')">⬇ Download Video</button>`:""}${show(x,"How")?`<button type="button" class="action wideAction" onclick="openHowToVideo('template')">📖 How to Use Template</button>`:""}${show(x,"Share")?`<button class="action wideAction sharebtn" onclick="shareCurrent()">↗ Share Template</button>`:""}</div>`;
    html+=!show(x,"How")?"":`<div id="templateHow" class="howToBox glass"><h3>📖 How to Use Template</h3>${formatHowText(howText)}</div>`;
    html+=cardsGrid(show(x,"Info")?`<div class="infoCard"><h3>📋 Template Info</h3><div class="infoList">${infoRow("Template",`#${n}${title&&String(title)!==`Template #${n}`?` — ${title}`:""}`)}${infoRow("Style",style)}${infoRow("Best for",bestFor)}${infoRow("Format",format)}${infoRow("Platform",platform)}${infoRow("App",app)}${infoRow("Difficulty",difficulty)}</div></div>`:"",show(x,"Desc")?`<div class="infoCard"><h3>📝 Description</h3><p>${escapeHtml(desc)}</p></div>`:"");
    html+=communityBox(x);
@@ -1158,7 +1158,7 @@ const DEFAULT_HOME={
  cards:[
   {id:"all-templates",slug:"all-templates",order:1,on:true,title:"All CapCut Templates",titleOn:true,
    short:"Browse free CapCut templates for Reels, Shorts and photo videos — open one, add your clips and export.",shortOn:true,
-   cover:"",coverOn:true,bylineOn:true,socialOn:true,homeChips:true,
+   cover:"",coverOn:true,bylineOn:true,socialOn:true,homeChips:false,
    boxes:[
     {heading:"Free CapCut templates, ready to use",text:"EditGalaxy collects CapCut templates for Instagram Reels, YouTube Shorts and photo videos. Every template opens inside CapCut in one tap, so all you do is add your own photos or short clips and export the finished video.",on:true},
     {heading:"How to use a template",text:"Pick a template you like, tap Use Template on CapCut, choose your photos or clips in the order you want, preview the edit and export it. Most templates take only a couple of minutes.",on:true},
@@ -1167,7 +1167,7 @@ const DEFAULT_HOME={
    imgs:[],link:{type:"templates"},chipsT:"all,trending,cinematic,hindi,english,funk,ai prompt",chipsP:"",startFilter:"all",custom:[]},
   {id:"ai-prompts",slug:"ai-image-prompts",order:2,on:true,title:"AI Image Prompts",titleOn:true,
    short:"Copy ready-made AI image prompts — portraits, cinematic looks, anime, fantasy and more.",shortOn:true,
-   cover:"",coverOn:true,bylineOn:true,socialOn:true,homeChips:true,
+   cover:"",coverOn:true,bylineOn:true,socialOn:true,homeChips:false,
    boxes:[
     {heading:"Ready-to-copy AI image prompts",text:"Each prompt on EditGalaxy is written to work with popular AI image tools such as ChatGPT, Gemini and Leonardo AI. Choose a prompt, copy it, upload your own photo if the prompt asks for one and generate your image.",on:true},
     {heading:"How to use a prompt",text:"Open a prompt, tap Get Prompt, pick the girl or boy version, copy the text and paste it into your AI tool. If the first result is not perfect, generate again or change a few words such as colours, outfit or background.",on:true},
@@ -1202,7 +1202,7 @@ function normCard(c,i){
   title:String(c.title||"Untitled"),titleOn:c.titleOn!==false&&c.titleOn!=="false",
   short:String(c.short||""),shortOn:c.shortOn!==false&&c.shortOn!=="false",
   cover:String(c.cover||""),coverOn:c.coverOn!==false&&c.coverOn!=="false",
-  bylineOn:c.bylineOn!==false&&c.bylineOn!=="false",socialOn:c.socialOn!==false&&c.socialOn!=="false",homeChips:c.homeChips!==false&&c.homeChips!=="false",
+  bylineOn:c.bylineOn!==false&&c.bylineOn!=="false",socialOn:c.socialOn!==false&&c.socialOn!=="false",homeChips:c.homeChips===true||c.homeChips==="true",
   boxes,imgs,link:{type:String(link.type||"templates"),itemType:String(link.itemType||"template"),itemId:String(link.itemId||""),url:String(link.url||"")},
   allowedT:csvList(c.chipsT),allowedP:csvList(c.chipsP),startFilter:String(c.startFilter||"all"),
   custom:toArr(c.custom).map(k=>({label:String(k.label||""),type:String(k.type||"url"),value:String(k.value||""),on:k.on!==false&&k.on!=="false"})).filter(k=>k.label&&k.value),
@@ -1232,7 +1232,7 @@ function cardHref(c){
 function hcardHtml(c){
  const cover=c.coverOn&&c.cover?c.cover:ph16(c.title);
  let chips="";
- if(c.homeChips){
+ if(c.homeChips===true){
   const t=c.link.type;
   const src=t==="templates"?templates:prompts;
   const has=f=>f==="all"||f==="trending"||!src.length||src.some(x=>categoryMatch(x,f));
@@ -1332,6 +1332,16 @@ window.openCustomChip=(slug,i,ev)=>{
  const type=k.type==="prompt"?"prompt":"template";
  const it=findByKey(type,k.value);
  if(it)openDetail(JSON.stringify(it),type);else showToast("Item not found");
+};
+window.downloadVideoFile=async(url,name)=>{
+ const fname=String(name||"video").replace(/[^a-z0-9_\-]+/gi,"_").slice(0,60)+".mp4";
+ try{
+  showToast("Preparing download…");
+  const r=await fetch(url,{mode:"cors"});if(!r.ok)throw new Error("http "+r.status);
+  const b=await r.blob();const a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download=fname;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);showToast("Download started ✓");
+ }catch(e){window.open(url,"_blank","noopener");showToast("Video opened — tap and hold to save");}
 };
 /* cookie consent */
 window.openCookie=()=>document.getElementById("cookieBar").classList.add("show");
