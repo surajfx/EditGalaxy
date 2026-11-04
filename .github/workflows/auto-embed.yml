@@ -46,7 +46,13 @@ jobs:
 
       - name: Notun share page-gulo main folder-e copy kori
         run: |
-          mkdir -p template prompt
+          mkdir -p template prompt c
+          # Purge old pages first, so hidden / deleted items disappear from the site and Google.
+          # (Only when this run really produced pages, so a failed run can never wipe the site.)
+          if [ -n "$(ls output/template 2>/dev/null)" ]; then
+            rm -rf template prompt c
+            mkdir -p template prompt c
+          fi
           cp -r output/template/* ./template/ 2>/dev/null || true
           cp -r output/prompt/* ./prompt/ 2>/dev/null || true
           mkdir -p c && cp -r output/c/* ./c/ 2>/dev/null || true

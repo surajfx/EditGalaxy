@@ -417,9 +417,9 @@ async function generate() {
   const sitemapUrls = [];
 
   const tsnap = await db.ref("templates").once("value");
-  const templates = Object.entries(tsnap.val() || {}).map(([id, x]) => ({ id, ...x }));
+  const templates = Object.entries(tsnap.val() || {}).map(([id, x]) => ({ id, ...x })).filter(x => !(x.hidden === true || x.hidden === "true"));
   const psnap = await db.ref("prompts").once("value");
-  const prompts = Object.entries(psnap.val() || {}).map(([id, x]) => ({ id, ...x }));
+  const prompts = Object.entries(psnap.val() || {}).map(([id, x]) => ({ id, ...x })).filter(x => !(x.hidden === true || x.hidden === "true"));
 
   let homeRaw = null;
   try { homeRaw = (await db.ref("settings/home").once("value")).val(); }

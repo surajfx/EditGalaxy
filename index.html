@@ -440,6 +440,7 @@ const app=initializeApp(firebaseConfig),db=getDatabase(app);
 let templates=[],prompts=[],tFilter="all",pFilter="all",aiType="template";
 const DEFAULT_SETTINGS={showNumbers:false,wishesOn:true,wishesLabel:"Wishes",wishesUrl:"https://wishverse.surajfx.in/",showHow:true,showShare:true,showVideo:true,showInfo:true,showLinks:true,showCommunity:true,showTrending:true,showDesc:true,showDownload:true,showVideoDownload:true,adGateOn:false,whatsappUrl:"https://whatsapp.com/channel/0029Vb8LDSC7z4kcrtFkae2k",telegramUrl:"https://t.me/trending_edit_day"};
 let S={...DEFAULT_SETTINGS};
+const visibleItem=x=>!(x&&(x.hidden===true||x.hidden==="true"));
 let H=null,activeCard=null;const trendSeen=new Set();
 function safeUrl(u,fb){try{const x=new URL(String(u||""));return x.protocol==="https:"||x.protocol==="http:"?x.href:fb}catch{return fb}}
 function applySettings(){
@@ -494,22 +495,22 @@ function listen(){
  // Fastest path: data baked into the HTML at build time (zero network wait)
  const pre=window.__PRELOADED_DATA__;
  if(pre && Array.isArray(pre.templates) && pre.templates.length){
-   templates=pre.templates;
+   templates=pre.templates.filter(visibleItem);
    renderTemplateFilters();renderTemplates();updateStats();
    if(location.hash.startsWith("#template/")) setTimeout(handleHash,0);
  }
  if(pre && Array.isArray(pre.prompts) && pre.prompts.length){
-   prompts=pre.prompts;
+   prompts=pre.prompts.filter(visibleItem);
    renderPromptFilters();renderPrompts();updateStats();
    if(location.hash.startsWith("#prompt/")) setTimeout(handleHash,0);
  }
  onValue(ref(db,"templates"),s=>{
-   const d=s.val()||{}; templates=Object.entries(d).map(([id,x])=>({id,...x}));
+   const d=s.val()||{}; templates=Object.entries(d).map(([id,x])=>({id,...x})).filter(visibleItem);
    renderTemplateFilters();renderTemplates();updateStats();
    if(location.hash.startsWith("#template/")) setTimeout(handleHash,0);
  });
  onValue(ref(db,"prompts"),s=>{
-   const d=s.val()||{}; prompts=Object.entries(d).map(([id,x])=>({id,...x}));
+   const d=s.val()||{}; prompts=Object.entries(d).map(([id,x])=>({id,...x})).filter(visibleItem);
    renderPromptFilters();renderPrompts();updateStats();
    if(location.hash.startsWith("#prompt/")) setTimeout(handleHash,0);
  });

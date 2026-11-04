@@ -48,8 +48,8 @@ async function generate() {
   const templatesData = templatesSnap.val() || {};
   const promptsData = promptsSnap.val() || {};
 
-  const templates = Object.entries(templatesData).map(([id, x]) => ({ id, ...x }));
-  const prompts = Object.entries(promptsData).map(([id, x]) => ({ id, ...x }));
+  const templates = Object.entries(templatesData).map(([id, x]) => ({ id, ...x })).filter(x => !(x.hidden === true || x.hidden === "true"));
+  const prompts = Object.entries(promptsData).map(([id, x]) => ({ id, ...x })).filter(x => !(x.hidden === true || x.hidden === "true"));
 
   console.log(`${templates.length} ta template, ${prompts.length} ta prompt paoa gelo.`);
 
